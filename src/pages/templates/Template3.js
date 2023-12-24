@@ -8,6 +8,7 @@ const Template3 = () => {
   const [generatedHTML, setGeneratedHTML] = useState("");
   const [isCVGenerated, setIsCVGenerated] = useState(true);
   const [alert, setAlert] = useState("");
+  const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const handleClick = async () => {
     try {
@@ -39,7 +40,7 @@ const Template3 = () => {
 
       setIsCVGenerated(false);
       setAlert("LOADING...please wait while the AI Robots work their magic");
-      const result = await axios.post("/api/user/build", {
+      const result = await axios.post(`${baseUrl}/api/user/build`, {
         text: `generate a basic resume in HTML,and style with CSS, using these values: first name:${firstName}, last name:${lastName}, email:${email}, phone:${mobileNumber}, adddress:${address}, objectives:${careerObjective}, skills:${skillsString}, education:${educationString}, experience:${experienceString}, projects:${projectsString}`,
       });
       setIsCVGenerated(true);
