@@ -35,39 +35,47 @@ const Profile = () => {
 
   const onFinish = async (values) => {
     setLoading(true);
-      try {
-        const result = await axios.post(`${baseUrl}/api/user/update`, {
+    try {
+      const { data } = await axios.patch(
+        `${baseUrl}/api/user/update`,
+        {
           ...values,
-          _id: user._id,
-        });
-        localStorage.setItem("user", JSON.stringify(result.data));
-        setLoading(false);
-        message.success("Profile Updated Successfully");
-      } catch (err) {
-        setLoading(false);
-        message.error("Profile Update Failed");
-        console.log(err);
-      }    
+          username: user.username,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        }
+      );
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...data, accessToken: user.accessToken })
+      );
+      setLoading(false);
+      message.success("Profile Updated Successfully");
+    } catch (err) {
+      setLoading(false);
+      message.error(err.response.data);
+      console.log(err);
+    }
   };
 
   return (
     <DefaultLayout>
       {loading && <Spin size="large" />}
       <h4>
-            <strong>Update Profile</strong>
-          </h4>
-          <hr />
-          <div className="update-profile">
-            <Form layout="vertical" onFinish={onFinish} initialValues={user}>
-              <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-              <button
-                style={{ borderRadius: "5px" }}
-                type="submit"
-              >
-                Update Profile
-              </button>
-            </Form>
-          </div>
+        <strong>Update Profile</strong>
+      </h4>
+      <hr />
+      <div className="update-profile">
+        <Form layout="vertical" onFinish={onFinish} initialValues={user}>
+          <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+          <button style={{ borderRadius: "5px" }} type="submit">
+            Update Profile
+          </button>
+        </Form>
+      </div>
       <div className="divider mt-3"></div>
     </DefaultLayout>
   );

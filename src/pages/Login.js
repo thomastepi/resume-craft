@@ -8,7 +8,14 @@ function Login() {
   const [loading, setLoading] = React.useState(false);
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const navigate = useNavigate();
+  const [form] = Form.useForm();
+
   const onFinish = async (values) => {
+    if (!values.username || !values.password) {
+      message.error("Please fill all the fields");
+      form.resetFields();
+      return;
+    }
     setLoading(true);
     try {
       const response = await axios.post(`${baseUrl}/api/user/login`, values);
@@ -18,7 +25,7 @@ function Login() {
       navigate("/");
     } catch (err) {
       setLoading(false);
-      message.error("User not found");
+      message.error(err.response.data);
       console.log(err);
     }
   };
@@ -34,7 +41,7 @@ function Login() {
     <div className="auth-parent">
       {loading && <Spin size="large" />}
       <div className="auth-child">
-        <div style={{textAlign: "left", paddingRight: "40px"}}>
+        <div style={{ textAlign: "left", paddingRight: "40px" }}>
           <h1 className="brand">AI-Powered Resume Builder</h1>
           <p>
             A Resume Builder powered by AI which helps you create a professional
@@ -42,7 +49,7 @@ function Login() {
           </p>
         </div>
         <div>
-          <Form layout="vertical" onFinish={onFinish}>
+          <Form layout="vertical" onFinish={onFinish} form={form}>
             <h1>Login</h1>
             <hr />
             <Form.Item name="username" label="Username">
@@ -51,13 +58,23 @@ function Login() {
             <Form.Item name="password" label="Password">
               <Input type="password" />
             </Form.Item>
+            <Button type="primary" htmlType="submit" className="btn-block">
+              Login
+            </Button>
+            <Button
+              type="primary"
+              htmlType="button"
+              onClick={() => {
+                onFinish({ username: "guest", password: "0000" });
+              }}
+              className="btn-block btn-guest"
+            >
+              Explore as Guest
+            </Button>
             <div className="d-flex align-items-center justify-content-between">
               <span>
                 Don't have an account? Register <Link to="/register">Here</Link>{" "}
               </span>
-              <Button type="primary" htmlType="submit">
-                Login
-              </Button>
             </div>
           </Form>
         </div>

@@ -25,7 +25,11 @@ const PersonalInfo = () => {
           </Form.Item>
         </div>
         <div className="col-md-4">
-          <Form.Item name="email" label="Email" rules={[{ required: true, message: "Missing email" }]}>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[{ required: true, message: "Missing email" }]}
+          >
             <Input />
           </Form.Item>
         </div>

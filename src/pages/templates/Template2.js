@@ -20,7 +20,7 @@ const Template2 = () => {
       <div className="divider mt-1"></div>
 
       <div className="objective mt-3">
-        <h3 style={{backgroundColor: "grey", padding: "10px"}}>Objective</h3>
+        <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Objective</h3>
         <hr />
         <p>{user.careerObjective}</p>
       </div>
@@ -28,7 +28,7 @@ const Template2 = () => {
       <div className="divider mt-3"></div>
 
       <div className="education mt-3">
-        <h3 style={{backgroundColor: "grey", padding: "10px"}}>Education</h3>
+        <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Education</h3>
         <hr />
         {user.education.map((education) => {
           return (
@@ -38,8 +38,8 @@ const Template2 = () => {
               </h6>
               <p>
                 <strong>{education.qualification} </strong> |
-                <strong> {education.percentage}% </strong> |
-                <strong> {education.institution}</strong>
+                <strong> {education.institution}</strong> |
+                <strong> {education.gpa}</strong>
               </p>
             </div>
           );
@@ -49,7 +49,7 @@ const Template2 = () => {
       <div className="divider mt-3"></div>
 
       <div className="experience mt-3">
-        <h3 style={{backgroundColor: "grey", padding: "10px"}}>Experience</h3>
+        <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Experience</h3>
         <hr />
         {user.experience.map((exp) => {
           return (
@@ -58,8 +58,8 @@ const Template2 = () => {
                 <strong>{exp.range} : </strong>
               </h6>
               <p>
-                <strong>{exp.company} </strong> |<strong> {exp.years} </strong>{" "}
-                |<strong> {exp.place}</strong>
+                <strong>{exp.company} </strong> |<strong> {exp.role} </strong> |
+                <strong> {exp.place}</strong>
               </p>
             </div>
           );
@@ -69,7 +69,7 @@ const Template2 = () => {
       <div className="divider mt-3"></div>
 
       <div className="projects mt-3">
-        <h3 style={{backgroundColor: "grey", padding: "10px"}}>Projects</h3>
+        <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Projects</h3>
         <hr />
         {user.projects.map((project) => {
           return (
@@ -88,7 +88,7 @@ const Template2 = () => {
       <div className="divider mt-3"></div>
 
       <div className="skills mt-3">
-        <h3 style={{backgroundColor: "grey", padding: "10px"}}>Skills</h3>
+        <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Skills</h3>
         <hr />
         {user.skills.map((skill) => {
           return (

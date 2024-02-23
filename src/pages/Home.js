@@ -30,7 +30,13 @@ function Home() {
                 <img src={template1_img} height="400" alt="" />
                 <div className="text">
                   <p>{template.title}</p>
-                  <button onClick={()=>{navigate(`/templates/${index + 1}`)}}>TRY</button>
+                  <button
+                    onClick={() => {
+                      navigate(`/templates/${index + 1}`);
+                    }}
+                  >
+                    TRY
+                  </button>
                 </div>
               </div>
             </div>

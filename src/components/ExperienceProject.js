@@ -33,15 +33,15 @@ const ExperienceProject = () => {
                   <div className="col-md-2">
                     <Form.Item
                       {...restField}
-                      name={[name, "years"]}
+                      name={[name, "role"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Years",
+                          message: "Missing Role",
                         },
                       ]}
                     >
-                      <Input placeholder="Number of Years" />
+                      <Input placeholder="Role" />
                     </Form.Item>
                   </div>
 

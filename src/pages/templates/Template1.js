@@ -37,8 +37,8 @@ const Template1 = () => {
               </h6>
               <p>
                 <strong>{education.qualification} </strong> |
-                <strong> {education.percentage}% </strong> |
-                <strong> {education.institution}</strong>
+                <strong> {education.institution}</strong> |
+                <strong> {education.gpa} </strong>
               </p>
             </div>
           );
@@ -57,8 +57,8 @@ const Template1 = () => {
                 <strong>{exp.range} : </strong>
               </h6>
               <p>
-                <strong>{exp.company} </strong> |<strong> {exp.years} </strong>{" "}
-                |<strong> {exp.place}</strong>
+                <strong>{exp.company} </strong> |<strong> {exp.role} </strong> |
+                <strong> {exp.place}</strong>
               </p>
             </div>
           );

@@ -2,6 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Dropdown, Button, message } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import logo from "../assets/images/logo.png";
 
 import "./../resources/defaultLayout.css";
 
@@ -45,17 +46,36 @@ function DefaultLayout(props) {
   return (
     <div className="layout">
       <div className="header">
-        <h1 onClick={()=>{navigate("/home")}}>AI Resume Generator</h1>
+        <img
+          className="logo"
+          onClick={() => {
+            navigate("/home");
+          }}
+          src={logo}
+          alt="logo"
+        />
+        <h1
+          className="logo-text"
+          onClick={() => {
+            navigate("/home");
+          }}
+        >
+          AI - CV
+        </h1>
         <Dropdown
           menu={{
             items,
           }}
           placement="bottomLeft"
         >
-          <Button icon={<UserOutlined />}>{user.username}</Button>
+          <Button className="btn-user" icon={<UserOutlined />}>
+            {user.username}
+          </Button>
         </Dropdown>
       </div>
-      <div className="content" style={{overflow: "scroll"}}>{props.children}</div>
+      <div className="content" style={{ overflow: "scroll" }}>
+        {props.children}
+      </div>
     </div>
   );
 }

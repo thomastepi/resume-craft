@@ -15,6 +15,10 @@
   opacity: 0;
 }
 
+.template img {
+  width: 100%;
+}
+
 .home .template .text:hover {
   background-color: black;
   opacity: 0.8;
@@ -27,10 +31,10 @@
 }
 
 .home .template button {
-    background-color: white !important;
-    color: black !important;
-    font-size: 16px !important;
-    padding: 0 20px;
+  background-color: white !important;
+  color: black !important;
+  font-size: 16px !important;
+  padding: 0 20px;
 }
 
 /* template 1 */

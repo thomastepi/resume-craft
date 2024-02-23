@@ -29,28 +29,49 @@ const Template3 = () => {
         .map((skill) => `${skill.skill}: ${skill.rating}`)
         .join(", ");
       const educationString = education
-        .map((edu) => `${edu.qualification} at ${edu.institution}, ${edu.gpa}`)
+        .map(
+          (edu) =>
+            `$Qualification: ${edu.qualification}, Institution: ${edu.institution}, GPA:${edu.gpa}`
+        )
         .join(", ");
       const experienceString = experience
-        .map((exp) => `${exp.years} years at ${exp.company}`)
+        .map(
+          (exp) =>
+            `$Employer: ${exp.company}, Role: ${exp.role}, Place: ${exp.place}, Duration: ${exp.range}`
+        )
         .join(", ");
       const projectsString = projects
-        .map((proj) => `${proj.title}: ${proj.description}`)
+        .map(
+          (proj) => `$Projects: ${proj.title}, Description: ${proj.description}`
+        )
         .join(", ");
 
       setIsCVGenerated(false);
       setAlert("LOADING...please wait while the AI Robots work their magic");
-      const result = await axios.post(`${baseUrl}/api/user/build`, {
-        text: `generate a basic resume in HTML,and style with CSS, using these values: first name:${firstName}, last name:${lastName}, email:${email}, phone:${mobileNumber}, adddress:${address}, objectives:${careerObjective}, skills:${skillsString}, education:${educationString}, experience:${experienceString}, projects:${projectsString}`,
-      });
-      setIsCVGenerated(true);
-      setAlert("");
-      setGeneratedHTML(result.data.data[0].message.content);
-      setLoading(false);
-      message.success("Resume generated Successfully");
+      const result = await axios.post(
+        `${baseUrl}/api/user/build`,
+        {
+          text: `generate a simple HTML-based resume styled with in-line CSS, using these values: first name:${firstName}, last name:${lastName}, email:${email}, phone:${mobileNumber}, adddress:${address}, objectives:${careerObjective}, skills:${skillsString}, education:${educationString}, experience:${experienceString}, projects:${projectsString}`,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.accessToken}`,
+          },
+        }
+      );
+      if (result.status === 200) {
+        setIsCVGenerated(true);
+        setAlert("");
+        console.log(result);
+        setGeneratedHTML(result.data.data[0].message.content);
+        setLoading(false);
+        message.success("Resume generated Successfully");
+      }
     } catch (err) {
       setLoading(false);
-      message.error("Resume generation Failed");
+      setIsCVGenerated(true);
+      setAlert("");
+      message.error(err.response.data);
       console.log(err);
     }
   };
