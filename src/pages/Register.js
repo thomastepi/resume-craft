@@ -29,8 +29,8 @@ function Register() {
       navigate("/login");
     } catch (err) {
       setLoading(false);
-      message.error(err.respose.data);
-      console.log(err);
+      message.error(err.response.data);
+      form.resetFields();
     }
   };
 

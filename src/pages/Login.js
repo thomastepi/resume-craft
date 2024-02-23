@@ -26,7 +26,7 @@ function Login() {
     } catch (err) {
       setLoading(false);
       message.error(err.response.data);
-      console.log(err);
+      form.resetFields();
     }
   };
 
