@@ -52,6 +52,7 @@
 
 .btn-user {
   height: max-content !important;
+  text-transform: uppercase !important;
 }
 
 .btn-guest {
