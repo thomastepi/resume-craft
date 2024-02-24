@@ -20,10 +20,12 @@ function Login() {
     setLoading(true);
     try {
       const response = await axios.post(`${baseUrl}/api/user/login`, values);
-      message.success("Login Successful");
+      message.success({ content: "Successfully logged in", duration: 4 });
       localStorage.setItem("user", JSON.stringify(response.data));
       setLoading(false);
-      navigate("/");
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
     } catch (err) {
       setLoading(false);
       message.error(err.response.data);
@@ -34,7 +36,9 @@ function Login() {
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      navigate("/home");
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
     }
   });
 

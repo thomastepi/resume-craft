@@ -33,7 +33,7 @@ function DefaultLayout(props) {
         <span
           onClick={() => {
             localStorage.removeItem("user");
-            navigate("/login");
+            navigate("/landing");
             message.success("Successfully logged out");
           }}
         >
