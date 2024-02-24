@@ -1,7 +1,7 @@
 import "./App.css";
 import "antd";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { Error, Home, Login, Register, Profile } from "./pages";
+import { Error, Home, Login, Register, Profile, Landing } from "./pages";
 import Templates from "./pages/templates/index";
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
+          <Route path="/landing" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route
@@ -57,6 +58,6 @@ export function ProtectedRoute(props) {
   if (user) {
     return props.children;
   } else {
-    return <Navigate to="/login" />;
+    return <Navigate to="/landing" />;
   }
 }

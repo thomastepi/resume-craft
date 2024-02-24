@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/images/logo-form.png";
 import axios from "axios";
 import { Button, Form, Input, message, Spin } from "antd";
 import "../resources/authentication.css";
@@ -45,15 +46,11 @@ function Register() {
     <div className="auth-parent">
       {loading && <Spin size="large" />}
       <div className="auth-child">
-        <div style={{ textAlign: "left", paddingRight: "40px" }}>
-          <h1 className="brand">AI-Powered Resume Builder</h1>
-          <p>
-            A Resume Builder powered by AI which helps you create a professional
-            resume in minutes.
-          </p>
-        </div>
         <div>
           <Form layout="vertical" onFinish={onFinish} form={form}>
+            <div className="form-logo">
+              <img src={logo} alt="logo" />
+            </div>
             <h1>Register</h1>
             <hr />
             <Form.Item name="username" label="Username">

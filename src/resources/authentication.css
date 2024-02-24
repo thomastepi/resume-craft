@@ -1,56 +1,65 @@
 .auth-parent {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-image: linear-gradient(to top, #48c6ef 0%, #6f86d6 100%);;
-    width: 100%;
-    overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
 }
 
 .auth-parent .auth-child {
-    width: 1000px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 1000px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-child img {
+  width: 25%;
+  margin: 0 auto;
 }
 
 .auth-child p {
-    font-size: 20px;
-    color: rgba(0, 0, 0, 0.585);
-    margin: 0;
-    padding: 0;
-    margin-right: 20px;
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.585);
+  margin: 0;
+  padding: 0;
+  margin-right: 20px;
 }
 
 .auth-parent form {
-    width: 400px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    padding: 60px 30px;
-    opacity: 0.85;
-       
+  width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 30px 30px 60px 30px;
+  opacity: 0.85;
+}
+
+.form-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .auth-parent h1 {
-    font-size: 22px;
-    font-weight: bold;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 .brand {
-    font-size: 40px !important;
-    width: 100%;
-    color: rgba(0, 0, 0, 0.585);
-    margin-right: 20px;
-
+  font-size: 40px !important;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.585);
+  margin-right: 20px;
 }
 
-@media only screen and (max-width:1000px) {
-    .brand, .auth-child p{
-        display: none;  
-    }
+@media only screen and (max-width: 1000px) {
+  .brand,
+  .auth-child p {
+    display: none;
+  }
 }
