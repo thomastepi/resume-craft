@@ -20,8 +20,15 @@ function Login() {
     setLoading(true);
     try {
       const response = await axios.post(`${baseUrl}/api/user/login`, values);
-      message.success({ content: "Successfully logged in", duration: 4 });
       localStorage.setItem("user", JSON.stringify(response.data));
+      let name =
+        response.data.firstName === "John "
+          ? "Guest User"
+          : response.data.firstName;
+      message.success({
+        content: `Welcome, ${name || response.data.username}!`,
+        duration: 4,
+      });
       setLoading(false);
       setTimeout(() => {
         navigate("/home");
@@ -38,6 +45,7 @@ function Login() {
     if (user) {
       setTimeout(() => {
         navigate("/home");
+        // message.success({ content: `Welcome ${user.firstName}`, duration: 4 });
       }, 2000);
     }
   });

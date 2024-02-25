@@ -62,10 +62,10 @@ function Register() {
             <Form.Item name="cpassword" label="Confirm Password">
               <Input type="password" />
             </Form.Item>
-            <Button type="primary" htmlType="submit" className="btn-block">
+            <Button type="primary" htmlType="submit" className="btn-block btn-register">
               Register
             </Button>
-            <span className="reg-span" style={{ marginTop: "10px" }}>
+            <span>
               Already have an account? Login <Link to="/login">Here</Link>{" "}
             </span>
           </Form>
