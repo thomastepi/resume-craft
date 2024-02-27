@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 const Wrapper = styled.main`
   nav {
-    width: 86%;
+    width: 64%;
     max-width: var(--max-width);
     margin: 0 auto;
-    height: 9rem;
+    /* height: 9rem; */
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -14,8 +14,17 @@ const Wrapper = styled.main`
     width: 10%;
     height: auto;
   }
+  @media (max-height: 600px) {
+    nav img {
+      display: none;
+    }
+    nav {
+      height: 4rem;
+    }
+  }
   .page {
     min-height: calc(100vh - 6rem);
+    width: 65%;
     display: grid;
     align-items: center;
     margin-top: -3rem;
