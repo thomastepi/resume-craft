@@ -45,7 +45,6 @@ function Login() {
     if (user) {
       setTimeout(() => {
         navigate("/home");
-        // message.success({ content: `Welcome ${user.firstName}`, duration: 4 });
       }, 2000);
     }
   });

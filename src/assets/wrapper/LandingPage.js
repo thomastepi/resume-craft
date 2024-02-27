@@ -5,8 +5,7 @@ const Wrapper = styled.main`
     width: 86%;
     max-width: var(--max-width);
     margin: 0 auto;
-    /* height: var(--nav-height); */
-    height: 6rem;
+    height: 9rem;
     display: flex;
     align-items: center;
     overflow: hidden;
@@ -20,10 +19,13 @@ const Wrapper = styled.main`
     display: grid;
     align-items: center;
     margin-top: -3rem;
+    position: relative;
   }
   .page img {
-    width: 80%;
-    height: auto;
+    width: 40%;
+    height: 100%;
+    position: absolute;
+    right: 0;
   }
   h1 {
     font-weight: 700;
