@@ -16,7 +16,7 @@ function Home() {
       image: template2_img,
     },
     {
-      title: "Generate using AI",
+      title: "Generate With AI",
       image: template2_img,
     },
   ];

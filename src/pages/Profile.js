@@ -5,6 +5,7 @@ import { Tabs, Form, Spin, message } from "antd";
 import PersonalInfo from "../components/PersonalInfo";
 import SkillsEducation from "../components/SkillsEducation";
 import ExperienceProject from "../components/ExperienceProject";
+import AlertBox from "../components/AlertBox";
 
 const onChange = (key) => {
   console.log(key);
@@ -29,6 +30,7 @@ const items = [
 
 const Profile = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const user = JSON.parse(localStorage.getItem("user"));
 
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -56,8 +58,7 @@ const Profile = () => {
       message.success("Profile Updated Successfully");
     } catch (err) {
       setLoading(false);
-      message.error(err.response.data);
-      console.log(err);
+      setError(err.response.data);
     }
   };
 
@@ -71,7 +72,14 @@ const Profile = () => {
       <div className="update-profile">
         <Form layout="vertical" onFinish={onFinish} initialValues={user}>
           <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-          <button style={{ borderRadius: "5px" }} type="submit">
+          <div style={{ width: "50%", marginBottom: "15px" }}>
+            {error && <AlertBox message={error} setError={setError} />}
+          </div>
+          <button
+            style={{ borderRadius: "5px" }}
+            type="submit"
+            disabled={error}
+          >
             Update Profile
           </button>
         </Form>

@@ -22,7 +22,7 @@ function Login() {
       const response = await axios.post(`${baseUrl}/api/user/login`, values);
       localStorage.setItem("user", JSON.stringify(response.data));
       let name =
-        response.data.firstName === "John "
+        response.data.firstName === "Thomas "
           ? "Guest User"
           : response.data.firstName;
       message.success({

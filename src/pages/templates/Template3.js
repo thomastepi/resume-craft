@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { message, Spin } from "antd";
 import axios from "axios";
 import AIGeneratedCV from "./AIGeneratedCV";
+import AlertBox from "../../components/AlertBox";
 
 const Template3 = () => {
   const [loading, setLoading] = useState(false);
   const [generatedHTML, setGeneratedHTML] = useState("");
   const [isCVGenerated, setIsCVGenerated] = useState(true);
   const [alert, setAlert] = useState("");
+  const [error, setError] = useState("");
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const handleClick = async () => {
@@ -62,22 +64,23 @@ const Template3 = () => {
       if (result.status === 200) {
         setIsCVGenerated(true);
         setAlert("");
-        console.log(result);
         setGeneratedHTML(result.data.data[0].message.content);
         setLoading(false);
-        message.success("Resume generated Successfully");
+        message.success("Your AI Resume is Ready!");
       }
     } catch (err) {
       setLoading(false);
       setIsCVGenerated(true);
       setAlert("");
-      message.error(err.response.data);
-      console.log(err);
+      setError(err.response.data);
     }
   };
 
   return (
     <div>
+      <div style={{ width: "50%", margin: "10px auto" }}>
+        {error && <AlertBox message={error} setError={setError} />}
+      </div>
       {loading && <Spin size="large" />}
       {!isCVGenerated && (
         <>
@@ -94,9 +97,9 @@ const Template3 = () => {
           </div>
         </>
       )}
-      {generatedHTML === "" && alert === "" && (
+      {generatedHTML === "" && alert === "" && !error && (
         <>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", marginBottom: "30px" }}>
             <h4>Click the button below to generate your resume</h4>
           </div>
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -105,7 +108,7 @@ const Template3 = () => {
               style={{ borderRadius: "5px", marginLeft: "20px" }}
               type="button"
             >
-              Generate Resume using AI
+              Generate AI Resume.
             </button>
           </div>
         </>
