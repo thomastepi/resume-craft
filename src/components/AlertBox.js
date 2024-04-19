@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert, Space } from "antd";
 import styled from "styled-components";
+import useIsMobile from "../hooks/useIsMobile";
 
 const Wrapper = styled.div`
   .anticon-close {
@@ -11,6 +12,7 @@ const Wrapper = styled.div`
 `;
 
 const AlertBox = ({ message, setError }) => {
+  const isMobile = useIsMobile();
   const onClose = () => {
     setError("");
   };
@@ -28,7 +30,7 @@ const AlertBox = ({ message, setError }) => {
           description={message}
           type="info"
           closable
-          showIcon
+          showIcon={!isMobile}
           onClose={onClose}
         />
       </Space>

@@ -6,6 +6,7 @@ import PersonalInfo from "../components/PersonalInfo";
 import SkillsEducation from "../components/SkillsEducation";
 import ExperienceProject from "../components/ExperienceProject";
 import AlertBox from "../components/AlertBox";
+import useIsMobile from "../hooks/useIsMobile";
 
 const onChange = (key) => {
   console.log(key);
@@ -31,6 +32,7 @@ const items = [
 const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const isMobile = useIsMobile();
   const user = JSON.parse(localStorage.getItem("user"));
 
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -72,7 +74,12 @@ const Profile = () => {
       <div className="update-profile">
         <Form layout="vertical" onFinish={onFinish} initialValues={user}>
           <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
-          <div style={{ width: "50%", marginBottom: "15px" }}>
+          <div
+            style={{
+              width: `${isMobile ? "95%" : "50%"}`,
+              marginBottom: "15px",
+            }}
+          >
             {error && <AlertBox message={error} setError={setError} />}
           </div>
           <button

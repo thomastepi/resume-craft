@@ -3,6 +3,7 @@ import { message, Spin } from "antd";
 import axios from "axios";
 import AIGeneratedCV from "./AIGeneratedCV";
 import AlertBox from "../../components/AlertBox";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const Template3 = () => {
   const [loading, setLoading] = useState(false);
@@ -10,6 +11,9 @@ const Template3 = () => {
   const [isCVGenerated, setIsCVGenerated] = useState(true);
   const [alert, setAlert] = useState("");
   const [error, setError] = useState("");
+  const isMobile = useIsMobile();
+
+  console.log(isMobile);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const handleClick = async () => {
@@ -78,7 +82,9 @@ const Template3 = () => {
 
   return (
     <div>
-      <div style={{ width: "50%", margin: "10px auto" }}>
+      <div
+        style={{ width: `${isMobile ? "95%" : "50%"}`, margin: "10px auto" }}
+      >
         {error && <AlertBox message={error} setError={setError} />}
       </div>
       {loading && <Spin size="large" />}
