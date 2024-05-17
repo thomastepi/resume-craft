@@ -54,14 +54,6 @@ function DefaultLayout(props) {
           src={logo}
           alt="logo"
         />
-        <h1
-          className="logo-text"
-          onClick={() => {
-            navigate("/home");
-          }}
-        >
-          AI - CV
-        </h1>
         <Dropdown
           menu={{
             items,
@@ -75,6 +67,18 @@ function DefaultLayout(props) {
       </div>
       <div className="content" style={{ overflow: "scroll" }}>
         {props.children}
+      </div>
+      <div className="footer">
+        <div className="footer-content">
+          <p>Made with ❤️ by Thomas Tepi</p>
+          <a
+            href="https://www.thomastepi.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            www.thomastepi.com
+          </a>
+        </div>
       </div>
     </div>
   );

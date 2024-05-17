@@ -37,6 +37,24 @@
   cursor: pointer;
 }
 
+.footer {
+  margin: 20px 0 20px 0;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .content {
   height: 87%;
   border: 1px solid gray;
@@ -53,7 +71,8 @@
 
 .btn-user {
   height: max-content !important;
-  text-transform: uppercase !important;
+  text-transform: capitalize !important;
+  background-color: #656565 !important;
 }
 
 .btn-guest {
@@ -67,17 +86,4 @@
 
 .btn-block:hover {
   background-color: #716a6a !important;
-}
-
-
-@media screen and (min-width: 768px) {
-  .logo-text {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .logo {
-    display: none;
-  }
 }

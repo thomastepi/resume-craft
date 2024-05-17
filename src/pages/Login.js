@@ -17,8 +17,8 @@ function Login() {
       form.resetFields();
       return;
     }
-    setLoading(true);
     try {
+      setLoading(true);
       const response = await axios.post(`${baseUrl}/api/user/login`, values);
       localStorage.setItem("user", JSON.stringify(response.data));
       let name =
@@ -29,14 +29,14 @@ function Login() {
         content: `Welcome, ${name || response.data.username}!`,
         duration: 4,
       });
-      setLoading(false);
       setTimeout(() => {
         navigate("/home");
       }, 2000);
     } catch (err) {
-      setLoading(false);
-      message.error(err.response.data);
+      message.error(err.message);
       form.resetFields();
+    } finally {
+      setLoading(false);
     }
   };
 
