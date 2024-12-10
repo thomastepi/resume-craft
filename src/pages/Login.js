@@ -33,8 +33,11 @@ function Login() {
         navigate("/home");
       }, 2000);
     } catch (err) {
-      message.error(err.message);
-      form.resetFields();
+      message.error(
+        err.response.data.error || "An error occurred. Please try again."
+      );
+      //console.error(err.response.data.error);
+      //form.resetFields();
     } finally {
       setLoading(false);
     }

@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const AlertBox = ({ message, setError }) => {
+const AlertBox = ({ message, setError, title }) => {
   const isMobile = useIsMobile();
   const onClose = () => {
     setError("");
@@ -26,7 +26,7 @@ const AlertBox = ({ message, setError }) => {
         }}
       >
         <Alert
-          message="Limited Access!"
+          message={title}
           description={message}
           type="info"
           closable

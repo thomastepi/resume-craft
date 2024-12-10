@@ -65,7 +65,7 @@ function DefaultLayout(props) {
           </Button>
         </Dropdown>
       </div>
-      <div className="content" style={{ overflow: "scroll" }}>
+      <div className="content" style={{ overflow: "auto" }}>
         {props.children}
       </div>
       <div className="footer">
