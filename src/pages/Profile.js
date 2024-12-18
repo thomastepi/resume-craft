@@ -67,7 +67,7 @@ const Profile = () => {
       }
       if (err.response.status === 403) {
         setAlertTitle("Unauthorized Access");
-        message.error("Unauthorized Access. Please login/signup.");
+        message.info("Unauthorized Access. Please login/signup.");
       } else {
         setAlertTitle("An error occurred");
         message.error("An error occurred. Please try again.");
@@ -97,6 +97,7 @@ const Profile = () => {
                 message={error}
                 setError={setError}
                 title={alertTitle}
+                type="info"
               />
             )}
           </div>

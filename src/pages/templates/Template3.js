@@ -5,14 +5,17 @@ import axios from "axios";
 import AIGeneratedCV from "./AIGeneratedCV";
 import AlertBox from "../../components/AlertBox";
 import useIsMobile from "../../hooks/useIsMobile";
+import "./template3.css";
 
 const Template3 = () => {
   const [loading, setLoading] = useState(false);
   const [generatedHTML, setGeneratedHTML] = useState("");
   const [isCVGenerated, setIsCVGenerated] = useState(true);
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [alert, setAlert] = useState("");
   const [error, setError] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
+  const [alertType, setAlertType] = useState("");
   const isMobile = useIsMobile();
 
   //console.log(isMobile);
@@ -39,6 +42,7 @@ const Template3 = () => {
       if (missingFields.length > 0) {
         setIsCVGenerated(true);
         setAlertTitle("Missing Fields");
+        setAlertType("error");
         message.error("Missing Fields. Please update your profile.");
         setError(
           <div>
@@ -46,9 +50,13 @@ const Template3 = () => {
               Please update the following sections of your profile before
               generating your resume:
             </p>
-            <p style={{ marginBottom: "0.5rem" }}>
-              <em>{missingFields.join(", ")}</em>
-            </p>
+            <ul>
+              {missingFields.map((field) => (
+                <li key={field}>
+                  <em>{field}</em>
+                </li>
+              ))}
+            </ul>
             <p style={{ marginBottom: "0" }}>
               Hover over your name on the top right corner and select{" "}
               <strong>Profile</strong> from the dropdown.
@@ -95,33 +103,34 @@ const Template3 = () => {
       const result = await axios.post(
         `${baseUrl}/api/user/build`,
         {
-          text: `Create a professional HTML-based resume with the following details:
-    - Full Name: ${firstName} ${lastName}
-    - Email: ${email}
-    - Phone: ${mobileNumber}
-    - Address: ${address || "N/A"}
-    - Career Objective: ${careerObjective || "N/A"}
-    - Skills: ${skillsString || "N/A"}
-    - Education: ${educationString || "N/A"}
-    - Experience: ${experienceString || "N/A"}
-    - Projects: ${projectsString || "N/A"}
-    
-    Requirements:
-    - Use the "${styleToUse}" template style.
-    - If the template is "modern":
-      - Use a minimalist design with sans-serif fonts, subtle colors (e.g., gray or blue), and clean lines.
-      - Include rounded borders, soft shadows, and prominent headers.
-      - Focus on spacing and typography for a sleek appearance.
-    - If the template is "classic":
-      - Use a traditional design with serif fonts and a simple black-and-white color scheme.
-      - Add a border around the entire resume for a structured look.
-      - Focus on straightforward readability and avoid complex design elements.
-      
-    Additional Guidelines:
-    - Highlight key achievements using bullet points.
-    - Organize the content into sections: "Objective," "Skills," "Education," "Experience," and "Projects" in this order.
-    - Provide placeholders like "N/A" for missing data.
-    - Return the complete HTML and inline CSS in a <div> element.`,
+          text: `Create a professional HTML-based resume in ${selectedLanguage} with the following details:
+- Full Name: ${firstName} ${lastName}
+- Email: ${email}
+- Phone: ${mobileNumber}
+- Address: ${address || "N/A"}
+- Career Objective: ${careerObjective || "N/A"}
+- Skills: ${skillsString || "N/A"}
+- Education: ${educationString || "N/A"}
+- Experience: ${experienceString || "N/A"}
+- Projects: ${projectsString || "N/A"}
+
+Requirements:
+- Use the "${styleToUse}" template style.
+- If the template is "modern":
+  - Use a minimalist design with sans-serif fonts, subtle colors (e.g., gray or blue), and clean lines.
+  - Include rounded borders, soft shadows, and prominent headers.
+  - Focus on spacing and typography for a sleek appearance.
+- If the template is "classic":
+  - Use a traditional design with serif fonts and a simple black-and-white color scheme.
+  - Add a border around the entire resume for a structured look.
+  - Focus on straightforward readability and avoid complex design elements.
+  
+Additional Guidelines:
+- Highlight key achievements using bullet points.
+- Organize the content into sections: "Objective," "Skills," "Education," "Experience," and "Projects" in this order.
+- Provide placeholders like "N/A" for missing data.
+- Translate all content, including section titles, into ${selectedLanguage}.
+- Return the complete HTML and inline CSS in a <div> element.`,
         },
         {
           headers: {
@@ -148,12 +157,15 @@ const Template3 = () => {
 
       if (err && err.response.status === 429) {
         setAlertTitle("Quota Exceeded");
+        setAlertType("error");
         message.error("Quota Exceeded. Please try again later.");
       } else if (err.response.status === 403) {
         setAlertTitle("Unauthorized Access!");
-        message.error("Unauthorized Access. Please login/signup.");
+        setAlertType("info");
+        message.info("Unauthorized Access. Please login/signup.");
       } else {
         setAlertTitle("An error occurred!");
+        setAlertType("error");
         message.error("An error occurred. Please try again.");
       }
       setError(err.response.data);
@@ -191,13 +203,29 @@ const Template3 = () => {
     },
   ];
 
+  const languageOptions = [
+    { key: "1", label: "English" },
+    { key: "2", label: "French" },
+    { key: "3", label: "Spanish" },
+  ];
+
+  const handleLanguageChange = (key) => {
+    const selected = languageOptions.find((option) => option.key === key);
+    setSelectedLanguage(selected.label);
+  };
+
   return (
     <div>
       <div
         style={{ width: `${isMobile ? "95%" : "50%"}`, margin: "10px auto" }}
       >
         {error && (
-          <AlertBox message={error} setError={setError} title={alertTitle} />
+          <AlertBox
+            message={error}
+            setError={setError}
+            title={alertTitle}
+            type={alertType}
+          />
         )}
       </div>
       {loading && <Spin size="large" />}
@@ -216,15 +244,50 @@ const Template3 = () => {
           </div>
         </>
       )}
-      {generatedHTML === "" && alert === "" && !error && (
+      {!generatedHTML && !alert && !error && (
         <>
           <div style={{ textAlign: "center", marginBottom: "30px" }}>
             <h4>
-              Select a template style and click the button below to generate
-              your resume.
+              Select a language and choose a template style to automatically
+              generate your resume.
             </h4>
           </div>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div className="options-dropdown">
+            <label
+              htmlFor="language-dropdown"
+              style={{
+                textAlign: "center",
+                display: "block",
+                fontWeight: "bold",
+                marginBottom: "5px",
+              }}
+            >
+              Resume Language
+            </label>
+            <Dropdown
+              className="language-dropdown"
+              menu={{
+                items: languageOptions.map((lang) => ({
+                  key: lang.key,
+                  label: (
+                    <span
+                      onClick={() => handleLanguageChange(lang.key)}
+                      style={{ display: "block", cursor: "pointer" }}
+                    >
+                      {lang.label}
+                    </span>
+                  ),
+                })),
+              }}
+              trigger={["click"]}
+            >
+              <button className="language-button" type="button">
+                <Space>
+                  {selectedLanguage} <DownOutlined />
+                </Space>
+              </button>
+            </Dropdown>
+
             <Dropdown
               menu={{
                 items: templateStyle,
@@ -234,11 +297,7 @@ const Template3 = () => {
               trigger={["click"]}
             >
               <button
-                style={{
-                  borderRadius: "5px",
-                  marginLeft: "20px",
-                  marginBottom: "20px",
-                }}
+                className="template-button"
                 type="button"
                 onClick={(e) => e.preventDefault()}
               >

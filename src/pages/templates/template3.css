@@ -1,0 +1,17 @@
+.options-dropdown {
+    display: flex;
+    justify-content: center;
+    flex-direction: column; 
+    /* gap: 1rem;  */
+    width: fit-content; 
+    align-content: center; 
+    margin: auto;
+}
+
+.language-dropdown {
+    margin-bottom: 3rem;
+}
+
+.template-button, .language-button {
+    border-radius: 5px;
+}

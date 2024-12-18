@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const AlertBox = ({ message, setError, title }) => {
+const AlertBox = ({ message, setError, title, type }) => {
   const isMobile = useIsMobile();
   const onClose = () => {
     setError("");
@@ -28,7 +28,7 @@ const AlertBox = ({ message, setError, title }) => {
         <Alert
           message={title}
           description={message}
-          type="info"
+          type={type}
           closable
           showIcon={!isMobile}
           onClose={onClose}
