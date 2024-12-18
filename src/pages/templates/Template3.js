@@ -18,10 +18,45 @@ const Template3 = () => {
   //console.log(isMobile);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
+  const checkMandatoryFields = (user) => {
+    const missingFields = [];
+    if (!user.firstName || !user.lastName) missingFields.push("Full Name");
+    if (!user.email) missingFields.push("Email");
+    if (!user.mobileNumber) missingFields.push("Phone Number");
+    if (!user.careerObjective) missingFields.push("Career Objective");
+    if (!user.skills || user.skills.length === 0) missingFields.push("Skills");
+    if (!user.education || user.education.length === 0)
+      missingFields.push("Education");
+
+    return missingFields;
+  };
+
   const handleClick = async (selectedStyle) => {
     try {
       const styleToUse = selectedStyle.toLowerCase();
       const user = JSON.parse(localStorage.getItem("user"));
+      const missingFields = checkMandatoryFields(user);
+      if (missingFields.length > 0) {
+        setIsCVGenerated(true);
+        setAlertTitle("Missing Fields");
+        message.error("Missing Fields. Please update your profile.");
+        setError(
+          <div>
+            <p style={{ marginBottom: "0" }}>
+              Please update the following sections of your profile before
+              generating your resume:
+            </p>
+            <p style={{ marginBottom: "0.5rem" }}>
+              <em>{missingFields.join(", ")}</em>
+            </p>
+            <p style={{ marginBottom: "0" }}>
+              Hover over your name on the top right corner and select{" "}
+              <strong>Profile</strong> from the dropdown.
+            </p>
+          </div>
+        );
+        return;
+      }
       const {
         firstName,
         lastName,
@@ -102,15 +137,24 @@ const Template3 = () => {
         message.success("Your AI Resume is Ready!");
       }
     } catch (err) {
+      console.error("Error", err);
       setLoading(false);
       setIsCVGenerated(true);
       setAlert("");
-      if (err.response.status === 429) {
+      if (err.message === "Network Error") {
+        message.error("Network Error. Please check your internet connection.");
+        return;
+      }
+
+      if (err && err.response.status === 429) {
         setAlertTitle("Quota Exceeded");
+        message.error("Quota Exceeded. Please try again later.");
       } else if (err.response.status === 403) {
         setAlertTitle("Unauthorized Access!");
+        message.error("Unauthorized Access. Please login/signup.");
       } else {
         setAlertTitle("An error occurred!");
+        message.error("An error occurred. Please try again.");
       }
       setError(err.response.data);
     }

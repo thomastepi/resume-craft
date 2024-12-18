@@ -32,6 +32,7 @@ const items = [
 const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [alertTitle, setAlertTitle] = useState("");
   const isMobile = useIsMobile();
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -60,6 +61,17 @@ const Profile = () => {
       message.success("Profile Updated Successfully");
     } catch (err) {
       setLoading(false);
+      if (err.message === "Network Error") {
+        message.error("Network Error. Please check your internet connection.");
+        return;
+      }
+      if (err.response.status === 403) {
+        setAlertTitle("Unauthorized Access");
+        message.error("Unauthorized Access. Please login/signup.");
+      } else {
+        setAlertTitle("An error occurred");
+        message.error("An error occurred. Please try again.");
+      }
       setError(err.response.data);
     }
   };
@@ -80,7 +92,13 @@ const Profile = () => {
               marginBottom: "15px",
             }}
           >
-            {error && <AlertBox message={error} setError={setError} />}
+            {error && (
+              <AlertBox
+                message={error}
+                setError={setError}
+                title={alertTitle}
+              />
+            )}
           </div>
           <button
             style={{ borderRadius: "5px" }}

@@ -20,23 +20,32 @@ function Login() {
     try {
       setLoading(true);
       const response = await axios.post(`${baseUrl}/api/user/login`, values);
-      localStorage.setItem("user", JSON.stringify(response.data));
-      let name =
-        response.data.firstName === "Thomas "
-          ? "Guest User"
-          : response.data.firstName;
+
+      const { username, firstName } = response.data;
+
+      const name =
+        username === "guest"
+          ? `Guest User`
+          : firstName || username;
+
       message.success({
-        content: `Welcome, ${name || response.data.username}!`,
+        content: `Welcome, ${name}!`,
         duration: 4,
       });
+
+      localStorage.setItem("user", JSON.stringify(response.data));
       setTimeout(() => {
         navigate("/home");
       }, 2000);
     } catch (err) {
+      console.error("Error", err);
+      if (err.message === "Network Error") {
+        message.error("Network Error. Please check your internet connection.");
+        return;
+      }
       message.error(
         err.response.data.error || "An error occurred. Please try again."
       );
-      //console.error(err.response.data.error);
       //form.resetFields();
     } finally {
       setLoading(false);
@@ -75,8 +84,14 @@ function Login() {
             <Button
               type="primary"
               htmlType="button"
-              onClick={() => {
-                onFinish({ username: "guest", password: "0000" });
+              onClick={async () => {
+                try {
+                  await axios.post(`${baseUrl}/api/user/guest-log`);
+
+                  onFinish({ username: "guest", password: "0000" });
+                } catch (err) {
+                  console.error("Failed to log guest session:", err);
+                }
               }}
               className="btn-block btn-guest"
             >

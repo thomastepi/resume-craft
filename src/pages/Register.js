@@ -14,12 +14,12 @@ function Register() {
   const onFinish = async (values) => {
     if (!values.username || !values.password || !values.cpassword) {
       message.error("Please fill all the fields");
-      form.resetFields();
+      //form.resetFields();
       return;
     }
     if (values.password !== values.cpassword) {
       message.error("Passwords do not match");
-      form.resetFields();
+      //form.resetFields();
       return;
     }
     setLoading(true);
@@ -30,8 +30,13 @@ function Register() {
       navigate("/login");
     } catch (err) {
       setLoading(false);
-      message.error(err.response.data);
-      form.resetFields();
+      console.error("Error", err);
+      if (err.message === "Network Error") {
+        message.error("Network Error. Please check your internet connection.");
+        return;
+      }
+      message.error(err.response.data || "An error occurred. Please try again.");
+      //form.resetFields();
     }
   };
 
@@ -62,7 +67,11 @@ function Register() {
             <Form.Item name="cpassword" label="Confirm Password">
               <Input type="password" />
             </Form.Item>
-            <Button type="primary" htmlType="submit" className="btn-block btn-register">
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="btn-block btn-register"
+            >
               Register
             </Button>
             <span>
