@@ -29,21 +29,6 @@ const SkillsEducaton = () => {
                     </Form.Item>
                   </div>
 
-                  <div className="col-md-2">
-                    <Form.Item
-                      {...restField}
-                      name={[name, "gpa"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Missing gpa",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="GPA" />
-                    </Form.Item>
-                  </div>
-
                   <div className="col-md-3">
                     <Form.Item
                       {...restField}
@@ -123,20 +108,6 @@ const SkillsEducaton = () => {
                     </Form.Item>
                   </div>
 
-                  <div className="col-md-4">
-                    <Form.Item
-                      {...restField}
-                      name={[name, "rating"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Missing Rating",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Rating" />
-                    </Form.Item>
-                  </div>
                   <div className="col-md-2">
                     <MinusCircleOutlined
                       style={{ fontSize: 26, color: "tomato" }}

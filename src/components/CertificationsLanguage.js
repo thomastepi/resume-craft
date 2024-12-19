@@ -1,84 +1,53 @@
 import React from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
-import TextArea from "antd/es/input/TextArea";
 
-const ExperienceProject = () => {
+const CertificationsLanguage = () => {
   return (
     <div>
       <h5>
-        <strong>Experience</strong>
+        <strong>Certifications</strong>
       </h5>
-      <Form.List name="experience">
+      <Form.List name="certifications">
         {(fields, { add, remove }) => (
           <>
             <div className="row">
               {fields.map(({ key, name, ...restField }) => (
                 <>
-                  <div className="col-md-2">
+                  <div className="col-md-4">
                     <Form.Item
                       {...restField}
-                      name={[name, "company"]}
+                      name={[name, "name"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Company",
+                          message: "Missing Certification Name",
                         },
                       ]}
                     >
-                      <Input placeholder="Company" />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-md-2">
-                    <Form.Item
-                      {...restField}
-                      name={[name, "role"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Missing Role",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Role" />
+                      <Input placeholder="Certification Name" />
                     </Form.Item>
                   </div>
 
                   <div className="col-md-3">
                     <Form.Item
                       {...restField}
-                      name={[name, "roleDescription"]}
+                      name={[name, "organization"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Description",
+                          message: "Missing Organization",
                         },
                       ]}
                     >
-                      <TextArea placeholder="Description" />
+                      <Input placeholder="Organization" />
                     </Form.Item>
                   </div>
 
-                  <div className="col-md-1">
+                  <div className="col-md-2">
                     <Form.Item
                       {...restField}
-                      name={[name, "place"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Missing Location",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Location" />
-                    </Form.Item>
-                  </div>
-
-                  <div className="col-md-1">
-                    <Form.Item
-                      {...restField}
-                      name={[name, "range"]}
+                      name={[name, "year"]}
                       rules={[
                         {
                           required: true,
@@ -86,9 +55,10 @@ const ExperienceProject = () => {
                         },
                       ]}
                     >
-                      <Input placeholder="Year Interval" />
+                      <Input placeholder="Year" />
                     </Form.Item>
                   </div>
+
                   <div className="col-md-2">
                     <MinusCircleOutlined
                       style={{ fontSize: 26, color: "tomato" }}
@@ -106,7 +76,7 @@ const ExperienceProject = () => {
                 block
                 icon={<PlusOutlined />}
               >
-                Add Experience
+                Add Certification
               </Button>
             </Form.Item>
           </>
@@ -116,9 +86,9 @@ const ExperienceProject = () => {
       <hr />
 
       <h5>
-        <strong>Projects</strong>
+        <strong>Languages</strong>
       </h5>
-      <Form.List name="projects">
+      <Form.List name="languages">
         {(fields, { add, remove }) => (
           <>
             <div className="row">
@@ -127,46 +97,33 @@ const ExperienceProject = () => {
                   <div className="col-md-4">
                     <Form.Item
                       {...restField}
-                      name={[name, "title"]}
+                      name={[name, "language"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Title",
+                          message: "Missing Language",
                         },
                       ]}
                     >
-                      <Input placeholder="Title" />
+                      <Input placeholder="Language" />
                     </Form.Item>
                   </div>
 
                   <div className="col-md-4">
                     <Form.Item
                       {...restField}
-                      name={[name, "description"]}
+                      name={[name, "proficiency"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Description",
+                          message: "Missing Proficiency Level",
                         },
                       ]}
                     >
-                      <TextArea placeholder="Description" />
+                      <Input placeholder="Proficiency (e.g., Beginner, Fluent)" />
                     </Form.Item>
                   </div>
-                  <div className="col-md-2">
-                    <Form.Item
-                      {...restField}
-                      name={[name, "range"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Missing Year",
-                        },
-                      ]}
-                    >
-                      <Input placeholder="Year Interval" />
-                    </Form.Item>
-                  </div>
+
                   <div className="col-md-2">
                     <MinusCircleOutlined
                       style={{ fontSize: 26, color: "tomato" }}
@@ -184,7 +141,7 @@ const ExperienceProject = () => {
                 block
                 icon={<PlusOutlined />}
               >
-                Add Project
+                Add Language
               </Button>
             </Form.Item>
           </>
@@ -194,4 +151,4 @@ const ExperienceProject = () => {
   );
 };
 
-export default ExperienceProject;
+export default CertificationsLanguage;

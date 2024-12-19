@@ -46,17 +46,23 @@ const PersonalInfo = () => {
         <div className="col-md-4">
           <Form.Item
             name="portfolio"
-            label="Portfolio"
-            rules={[{ required: true, message: "Missing Portfolio" }]}
+            label="Portfolio/LinkedIn (Optional)"
+            rules={[
+              {
+                required: false,
+                message:
+                  "Providing a portfolio is optional but highly recommended.",
+              },
+            ]}
           >
             <Input />
           </Form.Item>
         </div>
         <div className="col-md-12">
           <Form.Item
-            name="careerObjective"
-            label="Career Objective"
-            rules={[{ required: true, message: "Missing Objective" }]}
+            name="summary"
+            label="Summary"
+            rules={[{ required: true, message: "Missing Summary" }]}
           >
             <TextArea />
           </Form.Item>

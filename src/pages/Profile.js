@@ -5,11 +5,12 @@ import { Tabs, Form, Spin, message } from "antd";
 import PersonalInfo from "../components/PersonalInfo";
 import SkillsEducation from "../components/SkillsEducation";
 import ExperienceProject from "../components/ExperienceProject";
+import CertificationsLanguage from "../components/CertificationsLanguage";
 import AlertBox from "../components/AlertBox";
 import useIsMobile from "../hooks/useIsMobile";
 
 const onChange = (key) => {
-  console.log(key);
+  //console.log(key);
 };
 const items = [
   {
@@ -26,6 +27,11 @@ const items = [
     key: "3",
     label: "Experience and Projects",
     children: <ExperienceProject />,
+  },
+  {
+    key: "4",
+    label: "Certifications and Languages",
+    children: <CertificationsLanguage />,
   },
 ];
 
@@ -53,6 +59,7 @@ const Profile = () => {
           },
         }
       );
+      //console.log("data",data);
       localStorage.setItem(
         "user",
         JSON.stringify({ ...data, accessToken: user.accessToken })

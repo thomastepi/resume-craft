@@ -26,7 +26,7 @@ const Template3 = () => {
     if (!user.firstName || !user.lastName) missingFields.push("Full Name");
     if (!user.email) missingFields.push("Email");
     if (!user.mobileNumber) missingFields.push("Phone Number");
-    if (!user.careerObjective) missingFields.push("Career Objective");
+    if (!user.summary) missingFields.push("Summary");
     if (!user.skills || user.skills.length === 0) missingFields.push("Skills");
     if (!user.education || user.education.length === 0)
       missingFields.push("Education");
@@ -69,27 +69,40 @@ const Template3 = () => {
         firstName,
         lastName,
         email,
+        portfolio,
         mobileNumber,
         address,
         skills,
         education,
         experience,
         projects,
-        careerObjective,
+        summary,
+        certifications,
+        languages,
       } = user;
-      const skillsString = skills
-        .map((skill) => `${skill.skill}: ${skill.rating}`)
-        .join(", ");
+      const skillsString = skills.map((skill) => `${skill.skill}`).join(", ");
       const educationString = education
         .map(
           (edu) =>
-            `Qualification: ${edu.qualification}, Institution: ${edu.institution}, GPA:${edu.gpa}`
+            `Qualification: ${edu.qualification}, Institution: ${edu.institution}`
+        )
+        .join(", ");
+      const certificationsString = certifications
+        .map(
+          (cert) =>
+            `Certification name: ${cert.name}, Issuer: ${cert.organization}, Date: ${cert.year}`
+        )
+        .join(", ");
+      const languagesString = languages
+        .map(
+          (lang) =>
+            `Language: ${lang.language}, Proficiency: ${lang.proficiency}`
         )
         .join(", ");
       const experienceString = experience
         .map(
           (exp) =>
-            `Employer: ${exp.company}, Role: ${exp.role}, Place: ${exp.place}, Duration: ${exp.range}`
+            `Employer: ${exp.company}, Role: ${exp.role}, Description: ${exp.roleDescription},  Place: ${exp.place}, Duration: ${exp.range}`
         )
         .join(", ");
       const projectsString = projects
@@ -108,11 +121,14 @@ const Template3 = () => {
 - Email: ${email}
 - Phone: ${mobileNumber}
 - Address: ${address || "N/A"}
-- Career Objective: ${careerObjective || "N/A"}
+- Portfolio: ${portfolio || "N/A"}
+- Summary: ${summary || "N/A"}
 - Skills: ${skillsString || "N/A"}
 - Education: ${educationString || "N/A"}
 - Experience: ${experienceString || "N/A"}
 - Projects: ${projectsString || "N/A"}
+- Certifications: ${certificationsString || "N/A"}
+- Languages: ${languagesString || "N/A"}
 
 Requirements:
 - Use the "${styleToUse}" template style.
