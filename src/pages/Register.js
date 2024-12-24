@@ -12,22 +12,41 @@ function Register() {
   const [form] = Form.useForm();
 
   const onFinish = async (values) => {
+    if (values.username === "guest" && values.password === "0000") {
+      try {
+        setLoading(true);
+        const response = await axios.post(`${baseUrl}/api/user/login`, values);
+
+        message.success({
+          content: "Welcome, Guest User!",
+          duration: 4,
+        });
+
+        localStorage.setItem("user", JSON.stringify(response.data));
+        setTimeout(() => {
+          navigate("/home");
+        }, 2000);
+      } catch (err) {
+        console.error("Error", err);
+        message.error("An error occurred. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
     if (!values.username || !values.password || !values.cpassword) {
       message.error("Please fill all the fields");
-      //form.resetFields();
       return;
     }
     if (values.password !== values.cpassword) {
       message.error("Passwords do not match");
-      //form.resetFields();
       return;
     }
     setLoading(true);
     try {
       await axios.post(`${baseUrl}/api/user/register`, values);
       setLoading(false);
-      message.success("Registration Successful");
-      navigate("/login");
     } catch (err) {
       setLoading(false);
       console.error("Error", err);
@@ -35,8 +54,34 @@ function Register() {
         message.error("Network Error. Please check your internet connection.");
         return;
       }
-      message.error(err.response.data || "An error occurred. Please try again.");
-      //form.resetFields();
+      message.error(
+        err.response.data || "An error occurred. Please try again."
+      );
+    }
+
+    try {
+      const res = await axios.post(`${baseUrl}/api/user/login`, values);
+
+      message.success({
+        content: `Welcome, ${values.username}!`,
+        duration: 4,
+      });
+
+      localStorage.setItem("user", JSON.stringify(res.data));
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
+    } catch (err) {
+      console.error("Error", err);
+      if (err.message === "Network Error") {
+        message.error("Network Error. Please check your internet connection.");
+        return;
+      }
+      message.error(
+        err.response.data.error || "An error occurred. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -75,8 +120,32 @@ function Register() {
               Register
             </Button>
             <span>
-              Already have an account? Login <Link to="/login">Here</Link>{" "}
+              Already have an account? <Link to="/login">Login</Link>{" "}
             </span>
+
+            <div style={{ marginTop: "10px" }}>
+              <span>
+                Not ready to register?{" "}
+                <span
+                  className="guest-link"
+                  onClick={async () => {
+                    try {
+                      setLoading(true);
+                      await axios.post(`${baseUrl}/api/user/guest-log`);
+
+                      onFinish({ username: "guest", password: "0000" });
+                    } catch (err) {
+                      console.error("Failed to log guest session:", err);
+                      message.error("An error occurred. Please try again.");
+                    } finally {
+                      setLoading(false);
+                    }
+                  }}
+                >
+                  Explore as Guest
+                </span>
+              </span>
+            </div>
           </Form>
         </div>
       </div>

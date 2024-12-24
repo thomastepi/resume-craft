@@ -7,7 +7,7 @@ const Template1 = () => {
     <div className="template1-parent">
       <div className="top d-flex justify-content-between">
         <h1>
-          {user.firstName.toUpperCase()} {user.lastName.toUpperCase()}
+          {user.firstName.toUpperCase() || ""} {user.lastName.toUpperCase() || ""}
         </h1>
         <div>
           <p>{user.email}</p>

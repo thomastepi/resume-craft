@@ -23,10 +23,7 @@ function Login() {
 
       const { username, firstName } = response.data;
 
-      const name =
-        username === "guest"
-          ? `Guest User`
-          : firstName || username;
+      const name = username === "guest" ? `Guest User` : firstName || username;
 
       message.success({
         content: `Welcome, ${name}!`,
@@ -81,16 +78,25 @@ function Login() {
             <Button type="primary" htmlType="submit" className="btn-block">
               Login
             </Button>
+            <div className="or-divider">
+              <span>
+                <strong>OR</strong>
+              </span>
+            </div>
             <Button
               type="primary"
               htmlType="button"
               onClick={async () => {
                 try {
+                  setLoading(true);
                   await axios.post(`${baseUrl}/api/user/guest-log`);
 
                   onFinish({ username: "guest", password: "0000" });
                 } catch (err) {
                   console.error("Failed to log guest session:", err);
+                  message.error("An error occurred. Please try again.");
+                } finally {
+                  setLoading(false);
                 }
               }}
               className="btn-block btn-guest"
@@ -99,7 +105,7 @@ function Login() {
             </Button>
             <div className="d-flex align-items-center justify-content-between">
               <span>
-                Don't have an account? Register <Link to="/register">Here</Link>{" "}
+                Don't have an account? <Link to="/register">Register</Link>{" "}
               </span>
             </div>
           </Form>

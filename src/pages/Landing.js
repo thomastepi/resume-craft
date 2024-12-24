@@ -11,6 +11,9 @@ const Landing = () => {
         <nav>
           <img src={logo} alt="logo" />
         </nav>
+        <div className="logo-mobile">
+          <img src={logo} alt="logo" />
+        </div>
         <div className="container page">
           <div className="info">
             <h1>AI-Powered Resume Builder</h1>

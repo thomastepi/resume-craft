@@ -14,7 +14,7 @@ const Wrapper = styled.main`
     width: 10%;
     height: auto;
   }
-  @media (max-height: 600px) {
+  @media (max-height: 500px) {
     nav img {
       display: none;
     }
@@ -52,7 +52,11 @@ const Wrapper = styled.main`
     background-color: rgba(47, 43, 43, 0.818);
     color: white;
   }
-  @media (min-width: 992px) {
+
+  .logo-mobile {
+    display: none;
+  }
+  @media screen and (min-width: 768px) {
     .page {
       grid-template-columns: 1fr 1fr;
       column-gap: 3rem;
@@ -61,9 +65,25 @@ const Wrapper = styled.main`
       display: block;
     }
   }
-  @media (max-width: 992px) {
+  @media screen and (max-width: 768px) {
     nav img {
       display: none;
+    }
+    .logo-mobile {
+      display: flex;
+      justify-content: center;
+    }
+    .page {
+      text-align: center;
+    }
+    .logo-mobile img {
+      width: 30%;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .logo-mobile img {
+      width: 40%;
     }
   }
 `;
