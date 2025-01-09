@@ -1,8 +1,8 @@
 /* homepage template styling */
 .home .template {
-  margin: 20px;
+  margin: 10px;
   box-shadow: 0 0 3px grey;
-  padding: 20px;
+  padding: 10px;
   position: relative;
 }
 

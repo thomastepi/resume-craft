@@ -65,21 +65,7 @@ function DefaultLayout(props) {
           </Button>
         </Dropdown>
       </div>
-      <div className="content" style={{ overflow: "auto" }}>
-        {props.children}
-      </div>
-      <div className="footer">
-        <div className="footer-content">
-          <p>Made with ❤️ by Thomas Tepi</p>
-          <a
-            href="https://www.thomastepi.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            www.thomastepi.com
-          </a>
-        </div>
-      </div>
+      <div className="content">{props.children}</div>
     </div>
   );
 }

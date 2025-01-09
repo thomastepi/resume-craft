@@ -1,10 +1,11 @@
 .layout {
   height: 100vh;
-  padding: 20px 50px;
+  padding: 5px 5px;
+  overflow: hidden;
 }
 
 .header {
-  height: 15%;
+  height: 3.5rem;
   background-color: black;
   color: rgba(255, 255, 255, 0.681);
   border-radius: 5px;
@@ -17,8 +18,7 @@
 }
 
 .header img {
-  height: 150px;
-  width: 150px;
+  width: 5rem;
   cursor: pointer;
 }
 
@@ -37,32 +37,28 @@
   cursor: pointer;
 }
 
-.footer {
-  margin: 20px 0 20px 0;
-  padding: 10px;
-  background-color: black;
-  color: white;
-  border-radius: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .content {
-  height: 87%;
+  height: calc(100vh - 4.5rem);
   border: 1px solid gray;
-  margin-top: 20px;
+  margin-top: 5px;
   border-radius: 5px;
   box-shadow: 0 0 3px gray;
   padding: 10px;
   background-color: white;
+  overflow-x: hidden;
+}
+
+.col-md-4 {
+  display: flex;
+  align-items: center;
+}
+
+.home {
+  height: 100%;
+}
+
+.text p {
+  text-align: center;
 }
 
 .btn-block {
