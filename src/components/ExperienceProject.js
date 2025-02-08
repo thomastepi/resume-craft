@@ -14,15 +14,25 @@ const ExperienceProject = () => {
           <>
             <div className="row">
               {fields.map(({ key, name, ...restField }) => (
-                <>
+                <div key={key} className="row">
                   <div className="col-md-2">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "company"]}
                       rules={[
+                        { required: true, message: "Company name is required" },
                         {
-                          required: true,
-                          message: "Missing Company",
+                          pattern: /^[a-zA-Z0-9\s&-]+$/,
+                          message: "Invalid company name format",
+                        },
+                        {
+                          min: 2,
+                          message: "Must be at least 2 characters long",
+                        },
+                        {
+                          max: 100,
+                          message: "Cannot be more than 100 characters",
                         },
                       ]}
                     >
@@ -32,12 +42,22 @@ const ExperienceProject = () => {
 
                   <div className="col-md-2">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "role"]}
                       rules={[
+                        { required: true, message: "Role is required" },
                         {
-                          required: true,
-                          message: "Missing Role",
+                          pattern: /^[a-zA-Z0-9\s&-]+$/,
+                          message: "Invalid role format",
+                        },
+                        {
+                          min: 2,
+                          message: "Must be at least 2 characters long",
+                        },
+                        {
+                          max: 100,
+                          message: "Cannot be more than 100 characters",
                         },
                       ]}
                     >
@@ -47,27 +67,37 @@ const ExperienceProject = () => {
 
                   <div className="col-md-3">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "roleDescription"]}
                       rules={[
-                        {
-                          required: true,
-                          message: "Missing Description",
-                        },
+                        { required: true, message: "Description is required" },
+                        { min: 20, message: "Must be at least 20 characters" },
+                        { max: 1000, message: "Max 1000 characters allowed" },
                       ]}
                     >
                       <TextArea placeholder="Description" />
                     </Form.Item>
                   </div>
 
-                  <div className="col-md-1">
+                  <div className="col-md-2">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "place"]}
                       rules={[
+                        { required: true, message: "Location is required" },
                         {
-                          required: true,
-                          message: "Missing Location",
+                          pattern: /^[a-zA-Z0-9\s,.-]+$/,
+                          message: "Invalid location format",
+                        },
+                        {
+                          min: 2,
+                          message: "Must be at least 2 characters long",
+                        },
+                        {
+                          max: 100,
+                          message: "Cannot be more than 100 characters",
                         },
                       ]}
                     >
@@ -75,27 +105,31 @@ const ExperienceProject = () => {
                     </Form.Item>
                   </div>
 
-                  <div className="col-md-1">
+                  <div className="col-md-2">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "range"]}
                       rules={[
+                        { required: true, message: "Year interval required" },
                         {
-                          required: true,
-                          message: "Missing Year",
+                          pattern: /^\d{4}(-(\d{4}|present))?$/,
+                          message:
+                            "Use format YYYY or YYYY-YYYY or YYYY-present",
                         },
                       ]}
                     >
                       <Input placeholder="Year Interval" />
                     </Form.Item>
                   </div>
-                  <div className="col-md-2">
+
+                  <div className="col-md-1">
                     <MinusCircleOutlined
                       style={{ fontSize: 26, color: "tomato" }}
                       onClick={() => remove(name)}
                     />
                   </div>
-                </>
+                </div>
               ))}
             </div>
 
@@ -123,15 +157,28 @@ const ExperienceProject = () => {
           <>
             <div className="row">
               {fields.map(({ key, name, ...restField }) => (
-                <>
+                <div key={key} className="row">
                   <div className="col-md-4">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "title"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Title",
+                          message: "Project title is required",
+                        },
+                        {
+                          pattern: /^[a-zA-Z0-9\s-]+$/,
+                          message: "Invalid title format",
+                        },
+                        {
+                          min: 2,
+                          message: "Must be at least 2 characters long",
+                        },
+                        {
+                          max: 100,
+                          message: "Cannot be more than 100 characters",
                         },
                       ]}
                     >
@@ -141,39 +188,44 @@ const ExperienceProject = () => {
 
                   <div className="col-md-4">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "description"]}
                       rules={[
-                        {
-                          required: true,
-                          message: "Missing Description",
-                        },
+                        { required: true, message: "Description is required" },
+                        { min: 20, message: "Must be at least 20 characters" },
+                        { max: 1000, message: "Max 1000 characters allowed" },
                       ]}
                     >
                       <TextArea placeholder="Description" />
                     </Form.Item>
                   </div>
+
                   <div className="col-md-2">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "range"]}
                       rules={[
+                        { required: true, message: "Year interval required" },
                         {
-                          required: true,
-                          message: "Missing Year",
+                          pattern: /^\d{4}(-(\d{4}|present))?$/,
+                          message:
+                            "Use format YYYY or YYYY-YYYY or YYYY-present",
                         },
                       ]}
                     >
                       <Input placeholder="Year Interval" />
                     </Form.Item>
                   </div>
+
                   <div className="col-md-2">
                     <MinusCircleOutlined
                       style={{ fontSize: 26, color: "tomato" }}
                       onClick={() => remove(name)}
                     />
                   </div>
-                </>
+                </div>
               ))}
             </div>
 

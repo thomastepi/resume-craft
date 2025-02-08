@@ -13,15 +13,28 @@ const CertificationsLanguage = () => {
           <>
             <div className="row">
               {fields.map(({ key, name, ...restField }) => (
-                <>
+                <div key={key} className="row">
                   <div className="col-md-4">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "name"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Certification Name",
+                          message: "Certification name is required",
+                        },
+                        {
+                          pattern: /^[a-zA-Z0-9\s&-]+$/,
+                          message: "Invalid certification name format",
+                        },
+                        {
+                          min: 2,
+                          message: "Must be at least 2 characters long",
+                        },
+                        {
+                          max: 100,
+                          message: "Cannot be more than 100 characters",
                         },
                       ]}
                     >
@@ -31,12 +44,25 @@ const CertificationsLanguage = () => {
 
                   <div className="col-md-3">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "organization"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Organization",
+                          message: "Organization name is required",
+                        },
+                        {
+                          pattern: /^[a-zA-Z0-9\s&-]+$/,
+                          message: "Invalid organization name format",
+                        },
+                        {
+                          min: 2,
+                          message: "Must be at least 2 characters long",
+                        },
+                        {
+                          max: 100,
+                          message: "Cannot be more than 100 characters",
                         },
                       ]}
                     >
@@ -46,16 +72,18 @@ const CertificationsLanguage = () => {
 
                   <div className="col-md-2">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "year"]}
                       rules={[
+                        { required: true, message: "Year is required" },
                         {
-                          required: true,
-                          message: "Missing Year",
+                          pattern: /^\d{4}$/,
+                          message: "Enter a valid 4-digit year (e.g., 2020)",
                         },
                       ]}
                     >
-                      <Input placeholder="Year" />
+                      <Input placeholder="Year (YYYY)" />
                     </Form.Item>
                   </div>
 
@@ -65,7 +93,7 @@ const CertificationsLanguage = () => {
                       onClick={() => remove(name)}
                     />
                   </div>
-                </>
+                </div>
               ))}
             </div>
 
@@ -93,30 +121,53 @@ const CertificationsLanguage = () => {
           <>
             <div className="row">
               {fields.map(({ key, name, ...restField }) => (
-                <>
-                  <div className="col-md-4">
+                <div key={key} className="row">
+                  <div className="col-md-3">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "language"]}
                       rules={[
+                        { required: true, message: "Language is required" },
                         {
-                          required: true,
-                          message: "Missing Language",
+                          pattern: /^[a-zA-Z\s]+$/,
+                          message: "Invalid language name (letters only)",
+                        },
+                        {
+                          min: 2,
+                          message: "Must be at least 2 characters long",
+                        },
+                        {
+                          max: 50,
+                          message: "Cannot be more than 50 characters",
                         },
                       ]}
                     >
-                      <Input placeholder="Language" />
+                      <Input placeholder="Language (e.g., English, French)" />
                     </Form.Item>
                   </div>
 
-                  <div className="col-md-4">
+                  <div className="col-md-3">
                     <Form.Item
+                      style={{ width: "100%" }}
                       {...restField}
                       name={[name, "proficiency"]}
                       rules={[
                         {
                           required: true,
-                          message: "Missing Proficiency Level",
+                          message: "Proficiency level is required",
+                        },
+                        {
+                          pattern: /^[a-zA-Z\s]+$/,
+                          message: "Invalid proficiency level (letters only)",
+                        },
+                        {
+                          min: 2,
+                          message: "Must be at least 2 characters long",
+                        },
+                        {
+                          max: 50,
+                          message: "Cannot be more than 50 characters",
                         },
                       ]}
                     >
@@ -130,7 +181,7 @@ const CertificationsLanguage = () => {
                       onClick={() => remove(name)}
                     />
                   </div>
-                </>
+                </div>
               ))}
             </div>
 

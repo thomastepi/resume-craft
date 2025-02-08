@@ -31,9 +31,9 @@ const Template2 = () => {
       <div className="skills mt-3">
         <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Skills</h3>
         <hr />
-        {user.skills.map((skill) => {
+        {user.skills.map((skill, index) => {
           return (
-            <div className="d-flex flex-column">
+            <div key={index} className="d-flex flex-column">
               <p>- {skill.skill}</p>
             </div>
           );
@@ -45,9 +45,9 @@ const Template2 = () => {
       <div className="education mt-3">
         <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Education</h3>
         <hr />
-        {user.education.map((education) => {
+        {user.education.map((education, index) => {
           return (
-            <div className="d-flex align-items-center">
+            <div key={index} className="d-flex align-items-center">
               <h6 style={{ width: 120 }}>
                 <strong>{education.range} : </strong>
               </h6>
@@ -69,9 +69,10 @@ const Template2 = () => {
               Experience
             </h3>
             <hr />
-            {user.experience.map((exp) => {
+            {user.experience.map((exp, index) => {
               return (
                 <div
+                  key={index}
                   className="d-flex flex-column"
                   style={{ marginBottom: 15 }}
                 >
@@ -99,9 +100,9 @@ const Template2 = () => {
               Projects
             </h3>
             <hr />
-            {user.projects.map((project) => {
+            {user.projects.map((project, index) => {
               return (
-                <div className="d-flex flex-column">
+                <div key={index} className="d-flex flex-column">
                   <h6>
                     <strong>
                       {project.title} [{project.range}]{" "}
@@ -124,9 +125,9 @@ const Template2 = () => {
               Certifications
             </h3>
             <hr />
-            {user.certifications.map((cert) => {
+            {user.certifications.map((cert, index) => {
               return (
-                <div className="d-flex flex-column">
+                <div key={index} className="d-flex flex-column">
                   <p>
                     <strong>{cert.name} </strong> ({cert.organization}) [
                     {cert.year}]
@@ -143,9 +144,9 @@ const Template2 = () => {
       <div className="languages mt-3">
         <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Languages</h3>
         <hr />
-        {user.languages.map((lang) => {
+        {user.languages.map((lang, index) => {
           return (
-            <div className="d-flex flex-column">
+            <div key={index} className="d-flex flex-column">
               <p>
                 <strong>{lang.language} </strong> ({lang.proficiency})
               </p>

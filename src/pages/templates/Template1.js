@@ -7,7 +7,8 @@ const Template1 = () => {
     <div className="template1-parent">
       <div className="top d-flex justify-content-between">
         <h1>
-          {user.firstName.toUpperCase() || ""} {user.lastName.toUpperCase() || ""}
+          {user.firstName.toUpperCase() || ""}{" "}
+          {user.lastName.toUpperCase() || ""}
         </h1>
         <div>
           <p>{user.email}</p>
@@ -30,9 +31,9 @@ const Template1 = () => {
       <div className="skills mt-3">
         <h3>Skills</h3>
         <hr />
-        {user.skills.map((skill) => {
+        {user.skills.map((skill, index) => {
           return (
-            <div className="d-flex flex-column">
+            <div key={index} className="d-flex flex-column">
               <p>- {skill.skill}</p>
             </div>
           );
@@ -44,9 +45,9 @@ const Template1 = () => {
       <div className="education mt-3">
         <h3>Education</h3>
         <hr />
-        {user.education.map((education) => {
+        {user.education.map((education, index) => {
           return (
-            <div className="d-flex align-items-center">
+            <div key={index} className="d-flex align-items-center">
               <h6 style={{ width: 120 }}>
                 <strong>{education.range} : </strong>
               </h6>
@@ -66,9 +67,10 @@ const Template1 = () => {
           <div className="experience mt-3">
             <h3>Experience</h3>
             <hr />
-            {user.experience.map((exp) => {
+            {user.experience.map((exp, index) => {
               return (
                 <div
+                  key={index}
                   className="d-flex flex-column"
                   style={{ marginBottom: 15 }}
                 >
@@ -94,9 +96,9 @@ const Template1 = () => {
           <div className="projects mt-3">
             <h3>Projects</h3>
             <hr />
-            {user.projects.map((project) => {
+            {user.projects.map((project, index) => {
               return (
-                <div className="d-flex flex-column">
+                <div key={index} className="d-flex flex-column">
                   <h6>
                     <strong>
                       {project.title} [{project.range}]{" "}
@@ -117,9 +119,9 @@ const Template1 = () => {
           <div className="certifications mt-3">
             <h3>Certifications</h3>
             <hr />
-            {user.certifications.map((cert) => {
+            {user.certifications.map((cert, index) => {
               return (
-                <div className="d-flex flex-column">
+                <div key={index} className="d-flex flex-column">
                   <p>
                     <strong>{cert.name} </strong> ({cert.organization}) [
                     {cert.year}]
@@ -136,9 +138,9 @@ const Template1 = () => {
       <div className="languages mt-3">
         <h3>Languages</h3>
         <hr />
-        {user.languages.map((lang) => {
+        {user.languages.map((lang, index) => {
           return (
-            <div className="d-flex flex-column">
+            <div key={index} className="d-flex flex-column">
               <p>
                 <strong>{lang.language} </strong> ({lang.proficiency})
               </p>

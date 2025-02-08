@@ -9,9 +9,6 @@ import CertificationsLanguage from "../components/CertificationsLanguage";
 import AlertBox from "../components/AlertBox";
 import useIsMobile from "../hooks/useIsMobile";
 
-const onChange = (key) => {
-  //console.log(key);
-};
 const items = [
   {
     key: "1",
@@ -39,6 +36,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
+  const [activeTab, setActiveTab] = useState("1");
+  const [form] = Form.useForm();
   const isMobile = useIsMobile();
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -59,27 +58,69 @@ const Profile = () => {
           },
         }
       );
-      //console.log("data",data);
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ ...data, accessToken: user.accessToken })
-      );
-      setLoading(false);
-      message.success("Profile Updated Successfully");
+      if (data) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ ...data, accessToken: user.accessToken })
+        );
+        setLoading(false);
+        message.success("Profile Updated Successfully");
+      } else {
+        message.error(
+          "Something went wrong. Please review your details and try again."
+        );
+      }
     } catch (err) {
+      console.log("error: ", err);
       setLoading(false);
       if (err.message === "Network Error") {
         message.error("Network Error. Please check your internet connection.");
         return;
-      }
-      if (err.response.status === 403) {
+      } else if (err.response.status === 403) {
         setAlertTitle("Unauthorized Access");
         message.info("Unauthorized Access. Please login/signup.");
-      } else {
+        setError(err.response.data);
+      } else if (err.response.status === 400) {
         setAlertTitle("An error occurred");
+        message.error("An error occurred while updating your profile.");
+        setError(err.response.data.error.map((error) => error));
+      } else {
         message.error("An error occurred. Please try again.");
       }
-      setError(err.response.data);
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      await form.validateFields();
+      form.submit();
+    } catch (err) {
+      console.log("Validation Errors:", err);
+      const firstErrorField = err.errorFields?.[0]?.name?.[0];
+
+      if (firstErrorField) {
+        if (
+          [
+            "firstName",
+            "lastName",
+            "email",
+            "mobileNumber",
+            "address",
+            "summary",
+            "portfolio",
+          ].includes(firstErrorField)
+        ) {
+          setActiveTab("1");
+        } else if (["education", "skills"].includes(firstErrorField)) {
+          setActiveTab("2");
+        } else if (["experience", "projects"].includes(firstErrorField)) {
+          setActiveTab("3");
+        } else if (["certifications", "languages"].includes(firstErrorField)) {
+          setActiveTab("4");
+        }
+      }
+
+      message.error("Please check the section(s) with error message(s) before submitting.");
     }
   };
 
@@ -91,8 +132,18 @@ const Profile = () => {
       </h4>
       <hr />
       <div className="update-profile">
-        <Form layout="vertical" onFinish={onFinish} initialValues={user}>
-          <Tabs defaultActiveKey="1" items={items} onChange={onChange} />
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={onFinish}
+          initialValues={user}
+        >
+          <Tabs
+            //defaultActiveKey="1"
+            items={items}
+            activeKey={activeTab}
+            onChange={setActiveTab}
+          />
           <div
             style={{
               width: `${isMobile ? "95%" : "50%"}`,
@@ -110,7 +161,8 @@ const Profile = () => {
           </div>
           <button
             style={{ borderRadius: "5px" }}
-            type="submit"
+            type="button"
+            onClick={handleSubmit}
             disabled={error}
           >
             Update Profile

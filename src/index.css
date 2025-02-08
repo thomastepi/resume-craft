@@ -35,6 +35,10 @@ button {
   font-size: 20px;
 }
 
+button:hover {
+  background-color: rgba(105, 96, 96, 0.818) !important;
+}
+
 input,
 textarea {
   outline: none !important;
@@ -75,4 +79,28 @@ textarea:focus {
 
 .ant-message-notice {
   font-size: 17px !important;
+}
+
+
+.passwd-field {
+  border: 1px solid gray;
+  > input {
+    border: none!important;
+  }
+}
+
+.home-alert-banner {
+  > button {
+    > span {
+      background-color: white;
+    }
+  }
+
+  .home-alert-banner-btn {
+    background: #1677ff !important;
+  }
+
+  .home-alert-banner-btn:hover {
+    background: #164a92 !important;
+  }
 }

@@ -6,6 +6,7 @@ import AIGeneratedCV from "./AIGeneratedCV";
 import AlertBox from "../../components/AlertBox";
 import useIsMobile from "../../hooks/useIsMobile";
 import "./template3.css";
+import checkMandatoryFields from "../../utils/validatePrompt";
 
 const Template3 = () => {
   const [loading, setLoading] = useState(false);
@@ -18,21 +19,8 @@ const Template3 = () => {
   const [alertType, setAlertType] = useState("");
   const isMobile = useIsMobile();
 
-  //console.log(isMobile);
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
-  const checkMandatoryFields = (user) => {
-    const missingFields = [];
-    if (!user.firstName || !user.lastName) missingFields.push("Full Name");
-    if (!user.email) missingFields.push("Email");
-    if (!user.mobileNumber) missingFields.push("Phone Number");
-    if (!user.summary) missingFields.push("Summary");
-    if (!user.skills || user.skills.length === 0) missingFields.push("Skills");
-    if (!user.education || user.education.length === 0)
-      missingFields.push("Education");
-
-    return missingFields;
-  };
 
   const handleClick = async (selectedStyle) => {
     try {
@@ -117,18 +105,19 @@ const Template3 = () => {
         `${baseUrl}/api/user/build`,
         {
           text: `Create a professional HTML-based resume in ${selectedLanguage} with the following details:
+
 - Full Name: ${firstName} ${lastName}
-- Email: ${email}
-- Phone: ${mobileNumber}
-- Address: ${address || "N/A"}
-- Portfolio: ${portfolio || "N/A"}
-- Summary: ${summary || "N/A"}
-- Skills: ${skillsString || "N/A"}
-- Education: ${educationString || "N/A"}
-- Experience: ${experienceString || "N/A"}
-- Projects: ${projectsString || "N/A"}
-- Certifications: ${certificationsString || "N/A"}
-- Languages: ${languagesString || "N/A"}
+${email ? `- Email: ${email}` : ""}
+${mobileNumber ? `- Phone: ${mobileNumber}` : ""}
+${address ? `- Address: ${address}` : ""}
+${portfolio ? `- Portfolio: ${portfolio}` : ""}
+${summary ? `- Summary: ${summary}` : ""}
+${skillsString ? `- Skills: ${skillsString}` : ""}
+${educationString ? `- Education: ${educationString}` : ""}
+${experienceString ? `- Experience: ${experienceString}` : ""}
+${projectsString ? `- Projects: ${projectsString}` : ""}
+${certificationsString ? `- Certifications: ${certificationsString}` : ""}
+${languagesString ? `- Languages: ${languagesString}` : ""}
 
 Requirements:
 - Use the "${styleToUse}" template style.
@@ -140,13 +129,14 @@ Requirements:
   - Use a traditional design with serif fonts and a simple black-and-white color scheme.
   - Add a border around the entire resume for a structured look.
   - Focus on straightforward readability and avoid complex design elements.
-  
+
 Additional Guidelines:
 - Highlight key achievements using bullet points.
 - Organize the content into sections: "Objective," "Skills," "Education," "Experience," and "Projects" in this order.
-- Provide placeholders like "N/A" for missing data.
+- **Exclude any section if the user did not provide data** (do not show empty sections).
 - Translate all content, including section titles, into ${selectedLanguage}.
-- Return the complete HTML and inline CSS in a <div> element.`,
+- Return the complete HTML and inline CSS in a "<div>" element.
+`,
         },
         {
           headers: {
@@ -159,7 +149,9 @@ Additional Guidelines:
         setAlert("");
         setGeneratedHTML(result.data.data[0].message.content);
         setLoading(false);
-        message.success("Your AI Resume is Ready!");
+        message.success("Resume Generated Successfully!");
+      } else {
+        message.error("Something went wrong. Please try again later")
       }
     } catch (err) {
       console.error("Error", err);
