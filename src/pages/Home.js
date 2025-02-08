@@ -4,10 +4,12 @@ import template1_img from "../resources/templates/temp1.png";
 import template2_img from "../resources/templates/temp2.png";
 import template3_img from "../resources/templates/temp3.png";
 import { useNavigate } from "react-router-dom";
-import { Alert, Button } from "antd";
+import { jwtDecode } from "jwt-decode";
+import { Alert, Button, message } from "antd";
 
 function Home() {
   const [showBanner, setShowBanner] = useState(false);
+  const [isGuest, setIsGuest] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +21,21 @@ function Home() {
         : false;
     if (!returningUser) setShowBanner(true);
   }, []);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.accessToken) {
+      try {
+        const decodedToken = jwtDecode(user.accessToken);
+        if (decodedToken.role === "guest") {
+          setIsGuest(true);
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
+
   const templates = [
     {
       title: "Simple Resume",
@@ -46,6 +63,7 @@ function Home() {
             action={
               <Button
                 className="home-alert-banner-btn"
+                size="small"
                 type="button"
                 onClick={() => navigate("/profile")}
               >
@@ -58,6 +76,37 @@ function Home() {
           />
         </div>
       )}
+
+      {isGuest && (
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <Alert
+            className="home-alert-banner"
+            message="🚀 You're Exploring as a Guest!"
+            description="Enjoy browsing all features, but note that profile updates and AI resume generation are disabled for guest users. To unlock all features, create a free account today!"
+            type="warning"
+            showIcon
+            action={
+              <Button
+                className="home-alert-banner-btn"
+                size="small"
+                type="primary"
+                onClick={() => {
+                  localStorage.removeItem("user");
+                  message.success(
+                    "Guest session ended. Create an account to unlock all features!"
+                  );
+                  navigate("/register");
+                }}
+              >
+                Sign Up Now
+              </Button>
+            }
+            closable
+            style={{ maxWidth: "1080px" }}
+          />
+        </div>
+      )}
+
       <div className="row home">
         {templates.map((template, index) => {
           return (

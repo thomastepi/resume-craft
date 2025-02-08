@@ -13,7 +13,7 @@ const PersonalInfo = () => {
       <h5>
         {!returningUser && (
           <span style={{ fontSize: "13px", fontStyle: "italic" }}>
-            (Mandatory fields must be filled in order to generate resume using
+            (Mandatory fields must be updated in order to generate resume using
             AI)
           </span>
         )}
