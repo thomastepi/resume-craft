@@ -1,0 +1,35 @@
+.button-container {
+  padding: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Space between buttons */
+  justify-content: flex-end;
+}
+
+.action-btn {
+  padding: 10px 20px;
+  border: none;
+  /* background-color: #007bff!important; */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+  /* Mobile view */
+  .button-container {
+    flex-direction: column; /* Stack buttons */
+    align-items: center; /* Center them */
+  }
+
+  .action-btn:nth-child(1),
+  .action-btn:nth-child(2) {
+    display: inline-block;
+    width: 48%; /* Make them horizontal */
+  }
+
+  .action-btn:nth-child(3) {
+    width: 100%; /* Make the last button full-width below */
+  }
+}

@@ -4,8 +4,8 @@ import template1_img from "../resources/templates/temp1.png";
 import template2_img from "../resources/templates/temp2.png";
 import template3_img from "../resources/templates/temp3.png";
 import { useNavigate } from "react-router-dom";
+import AlertBox from "../components/AlertBox";
 import { jwtDecode } from "jwt-decode";
-import { Alert, Button, message } from "antd";
 
 function Home() {
   const [showBanner, setShowBanner] = useState(false);
@@ -54,55 +54,26 @@ function Home() {
     <DefaultLayout>
       {showBanner && (
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Alert
-            className="home-alert-banner"
-            message="🎉 Welcome to Resume Craft!"
-            description="To create the perfect resume, update your profile with your latest details."
+          <AlertBox
+            message="To create the perfect resume, update your profile with your latest details."
+            title="🎉 Welcome to Resume Craft!"
             type="info"
-            showIcon
-            action={
-              <Button
-                className="home-alert-banner-btn"
-                size="small"
-                type="button"
-                onClick={() => navigate("/profile")}
-              >
-                Update Profile
-              </Button>
-            }
-            closable
-            onClose={() => setShowBanner(false)}
-            style={{ maxWidth: "1080px" }}
+            navigateTo="/profile"
+            btnText="Update Profile"
+            endSession={false}
           />
         </div>
       )}
 
       {isGuest && (
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Alert
-            className="home-alert-banner"
-            message="🚀 You're Exploring as a Guest!"
-            description="Enjoy browsing all features, but note that profile updates and AI resume generation are disabled for guest users. To unlock all features, create a free account today!"
+          <AlertBox
+            message="Enjoy browsing all features, but note that profile updates and AI resume generation are disabled for guest users. To unlock all features, create a free account today!"
+            title="🚀 You're Exploring as a Guest!"
             type="warning"
-            showIcon
-            action={
-              <Button
-                className="home-alert-banner-btn"
-                size="small"
-                type="primary"
-                onClick={() => {
-                  localStorage.removeItem("user");
-                  message.success(
-                    "Guest session ended. Create an account to unlock all features!"
-                  );
-                  navigate("/register");
-                }}
-              >
-                Sign Up Now
-              </Button>
-            }
-            closable
-            style={{ maxWidth: "1080px" }}
+            navigateTo="/register"
+            btnText="Sign Up Now"
+            endSession={true}
           />
         </div>
       )}

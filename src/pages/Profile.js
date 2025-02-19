@@ -120,7 +120,9 @@ const Profile = () => {
         }
       }
 
-      message.error("Please check the section(s) with error message(s) before submitting.");
+      message.error(
+        "Please check the section(s) with error message(s) before submitting."
+      );
     }
   };
 
@@ -153,9 +155,11 @@ const Profile = () => {
             {error && (
               <AlertBox
                 message={error}
-                setError={setError}
                 title={alertTitle}
-                type="info"
+                btnText="Sign Up Now"
+                navigateTo="/register"
+                endSession={true}
+                type="warning"
               />
             )}
           </div>

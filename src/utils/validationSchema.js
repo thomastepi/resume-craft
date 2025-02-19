@@ -60,7 +60,7 @@ export const personalInfoSchema = Yup.object().shape({
     .matches(/^[0-9]{10,15}$/, "Invalid phone number format")
     .required("Phone number is required"),
 
-  portfolio: Yup.string().url("Invalid URL format").nullable(), // Optional field
+  portfolio: Yup.string().url("Invalid URL format").nullable(),
 
   summary: Yup.string()
     .trim()

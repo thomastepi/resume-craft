@@ -1,40 +1,50 @@
 import React from "react";
-import { Alert, Space } from "antd";
-import styled from "styled-components";
-import useIsMobile from "../hooks/useIsMobile";
+import { Alert, Button, message as toastMessage } from "antd";
+import { useNavigate } from "react-router-dom";
 
-const Wrapper = styled.div`
-  .anticon-close {
-    padding: 0.5rem;
-    background-color: white;
-    color: black;
-  }
-`;
-
-const AlertBox = ({ message, setError, title, type }) => {
-  const isMobile = useIsMobile();
-  const onClose = () => {
-    setError("");
+const AlertBox = ({
+  message,
+  title,
+  type,
+  navigateTo,
+  endSession,
+  btnText,
+  setError,
+}) => {
+  const navigate = useNavigate();
+  const onCloseAction = () => {
+    if (setError) setError("");
   };
 
   return (
-    <Wrapper>
-      <Space
-        direction="vertical"
-        style={{
-          width: "100%",
-        }}
-      >
-        <Alert
-          message={title}
-          description={message}
-          type={type}
-          closable
-          showIcon={!isMobile}
-          onClose={onClose}
-        />
-      </Space>
-    </Wrapper>
+    <Alert
+      style={{ maxWidth: "1080px" }}
+      className="home-alert-banner"
+      message={title}
+      description={message}
+      type={type}
+      onClose={onCloseAction}
+      closable
+      showIcon
+      action={
+        <Button
+          className="home-alert-banner-btn"
+          size="small"
+          type="primary"
+          onClick={() => {
+            if (endSession) {
+              localStorage.clear();
+              toastMessage.success(
+                "Guest Session Ended. Create an account to unlock all features!"
+              );
+            }
+            navigate(navigateTo);
+          }}
+        >
+          {btnText}
+        </Button>
+      }
+    />
   );
 };
 

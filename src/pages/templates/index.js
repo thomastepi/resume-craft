@@ -1,47 +1,65 @@
-import React, { useRef } from "react";
+import React, { useRef, useContext } from "react";
 import { useReactToPrint } from "react-to-print";
 import Template1 from "./Template1";
 import Template2 from "./Template2";
 import Template3 from "./Template3";
+import "./Templates.css";
 import DefaultLayout from "../../components/DefaultLayout";
 import { useParams, useNavigate } from "react-router-dom";
+import { ResumeContext } from "../../context/ResumeContext";
 
 const Templates = () => {
   const navigate = useNavigate();
-  const componentRef = useRef();
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-  });
   const params = useParams();
+  const componentRef = useRef();
+
+  const { generatedHTML, setGeneratedHTML, loading } =
+    useContext(ResumeContext);
+
+  const handlePrint = useReactToPrint({
+    contentRef: componentRef,
+    copyShadowRoots: true,
+  });
+
   const getTemplate = () => {
     switch (params.id) {
-      case "1": {
+      case "1":
         return <Template1 />;
-      }
-
-      case "2": {
+      case "2":
         return <Template2 />;
-      }
-
-      case "3": {
+      case "3":
         return <Template3 />;
-      }
+      default:
+        return null;
     }
   };
   return (
     <DefaultLayout>
-      <div className="d-flex justify-content-end my-5 mx-5">
+      <div className="button-container">
+        {params.id === "3" && generatedHTML && (
+          <button className="action-btn" onClick={() => setGeneratedHTML(null)}>
+            Regenerate
+          </button>
+        )}
         <button
-          className="back-btn"
+          className="action-btn"
+          disabled={loading}
           onClick={() => {
             navigate("/home");
           }}
         >
           Back
         </button>
-        <button className="mx-5" onClick={handlePrint}>
-          Print
-        </button>
+        {params.id === "3" && generatedHTML && (
+          <button className="action-btn" onClick={handlePrint}>
+            Print/Save
+          </button>
+        )}
+        {params.id === "1" || params.id === "2" ? (
+          <button className="action-btn" onClick={handlePrint}>
+            Print/Save
+          </button>
+        ) : null}
       </div>
       <div ref={componentRef}>{getTemplate()}</div>
     </DefaultLayout>

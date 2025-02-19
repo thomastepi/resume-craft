@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { message, Spin, Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import axios from "axios";
-import AIGeneratedCV from "./AIGeneratedCV";
+//import { jwtDecode } from "jwt-decode";
+import AIResumeComponent from "../../components/AIResumeComponent";
 import AlertBox from "../../components/AlertBox";
 import useIsMobile from "../../hooks/useIsMobile";
 import "./template3.css";
 import checkMandatoryFields from "../../utils/validatePrompt";
+import { generateResumePrompt } from "../../utils/aiResumeUtils";
+import { ResumeContext } from "../../context/ResumeContext";
 
 const Template3 = () => {
-  const [loading, setLoading] = useState(false);
-  const [generatedHTML, setGeneratedHTML] = useState("");
-  const [isCVGenerated, setIsCVGenerated] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [alert, setAlert] = useState("");
   const [error, setError] = useState("");
@@ -20,123 +20,50 @@ const Template3 = () => {
   const isMobile = useIsMobile();
 
   const baseUrl = process.env.REACT_APP_BASE_URL;
-
+  const user = JSON.parse(localStorage.getItem("user"));
+  const {
+    generatedHTML,
+    setGeneratedHTML,
+    setIsCVGenerated,
+    loading,
+    setLoading,
+  } = useContext(ResumeContext);
 
   const handleClick = async (selectedStyle) => {
+    const missingFields = checkMandatoryFields(user);
+    if (missingFields.length > 0) {
+      setAlertTitle("Missing Fields");
+      setAlertType("error");
+      message.error("Missing Fields. Please update your profile.");
+      setError(
+        <div>
+          <p style={{ marginBottom: "0" }}>
+            Please update the following sections of your profile before
+            generating your resume:
+          </p>
+          <ul>
+            {missingFields.map((field) => (
+              <li key={field}>
+                <em>{field}</em>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
+      return;
+    }
     try {
-      const styleToUse = selectedStyle.toLowerCase();
-      const user = JSON.parse(localStorage.getItem("user"));
-      const missingFields = checkMandatoryFields(user);
-      if (missingFields.length > 0) {
-        setIsCVGenerated(true);
-        setAlertTitle("Missing Fields");
-        setAlertType("error");
-        message.error("Missing Fields. Please update your profile.");
-        setError(
-          <div>
-            <p style={{ marginBottom: "0" }}>
-              Please update the following sections of your profile before
-              generating your resume:
-            </p>
-            <ul>
-              {missingFields.map((field) => (
-                <li key={field}>
-                  <em>{field}</em>
-                </li>
-              ))}
-            </ul>
-            <p style={{ marginBottom: "0" }}>
-              Hover over your name on the top right corner and select{" "}
-              <strong>Profile</strong> from the dropdown.
-            </p>
-          </div>
-        );
-        return;
-      }
-      const {
-        firstName,
-        lastName,
-        email,
-        portfolio,
-        mobileNumber,
-        address,
-        skills,
-        education,
-        experience,
-        projects,
-        summary,
-        certifications,
-        languages,
-      } = user;
-      const skillsString = skills.map((skill) => `${skill.skill}`).join(", ");
-      const educationString = education
-        .map(
-          (edu) =>
-            `Qualification: ${edu.qualification}, Institution: ${edu.institution}`
-        )
-        .join(", ");
-      const certificationsString = certifications
-        .map(
-          (cert) =>
-            `Certification name: ${cert.name}, Issuer: ${cert.organization}, Date: ${cert.year}`
-        )
-        .join(", ");
-      const languagesString = languages
-        .map(
-          (lang) =>
-            `Language: ${lang.language}, Proficiency: ${lang.proficiency}`
-        )
-        .join(", ");
-      const experienceString = experience
-        .map(
-          (exp) =>
-            `Employer: ${exp.company}, Role: ${exp.role}, Description: ${exp.roleDescription},  Place: ${exp.place}, Duration: ${exp.range}`
-        )
-        .join(", ");
-      const projectsString = projects
-        .map(
-          (proj) => `Projects: ${proj.title}, Description: ${proj.description}`
-        )
-        .join(", ");
-
-      setIsCVGenerated(false);
+      const prompt = generateResumePrompt(
+        user,
+        selectedStyle,
+        selectedLanguage
+      );
+      setLoading(true);
       setAlert("LOADING...please wait while the AI Robots work their magic");
       const result = await axios.post(
         `${baseUrl}/api/user/build`,
         {
-          text: `Create a professional HTML-based resume in ${selectedLanguage} with the following details:
-
-- Full Name: ${firstName} ${lastName}
-${email ? `- Email: ${email}` : ""}
-${mobileNumber ? `- Phone: ${mobileNumber}` : ""}
-${address ? `- Address: ${address}` : ""}
-${portfolio ? `- Portfolio: ${portfolio}` : ""}
-${summary ? `- Summary: ${summary}` : ""}
-${skillsString ? `- Skills: ${skillsString}` : ""}
-${educationString ? `- Education: ${educationString}` : ""}
-${experienceString ? `- Experience: ${experienceString}` : ""}
-${projectsString ? `- Projects: ${projectsString}` : ""}
-${certificationsString ? `- Certifications: ${certificationsString}` : ""}
-${languagesString ? `- Languages: ${languagesString}` : ""}
-
-Requirements:
-- Use the "${styleToUse}" template style.
-- If the template is "modern":
-  - Use a minimalist design with sans-serif fonts, subtle colors (e.g., gray or blue), and clean lines.
-  - Include rounded borders, soft shadows, and prominent headers.
-  - Focus on spacing and typography for a sleek appearance.
-- If the template is "classic":
-  - Use a traditional design with serif fonts and a simple black-and-white color scheme.
-  - Add a border around the entire resume for a structured look.
-  - Focus on straightforward readability and avoid complex design elements.
-
-Additional Guidelines:
-- Highlight key achievements using bullet points.
-- Organize the content into sections: "Objective," "Skills," "Education," "Experience," and "Projects" in this order.
-- **Exclude any section if the user did not provide data** (do not show empty sections).
-- Translate all content, including section titles, into ${selectedLanguage}.
-- Return the complete HTML and inline CSS in a "<div>" element.
-`,
+          text: prompt.trim(),
         },
         {
           headers: {
@@ -146,18 +73,14 @@ Additional Guidelines:
       );
       if (result.status === 200) {
         setIsCVGenerated(true);
-        setAlert("");
         setGeneratedHTML(result.data.data[0].message.content);
-        setLoading(false);
         message.success("Resume Generated Successfully!");
       } else {
-        message.error("Something went wrong. Please try again later")
+        message.error("Something went wrong. Please try again later");
       }
     } catch (err) {
       console.error("Error", err);
-      setLoading(false);
-      setIsCVGenerated(true);
-      setAlert("");
+      setIsCVGenerated(false);
       if (err.message === "Network Error") {
         message.error("Network Error. Please check your internet connection.");
         return;
@@ -169,14 +92,17 @@ Additional Guidelines:
         message.error("Quota Exceeded. Please try again later.");
       } else if (err.response.status === 403) {
         setAlertTitle("Unauthorized Access!");
-        setAlertType("info");
-        message.info("Unauthorized Access. Please login/signup.");
+        setAlertType("warning");
+        message.warning("Unauthorized Access. Please login/signup.");
       } else {
         setAlertTitle("An error occurred!");
         setAlertType("error");
         message.error("An error occurred. Please try again.");
       }
       setError(err.response.data);
+    } finally {
+      setLoading(false);
+      setAlert("");
     }
   };
 
@@ -186,10 +112,7 @@ Additional Guidelines:
       label: (
         <span
           style={{ width: "100%", display: "block" }}
-          onClick={() => {
-            const selectedStyle = "Modern";
-            handleClick(selectedStyle);
-          }}
+          onClick={() => handleClick("Modern")}
         >
           Modern
         </span>
@@ -200,10 +123,7 @@ Additional Guidelines:
       label: (
         <span
           style={{ width: "100%", display: "block" }}
-          onClick={() => {
-            const selectedStyle = "Classic";
-            handleClick(selectedStyle);
-          }}
+          onClick={() => handleClick("Classic")}
         >
           Classic
         </span>
@@ -223,21 +143,29 @@ Additional Guidelines:
   };
 
   return (
-    <div>
+    <>
       <div
         style={{ width: `${isMobile ? "95%" : "50%"}`, margin: "10px auto" }}
       >
         {error && (
           <AlertBox
             message={error}
-            setError={setError}
             title={alertTitle}
             type={alertType}
+            navigateTo={
+              alertTitle === "Missing Fields" ? "/profile" : "/register"
+            }
+            endSession={alertTitle === "Missing Fields" ? false : true}
+            btnText={
+              alertTitle === "Missing Fields" ? "Update Profile" : "Sign Up Now"
+            }
+            setError={setError}
+            showActionButton={true}
           />
         )}
       </div>
       {loading && <Spin size="large" />}
-      {!isCVGenerated && (
+      {alert && (
         <>
           <div style={{ textAlign: "center" }}>
             <h4>{alert}</h4>
@@ -245,13 +173,7 @@ Additional Guidelines:
           <Spin size="large" />
         </>
       )}
-      {isCVGenerated && generatedHTML && (
-        <>
-          <div>
-            <AIGeneratedCV generatedHTML={generatedHTML} />
-          </div>
-        </>
-      )}
+      {generatedHTML && <AIResumeComponent />}
       {!generatedHTML && !alert && !error && (
         <>
           <div style={{ textAlign: "center", marginBottom: "30px" }}>
@@ -318,7 +240,7 @@ Additional Guidelines:
           </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 
