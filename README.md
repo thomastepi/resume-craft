@@ -4,6 +4,8 @@
 
 This repository focuses on the React frontend component of the Resume Craft application. It collaborates with a backend API (separate repository) to provide a user-friendly interface for creating and managing resumes.
 
+## <a href="https://resumecraft.thomastepi.com" target="_blank" rel="noopener noreferrer"> <img src="https://img.shields.io/badge/LIVE%20DEMO-<COLOR>.svg" alt="resumeCraft"> </a>
+
 ## Key Features:
 - **Dynamic User Profile Management:** Users can create and modify their profile information, including name, address, summary, phone number, email, education, work experience, projects, and more.
 - **Interactive Form:** A dynamic form allows users to seamlessly enter and update their profile data.
