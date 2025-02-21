@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import DefaultLayout from "../components/DefaultLayout";
-import template1_img from "../resources/templates/temp1.png";
-import template2_img from "../resources/templates/temp2.png";
-import template3_img from "../resources/templates/temp3.png";
 import { useNavigate } from "react-router-dom";
 import AlertBox from "../components/AlertBox";
 import { jwtDecode } from "jwt-decode";
+
+const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/temp1.png";
+const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
+const aiGeneration = "https://ik.imagekit.io/thormars/ResumeCraft/temp3.png";
 
 function Home() {
   const [showBanner, setShowBanner] = useState(false);
@@ -39,15 +40,15 @@ function Home() {
   const templates = [
     {
       title: "Simple Resume",
-      image: template1_img,
+      image: template1,
     },
     {
       title: "Highlighted Sections",
-      image: template2_img,
+      image: template2,
     },
     {
       title: "Generate With AI",
-      image: template3_img,
+      image: aiGeneration,
     },
   ];
   return (
