@@ -4,7 +4,12 @@
 
 This repository focuses on the React frontend component of the Resume Craft application. It collaborates with a backend API (separate repository) to provide a user-friendly interface for creating and managing resumes.
 
-## <a href="https://resumecraft.thomastepi.com" target="_blank" rel="noopener noreferrer"> <img src="https://img.shields.io/badge/LIVE%20DEMO-<COLOR>.svg" alt="resumeCraft"> </a>
+---
+
+##  Live Demo
+🔗 **[Website](https://resumecraft.thomastepi.com)**  
+
+---
 
 ## Key Features:
 - **Dynamic User Profile Management:** Users can create and modify their profile information, including name, address, summary, phone number, email, education, work experience, projects, and more.
@@ -13,11 +18,16 @@ This repository focuses on the React frontend component of the Resume Craft appl
 - **User Interface:** Leverages Ant Design to offer a clean, responsive, and intuitive experience for resume creation.
 - **Communication with Backend:** Communicates with the backend API to handle user authentication, data storage, and AI-powered suggestions.
 
+---
+
 ## Technologies Used:
  - React
+ - Context API
  - React Router
- - Ant Design (UI framework)
+ - Ant Design
  - Axios
+
+---
 
 ### Backend Integration (High-Level Overview):
  - The backend API (separate repository) is built with Node.js and Express.js for server-side logic and API endpoints.
