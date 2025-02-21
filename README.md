@@ -1,4 +1,7 @@
 # Resume Craft React Frontend (AI-powered Resume Builder)
+
+![Resume Craft Screenshot](https://ik.imagekit.io/thormars/portfolio/craft.png)
+
 This repository focuses on the React frontend component of the Resume Craft application. It collaborates with a backend API (separate repository) to provide a user-friendly interface for creating and managing resumes.
 
 ## Key Features:
