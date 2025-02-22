@@ -108,21 +108,26 @@ ${languagesString ? `- Languages: ${languagesString}` : ""}
 
 Requirements:
 - Use the "${styleToUse}" template style.
-- Do not use class names or external styles. Every style must be applied using inline CSS.
-- If the template is "Modern":
-  - Use a minimalist design with sans-serif fonts, subtle colors (e.g., gray or blue), and clean lines.
-  - Include rounded borders, soft shadows, and prominent headers.
-  - Focus on spacing and typography for a sleek appearance.
-- If the template is "Classic":
-  - Use a traditional design with serif fonts and a simple black-and-white color scheme.
-  - Add a border around the entire resume for a structured look.
-  - Focus on straightforward readability and avoid complex design elements.
+- Ensure distinct styling between "Modern" and "Classic" templates.
+
+**Modern Template Styling:**
+  - Use **sans-serif fonts** for a sleek, contemporary look.
+  - Apply **subtle color accents** (e.g., blue, gray) for headings and section dividers.
+  - Implement **soft shadows, rounded corners, and minimalistic icons** to enhance aesthetics.
+  - Utilize a **two-column layout** (if applicable) to balance sections dynamically.
+  - Prioritize **white space and clean section separation** for better readability.
+
+**Classic Template Styling:**
+  - Use **serif fonts** (e.g., Times New Roman, Georgia) to reflect a traditional and formal style.
+  - Keep it **black-and-white** with a **structured border** around the entire resume.
+  - Section headings should be **bold and underlined**, with a **clear hierarchy**.
+  - Use **left-aligned, single-column formatting** for a structured, professional layout.
+  - Avoid decorative elements—focus on **clarity and readability**.
 
 Additional Guidelines:
 - Highlight key achievements using bullet points.
 - Organize the content into sections: "Objective," "Skills," "Education," "Experience," and "Projects" in this order.
 - Exclude any section if the user did not provide data (do not show empty sections).
 - Translate all content, including section titles, into ${selectedLanguage}.
-- Ensure the output is fully self-contained within a single <div> element, using only inline CSS styles.
-- Avoid any references to external stylesheets, classes, IDs, or JavaScript.`;
+- Ensure the resume is formatted for clear readability and professional presentation within a single <div> element.`;
 };
