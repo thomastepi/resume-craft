@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react";
 import { message, Spin, Dropdown, Space } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import axios from "axios";
-//import { jwtDecode } from "jwt-decode";
 import AIResumeComponent from "../../components/AIResumeComponent";
 import AlertBox from "../../components/AlertBox";
 import useIsMobile from "../../hooks/useIsMobile";
@@ -10,6 +8,7 @@ import "./template3.css";
 import checkMandatoryFields from "../../utils/validatePrompt";
 import { generateResumePrompt } from "../../utils/aiResumeUtils";
 import { ResumeContext } from "../../context/ResumeContext";
+import { getErrorMessage } from "../../utils/errorHandler";
 
 const Template3 = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
@@ -60,46 +59,59 @@ const Template3 = () => {
       );
       setLoading(true);
       setAlert("LOADING...please wait while the AI Robots work their magic");
-      const result = await axios.post(
-        `${baseUrl}/api/user/build`,
-        {
-          text: prompt.trim(),
+      setGeneratedHTML("");
+      const result = await fetch(`${baseUrl}/api/user/build`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.accessToken}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${user.accessToken}`,
-          },
-        }
-      );
-      if (result.status === 200) {
-        setIsCVGenerated(true);
-        setGeneratedHTML(result.data.data[0].message.content);
-        message.success("Resume Generated Successfully!");
-      } else {
-        message.error("Something went wrong. Please try again later");
+        body: JSON.stringify({ text: prompt.trim() }),
+      });
+
+      if (!result.ok) {
+        throw result;
       }
+
+      const reader = result.body.getReader();
+      const decoder = new TextDecoder();
+      let fullResume = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        fullResume += decoder.decode(value, { stream: true });
+        setGeneratedHTML(fullResume);
+        setLoading(false);
+      }
+
+      setIsCVGenerated(true);
+      message.success("Resume Generated Successfully!");
     } catch (err) {
       console.error("Error", err);
       setIsCVGenerated(false);
-      if (err.message === "Network Error") {
+      const errorMessage = await getErrorMessage(err);
+      if (errorMessage === "Failed to fetch") {
         message.error("Network Error. Please check your internet connection.");
         return;
       }
 
-      if (err && err.response.status === 429) {
+      if (err && err.status === 429) {
         setAlertTitle("Quota Exceeded");
         setAlertType("error");
         message.error("Quota Exceeded. Please try again later.");
-      } else if (err.response.status === 403) {
+        return;
+      }
+      if (err.status === 403) {
         setAlertTitle("Unauthorized Access!");
         setAlertType("warning");
         message.warning("Unauthorized Access. Please login/signup.");
+        setError(errorMessage);
       } else {
         setAlertTitle("An error occurred!");
         setAlertType("error");
         message.error("An error occurred. Please try again.");
       }
-      setError(err.response.data);
     } finally {
       setLoading(false);
       setAlert("");
@@ -165,7 +177,7 @@ const Template3 = () => {
         )}
       </div>
       {loading && <Spin size="large" />}
-      {alert && (
+      {alert && !generatedHTML && (
         <>
           <div style={{ textAlign: "center" }}>
             <h4>{alert}</h4>
