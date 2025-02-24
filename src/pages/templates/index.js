@@ -36,7 +36,7 @@ const Templates = () => {
   return (
     <DefaultLayout>
       <div className="button-container">
-        {params.id === "3" && generatedHTML && (
+        {params.id === "1" && generatedHTML && (
           <button className="action-btn" onClick={() => setGeneratedHTML(null)}>
             Regenerate
           </button>
@@ -48,14 +48,14 @@ const Templates = () => {
             navigate("/home");
           }}
         >
-          Back
+          {params.id === "1" ? "Back to Home" : "Back"}
         </button>
-        {params.id === "3" && generatedHTML && (
+        {params.id === "1" && generatedHTML && (
           <button className="action-btn" onClick={handlePrint}>
             Print/Save
           </button>
         )}
-        {params.id === "1" || params.id === "2" ? (
+        {params.id === "2" || params.id === "3" ? (
           <button className="action-btn" onClick={handlePrint}>
             Print/Save
           </button>
