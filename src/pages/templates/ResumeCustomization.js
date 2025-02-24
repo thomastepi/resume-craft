@@ -10,7 +10,7 @@ import { ResumeContext } from "../../context/ResumeContext";
 import { getErrorMessage } from "../../utils/errorHandler";
 import CustomizationPanel from "../../components/CustomizationFields/CustomizationPanel";
 
-const Template3 = () => {
+const ResumeCustomization = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [alert, setAlert] = useState("");
   const [error, setError] = useState("");
@@ -197,4 +197,4 @@ const Template3 = () => {
   );
 };
 
-export default Template3;
+export default ResumeCustomization;

@@ -2,7 +2,7 @@ import React, { useRef, useContext } from "react";
 import { useReactToPrint } from "react-to-print";
 import Template1 from "./Template1";
 import Template2 from "./Template2";
-import Template3 from "./Template3";
+import ResumeCustomization from "./ResumeCustomization";
 import "./Templates.css";
 import DefaultLayout from "../../components/DefaultLayout";
 import { useParams, useNavigate } from "react-router-dom";
@@ -24,11 +24,11 @@ const Templates = () => {
   const getTemplate = () => {
     switch (params.id) {
       case "1":
-        return <Template1 />;
+        return <ResumeCustomization />;
       case "2":
-        return <Template2 />;
+        return <Template1 />;
       case "3":
-        return <Template3 />;
+        return <Template2 />;
       default:
         return null;
     }

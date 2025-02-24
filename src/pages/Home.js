@@ -39,16 +39,16 @@ function Home() {
 
   const templates = [
     {
-      title: "Simple Resume",
+      title: "Generate With AI",
+      image: aiGeneration,
+    },
+    {
+      title: "Simple Template",
       image: template1,
     },
     {
-      title: "Highlighted Sections",
+      title: "Professional Template",
       image: template2,
-    },
-    {
-      title: "Generate With AI",
-      image: aiGeneration,
     },
   ];
   return (
