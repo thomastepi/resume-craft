@@ -1,5 +1,5 @@
 import React from "react";
-import "../../resources/templates.css";
+import "../../resources/styles/pages/templates/templates.css";
 
 const Template2 = () => {
   const user = JSON.parse(localStorage.getItem("user"));

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, Input, message, Spin } from "antd";
 import { Formik } from "formik";
 import { loginSchema } from "../utils/validationSchema";
-import "../resources/authentication.css";
+import "../resources/styles/pages/authentication.css";
 
 function Login() {
   const [loading, setLoading] = React.useState(false);

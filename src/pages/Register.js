@@ -5,7 +5,7 @@ import axios from "axios";
 import { Button, Form, Input, message, Spin } from "antd";
 import { Formik } from "formik";
 import { registerSchema } from "../utils/validationSchema"; // Import Yup schema
-import "../resources/authentication.css";
+import "../resources/styles/pages/authentication.css";
 
 function Register() {
   const navigate = useNavigate();

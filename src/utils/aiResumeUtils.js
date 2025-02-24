@@ -6,15 +6,15 @@ const sanitize = (input) =>
 const limitText = (text, limit) =>
   text.length > limit ? text.slice(0, limit) + "..." : text;
 
-export const generateResumePrompt = (userData, style, language) => {
-  const allowedLanguages = ["English", "French", "Spanish"];
-  const allowedStyles = ["Modern", "Classic"];
-
-  const selectedLanguage = allowedLanguages.includes(language)
-    ? language
-    : "English";
-
-  const styleToUse = allowedStyles.includes(style) ? style : "Modern";
+export const generateResumePrompt = (userData, resumeCustomiztions) => {
+  const {
+    selectedLanguage,
+    selectedLayout,
+    writingStyle,
+    fontChoice,
+    themeColor,
+    optimizeForATS,
+  } = resumeCustomiztions;
 
   const firstName = sanitize(userData.firstName);
   const lastName = sanitize(userData.lastName);
@@ -106,28 +106,70 @@ ${projectsString ? `- Projects: ${projectsString}` : ""}
 ${certificationsString ? `- Certifications: ${certificationsString}` : ""}
 ${languagesString ? `- Languages: ${languagesString}` : ""}
 
-Requirements:
-- Use the "${styleToUse}" template style.
-- Ensure distinct styling between "Modern" and "Classic" templates.
+ Writing Style: ${writingStyle}
+- If "Professional", use structured, concise, and professional language that emphasizes achievements and impact.
+- If "Friendly", use a warm, engaging tone that feels more personal while maintaining professionalism.
+- If "Technical", focus on precise, data-driven, and metric-oriented descriptions (ideal for engineers, researchers, or analysts).
 
-**Modern Template Styling:**
-  - Use **sans-serif fonts** for a sleek, contemporary look.
-  - Apply **subtle color accents** (e.g., blue, gray) for headings and section dividers.
-  - Implement **soft shadows, rounded corners, and minimalistic icons** to enhance aesthetics.
-  - Utilize a **two-column layout** (if applicable) to balance sections dynamically.
-  - Prioritize **white space and clean section separation** for better readability.
+ Font Choice: ${fontChoice}
+- Use the selected font: "${fontChoice}" across the resume.
+- Ensure text is legible with proper contrast.
 
-**Classic Template Styling:**
-  - Use **serif fonts** (e.g., Times New Roman, Georgia) to reflect a traditional and formal style.
-  - Keep it **black-and-white** with a **structured border** around the entire resume.
-  - Section headings should be **bold and underlined**, with a **clear hierarchy**.
-  - Use **left-aligned, single-column formatting** for a structured, professional layout.
-  - Avoid decorative elements—focus on **clarity and readability**.
+ Theme Colors: ${themeColor}
+- Apply the chosen "${themeColor}" to headings, section dividers, and accents.
+- Ensure good contrast for readability.
 
-Additional Guidelines:
+ Optimize for ATS (Applicant Tracking Systems): ${optimizeForATS}
+- If "true", follow these ATS-friendly rules:
+  - Avoid tables, images, or excessive formatting.
+  - Use standard section headings (e.g., "Experience", "Education").
+  - Keep text left-aligned with no unnecessary symbols.
+  - Avoid fancy fonts and ensure proper spacing.
+
+  Layout: ${selectedLayout}
+- Apply the "${selectedLayout}" layout to structure the resume.
+
+ Single Column Layout:
+  - Stack all sections vertically in a linear flow.
+  - Ensure clear section separation with distinct headings.
+  - Prioritize readability, making each section easy to scan.
+
+ Two Column Layout:
+   - Ensure the resume uses a **proper flexbox or CSS grid structure**.
+  - Place Personal Information, Skills, and Certifications in the left column.
+  - Place Experience, Education, and Projects in the right column.
+  - Both columns should be aligned at the top.
+  - Use "display: flex" or "grid-template-columns: 1fr 1fr" to ensure proper alignment.
+  - Ensure content wraps correctly, preventing one column from shifting below the other.
+  - Add a fixed width or min-width for both columns so they stay balanced.
+
+ Compact Layout:
+  - Optimize the content to fit within a single page, focusing on key achievements.
+  - Use a denser structure with reduced padding and margin spacing.
+  - Prioritize short, concise bullet points instead of long descriptions.
+
+ Expanded Layout:
+  - Emphasize detailed descriptions for experience, education, and projects.
+  - Allow additional spacing for a more open and visually appealing structure.
+  - Use section subtitles where necessary to improve readability.
+
+- Regardless of the layout, ensure:
+  - A professional and clean structure with consistent alignment.
+  - Proper section ordering based on the user's experience level.
+  - That no empty sections appear in the final resume.
+
+
+ Additional Guidelines:
 - Highlight key achievements using bullet points.
 - Organize the content into sections: "Objective," "Skills," "Education," "Experience," and "Projects" in this order.
 - Exclude any section if the user did not provide data (do not show empty sections).
 - Translate all content, including section titles, into ${selectedLanguage}.
-- Ensure the resume is formatted for clear readability and professional presentation within a single <div> element.`;
+- Ensure the resume is properly structured, readable, and professional within a single <div> element.
+
+IMPORTANT:
+- Only return valid, self-contained HTML.
+- Do NOT include explanations, descriptions, or additional text.
+- Do NOT wrap the response in triple backticks or any markdown formatting.
+- The response should begin immediately with "<div>" and end with "</div>".
+`;
 };

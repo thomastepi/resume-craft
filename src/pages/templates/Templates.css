@@ -2,7 +2,7 @@
   padding: 40px;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; /* Space between buttons */
+  gap: 10px;
   justify-content: flex-end;
 }
 
@@ -19,17 +19,17 @@
 @media (max-width: 768px) {
   /* Mobile view */
   .button-container {
-    flex-direction: column; /* Stack buttons */
-    align-items: center; /* Center them */
+    flex-direction: column; 
+    align-items: center;
   }
 
   .action-btn:nth-child(1),
   .action-btn:nth-child(2) {
     display: inline-block;
-    width: 48%; /* Make them horizontal */
+    width: 48%;
   }
 
   .action-btn:nth-child(3) {
-    width: 100%; /* Make the last button full-width below */
+    width: 100%;
   }
 }

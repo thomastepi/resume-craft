@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useContext } from "react";
 import { ResumeContext } from "../context/ResumeContext";
-import "../resources/components/AIResumeComponent.css";
+import "../resources/styles/components/AIResumeComponent.css";
 
 const AIResumeComponent = () => {
   const shadowHostRef = useRef(null);

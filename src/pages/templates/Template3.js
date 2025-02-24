@@ -1,14 +1,14 @@
 import React, { useState, useContext } from "react";
-import { message, Spin, Dropdown, Space } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { message, Spin } from "antd";
 import AIResumeComponent from "../../components/AIResumeComponent";
 import AlertBox from "../../components/AlertBox";
 import useIsMobile from "../../hooks/useIsMobile";
-import "./template3.css";
+import "../../resources/styles/pages/templates/template3.css";
 import checkMandatoryFields from "../../utils/validatePrompt";
 import { generateResumePrompt } from "../../utils/aiResumeUtils";
 import { ResumeContext } from "../../context/ResumeContext";
 import { getErrorMessage } from "../../utils/errorHandler";
+import CustomizationPanel from "../../components/CustomizationFields/CustomizationPanel";
 
 const Template3 = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
@@ -16,8 +16,22 @@ const Template3 = () => {
   const [error, setError] = useState("");
   const [alertTitle, setAlertTitle] = useState("");
   const [alertType, setAlertType] = useState("");
-  const isMobile = useIsMobile();
+  const [selectedLayout, setSelectedLayout] = useState("Single Column");
+  const [writingStyle, setWritingStyle] = useState("Professional");
+  const [fontChoice, setFontChoice] = useState("Serif");
+  const [themeColor, setThemeColor] = useState("rgb(0, 150, 136)");
+  const [optimizeForATS, setOptimizeForATS] = useState(false);
 
+  const isMobile = useIsMobile();
+  const resumeCustomiztions = {
+    selectedLanguage,
+    selectedLayout,
+    writingStyle,
+    fontChoice,
+    themeColor,
+    optimizeForATS,
+  };
+  
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const user = JSON.parse(localStorage.getItem("user"));
   const {
@@ -28,7 +42,7 @@ const Template3 = () => {
     setLoading,
   } = useContext(ResumeContext);
 
-  const handleClick = async (selectedStyle) => {
+  const handleGenerateResume = async () => {
     const missingFields = checkMandatoryFields(user);
     if (missingFields.length > 0) {
       setAlertTitle("Missing Fields");
@@ -52,11 +66,7 @@ const Template3 = () => {
       return;
     }
     try {
-      const prompt = generateResumePrompt(
-        user,
-        selectedStyle,
-        selectedLanguage
-      );
+      const prompt = generateResumePrompt(user, resumeCustomiztions);
       setLoading(true);
       setAlert("LOADING...please wait while the AI Robots work their magic");
       setGeneratedHTML("");
@@ -118,42 +128,6 @@ const Template3 = () => {
     }
   };
 
-  const templateStyle = [
-    {
-      key: "1",
-      label: (
-        <span
-          style={{ width: "100%", display: "block" }}
-          onClick={() => handleClick("Modern")}
-        >
-          Modern
-        </span>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <span
-          style={{ width: "100%", display: "block" }}
-          onClick={() => handleClick("Classic")}
-        >
-          Classic
-        </span>
-      ),
-    },
-  ];
-
-  const languageOptions = [
-    { key: "1", label: "English" },
-    { key: "2", label: "French" },
-    { key: "3", label: "Spanish" },
-  ];
-
-  const handleLanguageChange = (key) => {
-    const selected = languageOptions.find((option) => option.key === key);
-    setSelectedLanguage(selected.label);
-  };
-
   return (
     <>
       <div
@@ -176,6 +150,7 @@ const Template3 = () => {
           />
         )}
       </div>
+
       {loading && <Spin size="large" />}
       {alert && !generatedHTML && (
         <>
@@ -185,70 +160,36 @@ const Template3 = () => {
           <Spin size="large" />
         </>
       )}
+
       {generatedHTML && <AIResumeComponent />}
+
       {!generatedHTML && !alert && !error && (
         <>
           <div style={{ textAlign: "center", marginBottom: "30px" }}>
-            <h4>
-              Select a language and choose a template style to automatically
-              generate your resume.
-            </h4>
+            <h4>Customize your resume before generating</h4>
           </div>
-          <div className="options-dropdown">
-            <label
-              htmlFor="language-dropdown"
-              style={{
-                textAlign: "center",
-                display: "block",
-                fontWeight: "bold",
-                marginBottom: "5px",
-              }}
-            >
-              Resume Language
-            </label>
-            <Dropdown
-              className="language-dropdown"
-              menu={{
-                items: languageOptions.map((lang) => ({
-                  key: lang.key,
-                  label: (
-                    <span
-                      onClick={() => handleLanguageChange(lang.key)}
-                      style={{ display: "block", cursor: "pointer" }}
-                    >
-                      {lang.label}
-                    </span>
-                  ),
-                })),
-              }}
-              trigger={["click"]}
-            >
-              <button className="language-button" type="button">
-                <Space>
-                  {selectedLanguage} <DownOutlined />
-                </Space>
-              </button>
-            </Dropdown>
 
-            <Dropdown
-              menu={{
-                items: templateStyle,
-                selectable: true,
-              }}
-              placement="bottomLeft"
-              trigger={["click"]}
-            >
-              <button
-                className="template-button"
-                type="button"
-                onClick={(e) => e.preventDefault()}
-              >
-                <Space>
-                  Select Template Style
-                  <DownOutlined />
-                </Space>
-              </button>
-            </Dropdown>
+          <div className="options-container">
+            <CustomizationPanel
+              selectedLayout={selectedLayout}
+              setSelectedLayout={setSelectedLayout}
+              writingStyle={writingStyle}
+              setWritingStyle={setWritingStyle}
+              fontChoice={fontChoice}
+              setFontChoice={setFontChoice}
+              themeColor={themeColor}
+              setThemeColor={setThemeColor}
+              optimizeForATS={optimizeForATS}
+              setOptimizeForATS={setOptimizeForATS}
+              selectedLanguage={selectedLanguage}
+              setSelectedLanguage={setSelectedLanguage}
+            />
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <button className="generate-button" onClick={handleGenerateResume}>
+              Generate Resume
+            </button>
           </div>
         </>
       )}

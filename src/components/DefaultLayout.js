@@ -5,7 +5,7 @@ import { UserOutlined } from "@ant-design/icons";
 import logo from "../assets/images/logo.png";
 import { jwtDecode } from "jwt-decode";
 
-import "./../resources/defaultLayout.css";
+import "./../resources/styles/defaultLayout.css";
 
 function DefaultLayout(props) {
   const navigate = useNavigate();
