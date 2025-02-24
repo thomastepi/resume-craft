@@ -48,7 +48,7 @@ const Templates = () => {
             navigate("/home");
           }}
         >
-          {params.id === "1" ? "Back to Home" : "Back"}
+          {params.id === "1" && generatedHTML ? "Back to Home" : "Back"}
         </button>
         {params.id === "1" && generatedHTML && (
           <button className="action-btn" onClick={handlePrint}>
