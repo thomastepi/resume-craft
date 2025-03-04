@@ -37,9 +37,9 @@ const ResumeCustomization = () => {
   const {
     generatedHTML,
     setGeneratedHTML,
-    setIsCVGenerated,
     loading,
     setLoading,
+    setIsGenerating,
   } = useContext(ResumeContext);
 
   const handleGenerateResume = async () => {
@@ -68,6 +68,7 @@ const ResumeCustomization = () => {
     try {
       const prompt = generateResumePrompt(user, resumeCustomiztions);
       setLoading(true);
+      setIsGenerating(true);
       setAlert("LOADING...please wait while the AI Robots work their magic");
       setGeneratedHTML("");
       const result = await fetch(`${baseUrl}/api/user/build`, {
@@ -99,12 +100,12 @@ const ResumeCustomization = () => {
           firstChunkReceived = true;
         }
       }
-
-      setIsCVGenerated(true);
+      setIsGenerating(false);
       message.success("Resume Generated Successfully!");
     } catch (err) {
       console.error("Error", err);
-      setIsCVGenerated(false);
+      setLoading(false);
+      setIsGenerating(false);
       const errorMessage = await getErrorMessage(err);
       if (errorMessage === "Failed to fetch") {
         message.error("Network Error. Please check your internet connection.");
@@ -129,6 +130,7 @@ const ResumeCustomization = () => {
       }
     } finally {
       setLoading(false);
+      setIsGenerating(false);
       setAlert("");
     }
   };

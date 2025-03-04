@@ -15,7 +15,7 @@ const Templates = () => {
   const params = useParams();
   const componentRef = useRef();
 
-  const { generatedHTML, setGeneratedHTML, loading } =
+  const { generatedHTML, setGeneratedHTML, isGenerating } =
     useContext(ResumeContext);
 
   const handlePrint = useReactToPrint({
@@ -70,13 +70,17 @@ const Templates = () => {
     <DefaultLayout>
       <div className="button-container">
         {params.id === "1" && generatedHTML && (
-          <button className="action-btn" onClick={() => setGeneratedHTML(null)}>
+          <button
+            className="action-btn"
+            disabled={isGenerating}
+            onClick={() => setGeneratedHTML(null)}
+          >
             Regenerate
           </button>
         )}
         <button
           className="action-btn"
-          disabled={loading}
+          disabled={isGenerating}
           onClick={() => {
             navigate("/home");
           }}
@@ -86,11 +90,19 @@ const Templates = () => {
         {params.id === "1" && generatedHTML && (
           <>
             {isMobile ? (
-              <button className="action-btn" onClick={handleDownloadPDF}>
+              <button
+                className="action-btn"
+                disabled={isGenerating}
+                onClick={handleDownloadPDF}
+              >
                 Download as PDF
               </button>
             ) : (
-              <button className="action-btn" onClick={handlePrint}>
+              <button
+                className="action-btn"
+                disabled={isGenerating}
+                onClick={handlePrint}
+              >
                 Print/Save
               </button>
             )}
@@ -99,11 +111,19 @@ const Templates = () => {
         {params.id === "2" || params.id === "3" ? (
           <>
             {isMobile ? (
-              <button className="action-btn" onClick={handleDownloadPDF}>
+              <button
+                className="action-btn"
+                disabled={isGenerating}
+                onClick={handleDownloadPDF}
+              >
                 Download as PDF
               </button>
             ) : (
-              <button className="action-btn" onClick={handlePrint}>
+              <button
+                className="action-btn"
+                disabled={isGenerating}
+                onClick={handlePrint}
+              >
                 Print/Save
               </button>
             )}
