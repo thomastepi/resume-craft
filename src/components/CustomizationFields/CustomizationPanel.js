@@ -32,13 +32,7 @@ const CustomizationPanel = ({
                 { key: "6", label: "Swahili" },
                 { key: "7", label: "Hausa" },
                 { key: "8", label: "Yoruba" },
-                { key: "9", label: "Igbo" },
-                { key: "10", label: "Amharic" },
-                { key: "11", label: "Zulu" },
-                { key: "12", label: "German" },
-                { key: "13", label: "Portuguese" },
-                { key: "14", label: "Dutch" },
-                { key: "15", label: "Chinese" },
+                { key: "9", label: "Chinese" },
               ].map((lang) => ({
                 key: lang.key,
                 label: (
