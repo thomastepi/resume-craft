@@ -25,13 +25,30 @@ const Templates = () => {
 
   const handleDownloadPDF = () => {
     const element = componentRef.current;
+    const cloneElement = element.cloneNode(true);
+
+    const extractShadowRoots = (element) => {
+      if (element.shadowRoot) {
+        Array.from(element.shadowRoot.children).forEach((child) => {
+          cloneElement.appendChild(child.cloneNode(true));
+        });
+      }
+      element.childNodes.forEach(extractShadowRoots);
+    };
+    extractShadowRoots(element);
+
     html2pdf()
-      .from(element)
+      .from(cloneElement)
       .set({
         margin: [10, 10],
         filename: "Resume.pdf",
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          removeContainer: false,
+          logging: true,
+        },
         jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
       })
       .save();
