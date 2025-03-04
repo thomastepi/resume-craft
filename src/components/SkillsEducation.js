@@ -139,7 +139,7 @@ const SkillsEducation = () => {
                           message: "Missing Skill",
                         },
                         {
-                          pattern: /^[a-zA-Z0-9\s\-\+\#\.\,\/\(\)\']+$/,
+                          pattern: /^[a-zA-Z0-9\s\-+#.,/()']+$/,
                           message:
                             "Please use letters, numbers, spaces and basic punctuation only",
                         },

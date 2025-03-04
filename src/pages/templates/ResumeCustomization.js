@@ -19,7 +19,7 @@ const ResumeCustomization = () => {
   const [selectedLayout, setSelectedLayout] = useState("Single Column");
   const [writingStyle, setWritingStyle] = useState("Professional");
   const [fontChoice, setFontChoice] = useState("Serif");
-  const [themeColor, setThemeColor] = useState("rgb(0, 150, 136)");
+  const [themeColor, setThemeColor] = useState("rgb(33, 37, 41)");
   const [optimizeForATS, setOptimizeForATS] = useState(false);
 
   const isMobile = useIsMobile();
@@ -31,7 +31,7 @@ const ResumeCustomization = () => {
     themeColor,
     optimizeForATS,
   };
-  
+
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const user = JSON.parse(localStorage.getItem("user"));
   const {
@@ -86,13 +86,18 @@ const ResumeCustomization = () => {
       const reader = result.body.getReader();
       const decoder = new TextDecoder();
       let fullResume = "";
+      let firstChunkReceived = false;
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        fullResume += decoder.decode(value, { stream: true });
+        const chunk = decoder.decode(value, { stream: true });
+        fullResume += chunk;
         setGeneratedHTML(fullResume);
-        setLoading(false);
+        if (!firstChunkReceived && fullResume.length > 500) {
+          setLoading(false);
+          firstChunkReceived = true;
+        }
       }
 
       setIsCVGenerated(true);

@@ -1,5 +1,7 @@
 import React, { useRef, useContext } from "react";
 import { useReactToPrint } from "react-to-print";
+import html2pdf from "html2pdf.js";
+import { isMobile } from "react-device-detect";
 import Template1 from "./Template1";
 import Template2 from "./Template2";
 import ResumeCustomization from "./ResumeCustomization";
@@ -20,6 +22,20 @@ const Templates = () => {
     contentRef: componentRef,
     copyShadowRoots: true,
   });
+
+  const handleDownloadPDF = () => {
+    const element = componentRef.current;
+    html2pdf()
+      .from(element)
+      .set({
+        margin: [10, 10],
+        filename: "Resume.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+      })
+      .save();
+  };
 
   const getTemplate = () => {
     switch (params.id) {
@@ -51,14 +67,30 @@ const Templates = () => {
           {params.id === "1" && generatedHTML ? "Back to Home" : "Back"}
         </button>
         {params.id === "1" && generatedHTML && (
-          <button className="action-btn" onClick={handlePrint}>
-            Print/Save
-          </button>
+          <>
+            {isMobile ? (
+              <button className="action-btn" onClick={handleDownloadPDF}>
+                Download as PDF
+              </button>
+            ) : (
+              <button className="action-btn" onClick={handlePrint}>
+                Print/Save
+              </button>
+            )}
+          </>
         )}
         {params.id === "2" || params.id === "3" ? (
-          <button className="action-btn" onClick={handlePrint}>
-            Print/Save
-          </button>
+          <>
+            {isMobile ? (
+              <button className="action-btn" onClick={handleDownloadPDF}>
+                Download as PDF
+              </button>
+            ) : (
+              <button className="action-btn" onClick={handlePrint}>
+                Print/Save
+              </button>
+            )}
+          </>
         ) : null}
       </div>
       <div ref={componentRef}>{getTemplate()}</div>
