@@ -37,7 +37,7 @@ const AlertBox = ({
               if (endSession) {
                 localStorage.clear();
                 toastMessage.success(
-                  "Guest Session Ended. Create an account to unlock all features!"
+                  "Successfully logged out"
                 );
               }
               navigate(navigateTo);

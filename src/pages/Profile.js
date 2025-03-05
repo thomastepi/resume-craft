@@ -100,9 +100,9 @@ const Profile = () => {
           break;
 
         default:
-          setAlertTitle("An error occurred!");
-          message.error("An error occurred!");
-          setError("An unexpected error occurred. Please try again.");
+          setAlertTitle(err.response.data.error || "An error occurred!");
+          message.error(err.response.data.error || "An error occurred!");
+          setError(err.response.data.message || "An unexpected error occurred. Please try again.");
           break;
       }
     }
@@ -174,8 +174,16 @@ const Profile = () => {
               <AlertBox
                 message={error}
                 title={alertTitle}
-                btnText="Sign Up Now"
-                navigateTo="/register"
+                btnText={
+                  alertTitle === "Session Expired" || "Invalid Token"
+                    ? "Log In Now"
+                    : "Sign Up Now"
+                }
+                navigateTo={
+                  alertTitle === "Session Expired" || "Invalid Token"
+                    ? "/login"
+                    : "/register"
+                }
                 endSession={true}
                 type="warning"
                 showActionButton={true}
