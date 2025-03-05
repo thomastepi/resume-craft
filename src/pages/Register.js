@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import ReCAPTCHA from "react-google-recaptcha";
 import logo from "../assets/images/logo-form.png";
 import axios from "axios";
 import { Button, Form, Input, message, Spin } from "antd";
@@ -8,9 +9,15 @@ import { registerSchema } from "../utils/validationSchema";
 import "../resources/styles/pages/authentication.css";
 
 function Register() {
+  const [loading, setLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null);
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(false);
+  
   const baseUrl = process.env.REACT_APP_BASE_URL;
+
+  function handleCaptchaChange(token) {
+    setCaptchaToken(token);
+  }
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -20,9 +27,16 @@ function Register() {
   }, [navigate]);
 
   const handleRegister = async (values, { setSubmitting }) => {
+    if (!captchaToken) {
+          message.error("Please complete the reCAPTCHA.");
+          return;
+        }
     try {
       setLoading(true);
-      await axios.post(`${baseUrl}/api/user/register`, values);
+      await axios.post(`${baseUrl}/api/user/register`, {
+        ...values,
+        captchaToken,
+      });
 
       message.success(`Registration successful! Logging in...`);
 
@@ -124,11 +138,24 @@ function Register() {
                   />
                 </Form.Item>
 
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <ReCAPTCHA
+                    sitekey={"6Lco1-oqAAAAAEiEbzvjXKUk_dHhb7jWQsup0cxi"}
+                    onChange={handleCaptchaChange}
+                  />
+                </div>
+
                 <Button
                   type="primary"
                   htmlType="submit"
                   className="btn-block btn-register"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !captchaToken}
                 >
                   Register
                 </Button>
