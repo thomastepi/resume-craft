@@ -22,6 +22,9 @@ const ResumeCustomization = () => {
   const [themeColor, setThemeColor] = useState("rgb(33, 37, 41)");
   const [optimizeForATS, setOptimizeForATS] = useState(false);
 
+  const [errorStatus, setErrorStatus] = useState(null);
+  const [remainingGenerations, setRemainingGenerations] = useState(null);
+
   const isMobile = useIsMobile();
   const resumeCustomiztions = {
     selectedLanguage,
@@ -84,6 +87,21 @@ const ResumeCustomization = () => {
         throw result;
       }
 
+      const rateLimitHeader =
+        result.headers.get("RateLimit") ||
+        result.headers.get("ratelimit-remaining");
+
+      let remainingRequests = "Unknown";
+
+      if (rateLimitHeader) {
+        const match = rateLimitHeader.match(/r=(\d+)/);
+        if (match) {
+          remainingRequests = match[1];
+        }
+      }
+
+      setRemainingGenerations(remainingRequests);
+
       const reader = result.body.getReader();
       const decoder = new TextDecoder();
       let fullResume = "";
@@ -106,27 +124,48 @@ const ResumeCustomization = () => {
       console.error("Error", err);
       setLoading(false);
       setIsGenerating(false);
+      setErrorStatus(err?.status || null);
+
       const errorMessage = await getErrorMessage(err);
-      if (errorMessage === "Failed to fetch") {
+
+      if (err.message === "Failed to fetch") {
         message.error("Network Error. Please check your internet connection.");
         return;
       }
 
-      if (err && err.status === 429) {
-        setAlertTitle("Quota Exceeded");
-        setAlertType("error");
-        message.error("Quota Exceeded. Please try again later.");
-        return;
-      }
-      if (err.status === 403) {
-        setAlertTitle("Unauthorized Access!");
-        setAlertType("warning");
-        message.warning("Unauthorized Access. Please login/signup.");
-        setError(errorMessage);
-      } else {
-        setAlertTitle("An error occurred!");
-        setAlertType("error");
-        message.error("An error occurred. Please try again.");
+      switch (err.status) {
+        case 429:
+          setAlertTitle(errorMessage.error || "Rate Limit Exceeded");
+          setAlertType("error");
+          message.error(
+            errorMessage.error ||
+              "You've reached the limit of resume generations. Please wait."
+          );
+          setError(errorMessage.message || "Try again later.");
+          break;
+
+        case 403:
+          setAlertTitle(errorMessage.error || "Access Denied");
+          setAlertType("warning");
+          message.warning(
+            errorMessage.error || "You don't have permission for this action."
+          );
+          setError(
+            errorMessage.message || "Please sign up to unlock this feature."
+          );
+          break;
+
+        default:
+          setAlertTitle(errorMessage.error || "An error occurred!");
+          setAlertType("error");
+          message.error(
+            errorMessage.error ||
+              "An unexpected error occurred. Please try again."
+          );
+          setError(
+            errorMessage.message || "Unexpected error. Please try again."
+          );
+          break;
       }
     } finally {
       setLoading(false);
@@ -146,14 +185,22 @@ const ResumeCustomization = () => {
             title={alertTitle}
             type={alertType}
             navigateTo={
-              alertTitle === "Missing Fields" ? "/profile" : "/register"
+              alertTitle === "Missing Fields"
+                ? "/profile"
+                : errorStatus === 403
+                ? "/register"
+                : "/login"
             }
             endSession={alertTitle === "Missing Fields" ? false : true}
             btnText={
-              alertTitle === "Missing Fields" ? "Update Profile" : "Sign Up Now"
+              alertTitle === "Missing Fields"
+                ? "Update Profile"
+                : errorStatus === 403
+                ? "Sign Up Now"
+                : "Log In Now"
             }
             setError={setError}
-            showActionButton={true}
+            showActionButton={![429, 500, 503].includes(errorStatus)}
           />
         )}
       </div>
@@ -192,6 +239,24 @@ const ResumeCustomization = () => {
               setSelectedLanguage={setSelectedLanguage}
             />
           </div>
+
+          {remainingGenerations !== null && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "5px",
+              }}
+            >
+              <AlertBox
+                message={`You have ${remainingGenerations} resume ${
+                  remainingGenerations === "1" ? "generation" : "generations"
+                } left this hour.`}
+                type={remainingGenerations > 2 ? "info" : "warning"}
+                showIcon
+              />
+            </div>
+          )}
 
           <div style={{ textAlign: "center", marginTop: "20px" }}>
             <button className="generate-button" onClick={handleGenerateResume}>

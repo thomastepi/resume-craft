@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import logo from "../assets/images/logo-form.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -26,11 +27,17 @@ function Login() {
       setLoading(true);
       const response = await axios.post(`${baseUrl}/api/user/login`, values);
 
-      const { username, firstName } = response.data;
+      const { username, firstName, accessToken } = response.data;
       const name = username === "guest" ? `Guest User` : firstName || username;
 
       message.success(`Welcome, ${name}!`);
       localStorage.setItem("user", JSON.stringify(response.data));
+
+      const decodedToken = jwtDecode(accessToken);
+      const expirationTime = decodedToken.exp;
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("tokenExpiry", expirationTime);
 
       setTimeout(() => {
         navigate("/home");
@@ -41,7 +48,7 @@ function Login() {
         message.error("Network Error. Please check your internet connection.");
       } else {
         message.error(
-          err.response?.data?.error || "An error occurred. Please try again."
+          err.response?.data?.message || "An error occurred. Please try again."
         );
       }
     } finally {

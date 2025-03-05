@@ -76,16 +76,34 @@ const Profile = () => {
       if (err.message === "Network Error") {
         message.error("Network Error. Please check your internet connection.");
         return;
-      } else if (err.response.status === 403) {
-        setAlertTitle("Unauthorized Access");
-        message.info("Unauthorized Access. Please login/signup.");
-        setError(err.response.data);
-      } else if (err.response.status === 400) {
-        setAlertTitle("An error occurred");
-        message.error("An error occurred while updating your profile.");
-        setError(err.response.data.error.map((error) => error));
-      } else {
-        message.error("An error occurred. Please try again.");
+      }
+      switch (err.status) {
+        case 429:
+          setAlertTitle(err.response.data.error || "Rate Limit Exceeded");
+          message.error(
+            err.response.data.error ||
+              "You've reached the limit of resume generations. Please wait."
+          );
+          setError(err.response.data.message || "Try again later.");
+          break;
+
+        case 403:
+          setAlertTitle(err.response.data.error || "Access Denied");
+          message.warning(
+            err.response.data.error ||
+              "You don't have permission for this action."
+          );
+          setError(
+            err.response.data.message ||
+              "Please sign up to unlock this feature."
+          );
+          break;
+
+        default:
+          setAlertTitle("An error occurred!");
+          message.error("An error occurred!");
+          setError("An unexpected error occurred. Please try again.");
+          break;
       }
     }
   };
@@ -160,11 +178,16 @@ const Profile = () => {
                 navigateTo="/register"
                 endSession={true}
                 type="warning"
+                showActionButton={true}
+                setError={setError}
               />
             )}
           </div>
           <button
-            style={{ borderRadius: "5px" }}
+            style={{
+              borderRadius: "5px",
+              cursor: error ? "not-allowed" : "pointer",
+            }}
             type="button"
             onClick={handleSubmit}
             disabled={error}

@@ -4,7 +4,7 @@ import logo from "../assets/images/logo-form.png";
 import axios from "axios";
 import { Button, Form, Input, message, Spin } from "antd";
 import { Formik } from "formik";
-import { registerSchema } from "../utils/validationSchema"; // Import Yup schema
+import { registerSchema } from "../utils/validationSchema";
 import "../resources/styles/pages/authentication.css";
 
 function Register() {
@@ -35,7 +35,7 @@ function Register() {
     } catch (err) {
       console.error("Error", err);
       message.error(
-        err.response?.data || "An error occurred. Please try again."
+        err.response?.data?.message || "An error occurred. Please try again."
       );
     } finally {
       setLoading(false);

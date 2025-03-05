@@ -6,11 +6,19 @@ export const getErrorMessage = async (error) => {
   if (error instanceof Response) {
     try {
       const errorData = await error.json();
-      return (
-        errorData.message || HTTP_ERRORS[error.status] || "An error occurred."
-      );
+      return {
+        error: errorData.error || "Something went wrong.",
+        message:
+          errorData.message ||
+          HTTP_ERRORS[error.status] ||
+          "An error occurred. Please try again.",
+      };
     } catch {
-      return HTTP_ERRORS[error.status] || "An error occurred.";
+      return {
+        error: "Something went wrong.",
+        message:
+          HTTP_ERRORS[error.status] || "An error occurred. Please try again.",
+      };
     }
   }
 

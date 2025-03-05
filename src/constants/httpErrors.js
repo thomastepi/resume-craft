@@ -5,6 +5,6 @@ export const HTTP_ERRORS = {
   404: "Not Found: The requested resource was not found.",
   409: "Conflict: The request could not be completed due to a conflict.",
   429: "Too Many Requests: You have exceeded the request limit. Try again later.",
-  500: "Internal Server Error: Something went wrong on our end.",
+  500: "Our servers are currently down. Please try again later.",
   503: "Service Unavailable: The server is temporarily unavailable.",
 };

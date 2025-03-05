@@ -10,6 +10,7 @@ const AlertBox = ({
   endSession,
   btnText,
   setError,
+  showActionButton,
 }) => {
   const navigate = useNavigate();
   const onCloseAction = () => {
@@ -27,22 +28,24 @@ const AlertBox = ({
       closable
       showIcon
       action={
-        <Button
-          className="home-alert-banner-btn"
-          size="small"
-          type="primary"
-          onClick={() => {
-            if (endSession) {
-              localStorage.clear();
-              toastMessage.success(
-                "Guest Session Ended. Create an account to unlock all features!"
-              );
-            }
-            navigate(navigateTo);
-          }}
-        >
-          {btnText}
-        </Button>
+        showActionButton && (
+          <Button
+            className="home-alert-banner-btn"
+            size="small"
+            type="primary"
+            onClick={() => {
+              if (endSession) {
+                localStorage.clear();
+                toastMessage.success(
+                  "Guest Session Ended. Create an account to unlock all features!"
+                );
+              }
+              navigate(navigateTo);
+            }}
+          >
+            {btnText}
+          </Button>
+        )
       }
     />
   );

@@ -3,6 +3,8 @@ import DefaultLayout from "../components/DefaultLayout";
 import { useNavigate } from "react-router-dom";
 import AlertBox from "../components/AlertBox";
 import { jwtDecode } from "jwt-decode";
+import useAuthCheck from "../hooks/useAuthCheck";
+import useInactivityLogout from "../hooks/useInactivityLogout";
 
 const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/temp1.png";
 const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
@@ -12,6 +14,9 @@ function Home() {
   const [showBanner, setShowBanner] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   const navigate = useNavigate();
+
+  useAuthCheck();
+  useInactivityLogout();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -62,6 +67,7 @@ function Home() {
             navigateTo="/profile"
             btnText="Update Profile"
             endSession={false}
+            showActionButton={true}
           />
         </div>
       )}
@@ -75,6 +81,7 @@ function Home() {
             navigateTo="/register"
             btnText="Sign Up Now"
             endSession={true}
+            showActionButton={true}
           />
         </div>
       )}
