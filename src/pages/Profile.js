@@ -185,7 +185,7 @@ const Profile = () => {
                     : "/register"
                 }
                 endSession={true}
-                type="warning"
+                type="error"
                 showActionButton={true}
                 setError={setError}
               />
