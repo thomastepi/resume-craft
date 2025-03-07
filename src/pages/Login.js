@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, Input, message, Spin } from "antd";
 import { Formik } from "formik";
 import { loginSchema } from "../utils/validationSchema";
+import { GoogleLogin } from "@react-oauth/google";
 import "../resources/styles/pages/authentication.css";
 
 function Login() {
@@ -18,6 +19,35 @@ function Login() {
   function handleCaptchaChange(token) {
     setCaptchaToken(token);
   }
+
+  const handleOAuthSuccess = async (response) => {
+    const { credential } = response;
+    try {
+      const res = await axios.post(`${baseUrl}/api/user/google-oauth`, {
+        token: credential,
+      });
+      const { firstName, username, accessToken } = res.data;
+      localStorage.setItem("user", JSON.stringify(res.data));
+      const name = username === "guest" ? `Guest User` : firstName || username;
+
+      message.success(`Welcome, ${name}!`);
+
+      const decodedToken = jwtDecode(accessToken);
+      const expirationTime = decodedToken.exp;
+
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("tokenExpiry", expirationTime);
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to log in with Google:", err);
+      message.error(
+        err.response?.data?.message || "An error occurred. Please try again."
+      );
+    }
+  };
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -95,7 +125,6 @@ function Login() {
                 </div>
                 <h1>Login</h1>
                 <hr />
-
                 <Form.Item
                   label="Username"
                   validateStatus={
@@ -112,7 +141,6 @@ function Login() {
                     onBlur={handleBlur}
                   />
                 </Form.Item>
-
                 <Form.Item
                   label="Password"
                   type="text"
@@ -132,7 +160,6 @@ function Login() {
                     onBlur={handleBlur}
                   />
                 </Form.Item>
-
                 <div
                   style={{
                     display: "flex",
@@ -145,7 +172,6 @@ function Login() {
                     onChange={handleCaptchaChange}
                   />
                 </div>
-
                 <Button
                   type="primary"
                   htmlType="submit"
@@ -154,35 +180,54 @@ function Login() {
                 >
                   Login
                 </Button>
-
                 <div className="or-divider">
                   <span>
                     <strong>OR</strong>
                   </span>
                 </div>
 
-                <Button
-                  type="primary"
-                  htmlType="button"
-                  onClick={async () => {
-                    try {
-                      setLoading(true);
-                      await axios.post(`${baseUrl}/api/user/guest-log`);
-                      handleLogin(
-                        { username: "guest", password: "SecurePass123" },
-                        { setSubmitting: () => {} }
-                      );
-                    } catch (err) {
-                      console.error("Failed to log guest session:", err);
-                      message.error("An error occurred. Please try again.");
-                    } finally {
-                      setLoading(false);
-                    }
+                <div
+                  style={{
+                    marginBottom: "10px",
+                    display: "flex",
+                    justifyContent: "center",
                   }}
-                  className="btn-block btn-guest"
                 >
-                  Explore as Guest
-                </Button>
+                  <GoogleLogin
+                    onSuccess={handleOAuthSuccess}
+                    onError={() => {
+                      console.log("Login Failed");
+                    }}
+                  />
+                </div>
+
+                <hr />
+
+                <div style={{ margin: "10px 0" }}>
+                  <span>
+                    Not ready to Log in?{" "}
+                    <span
+                      className="guest-link"
+                      onClick={async () => {
+                        try {
+                          setLoading(true);
+                          await axios.post(`${baseUrl}/api/user/guest-log`);
+                          handleLogin(
+                            { username: "guest", password: "SecurePass123" },
+                            { setSubmitting: () => {} }
+                          );
+                        } catch (err) {
+                          console.error("Failed to log guest session:", err);
+                          message.error("An error occurred. Please try again.");
+                        } finally {
+                          setLoading(false);
+                        }
+                      }}
+                    >
+                      Explore as Guest
+                    </span>
+                  </span>
+                </div>
 
                 <div className="d-flex align-items-center justify-content-between">
                   <span>
