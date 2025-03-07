@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import ReCAPTCHA from "react-google-recaptcha";
 import logo from "../assets/images/logo-form.png";
 import axios from "axios";
@@ -12,7 +13,7 @@ function Register() {
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState(null);
   const navigate = useNavigate();
-  
+
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   function handleCaptchaChange(token) {
@@ -27,21 +28,33 @@ function Register() {
   }, [navigate]);
 
   const handleRegister = async (values, { setSubmitting }) => {
-    if (!captchaToken) {
-          message.error("Please complete the reCAPTCHA.");
-          return;
-        }
+    if (!captchaToken && values.username !== "guest") {
+      message.error("Please complete the reCAPTCHA.");
+      return;
+    }
     try {
       setLoading(true);
-      await axios.post(`${baseUrl}/api/user/register`, {
+      if (values.username !== "guest") {
+        await axios.post(`${baseUrl}/api/user/register`, values);
+      }
+
+      const res = await axios.post(`${baseUrl}/api/user/login`, {
         ...values,
         captchaToken,
       });
-
-      message.success(`Registration successful! Logging in...`);
-
-      const res = await axios.post(`${baseUrl}/api/user/login`, values);
       localStorage.setItem("user", JSON.stringify(res.data));
+
+      const decodedToken = jwtDecode(res.data.accessToken);
+      const expirationTime = decodedToken.exp;
+
+      localStorage.setItem("accessToken", res.data.accessToken);
+      localStorage.setItem("tokenExpiry", expirationTime);
+
+      message.success(
+        values.username === "guest"
+          ? "Welcome, Guest User!"
+          : `Welcome, ${res.data.firstName || values.username}!`
+      );
 
       setTimeout(() => {
         navigate("/home");
@@ -176,8 +189,7 @@ function Register() {
                           handleRegister(
                             {
                               username: "guest",
-                              password: "0000",
-                              cpassword: "0000",
+                              password: "SecurePass123",
                             },
                             { setSubmitting: () => {} }
                           );

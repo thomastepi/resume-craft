@@ -8,6 +8,7 @@ import ExperienceProject from "../components/ExperienceProject";
 import CertificationsLanguage from "../components/CertificationsLanguage";
 import AlertBox from "../components/AlertBox";
 import useIsMobile from "../hooks/useIsMobile";
+import { useNavigate } from "react-router-dom";
 
 const items = [
   {
@@ -39,6 +40,8 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("1");
   const [form] = Form.useForm();
   const isMobile = useIsMobile();
+
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
 
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -78,6 +81,20 @@ const Profile = () => {
         return;
       }
       switch (err.status) {
+        case 401:
+          setAlertTitle(err.response.data.error || "Unauthorized");
+          message.error(
+            err.response?.data?.error ||
+              "You are not authorized to perform this action.",
+            6
+          );
+          setError(err.response?.data?.message || "Please log in to continue.");
+          setTimeout(() => {
+            navigate("/login");
+            localStorage.clear();
+          }, 2000);
+          break;
+
         case 429:
           setAlertTitle(err.response.data.error || "Rate Limit Exceeded");
           message.error(
@@ -102,7 +119,10 @@ const Profile = () => {
         default:
           setAlertTitle(err.response.data.error || "An error occurred!");
           message.error(err.response.data.error || "An error occurred!");
-          setError(err.response.data.message || "An unexpected error occurred. Please try again.");
+          setError(
+            err.response.data.message ||
+              "An unexpected error occurred. Please try again."
+          );
           break;
       }
     }

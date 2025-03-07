@@ -27,6 +27,11 @@ export const registerSchema = Yup.object().shape({
       usernameRegex,
       "Username can only contain letters, numbers, _, ., and -"
     )
+    .test(
+      "not-guest",
+      "The username 'guest' is reserved. Please choose a different username.",
+      (value) => value && value.toLowerCase() !== "guest"
+    )
     .required("Username is required"),
 
   password: Yup.string()

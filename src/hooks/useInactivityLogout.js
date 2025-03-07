@@ -16,7 +16,7 @@ const useInactivityLogout = () => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("tokenExpiry");
       localStorage.removeItem("user");
-      message.error("Session Expired. Please login again.");
+      message.error("Session Expired. Please login again.", 6);
       navigate("/login");
     };
 

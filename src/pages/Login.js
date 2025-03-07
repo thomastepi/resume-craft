@@ -29,7 +29,7 @@ function Login() {
   }, [navigate]);
 
   const handleLogin = async (values, { setSubmitting }) => {
-    if (!captchaToken) {
+    if (!captchaToken && values.username !== "guest") {
       message.error("Please complete the reCAPTCHA.");
       return;
     }

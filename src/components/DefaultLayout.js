@@ -35,7 +35,7 @@ function DefaultLayout(props) {
       label: (
         <span
           onClick={() => {
-            localStorage.removeItem("user");
+            localStorage.clear();
             navigate("/landing");
             message.success(
               decodedToken.role === "guest"

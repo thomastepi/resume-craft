@@ -9,6 +9,7 @@ import { generateResumePrompt } from "../../utils/aiResumeUtils";
 import { ResumeContext } from "../../context/ResumeContext";
 import { getErrorMessage } from "../../utils/errorHandler";
 import CustomizationPanel from "../../components/CustomizationFields/CustomizationPanel";
+import { useNavigate } from "react-router-dom";
 
 const ResumeCustomization = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
@@ -24,6 +25,7 @@ const ResumeCustomization = () => {
 
   const [errorStatus, setErrorStatus] = useState(null);
   const [remainingGenerations, setRemainingGenerations] = useState(null);
+  const navigate = useNavigate();
 
   const isMobile = useIsMobile();
   const resumeCustomiztions = {
@@ -134,6 +136,21 @@ const ResumeCustomization = () => {
       }
 
       switch (err.status) {
+        case 401:
+          setAlertTitle(errorMessage.error || "Unauthorized");
+          setAlertType("error");
+          message.error(
+            errorMessage.error ||
+              "You are not authorized to perform this action.",
+            6
+          );
+          setError(errorMessage.message || "Please log in to continue.");
+          setTimeout(() => {
+            navigate("/login");
+            localStorage.clear();
+          }, 2000);
+          break;
+
         case 429:
           setAlertTitle(errorMessage.error || "Rate Limit Exceeded");
           setAlertType("error");
