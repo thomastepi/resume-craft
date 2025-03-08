@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Dropdown, Button, message } from "antd";
+import { Dropdown, Button, message, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import logo from "../assets/images/logo.png";
 import { jwtDecode } from "jwt-decode";
@@ -10,6 +10,8 @@ import "./../resources/styles/defaultLayout.css";
 function DefaultLayout(props) {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
+
+  const avatarSrc = user.avatar || null;
 
   const decodedToken = jwtDecode(user.accessToken);
 
@@ -67,7 +69,10 @@ function DefaultLayout(props) {
           }}
           placement="bottomLeft"
         >
-          <Button className="btn-user" icon={<UserOutlined />}>
+          <Button
+            className="btn-user"
+            icon={avatarSrc ? <Avatar src={avatarSrc} /> : <UserOutlined />}
+          >
             {user.username}
           </Button>
         </Dropdown>
