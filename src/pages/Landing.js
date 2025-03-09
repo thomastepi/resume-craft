@@ -74,7 +74,7 @@ const Landing = () => {
             <div style={{ width: "100%", marginTop: "5rem" }}>
               <span>Already have an account? </span>
               <Link to="/login" className="btn btn-login">
-                Login
+                Log in
               </Link>
             </div>
           </div>
