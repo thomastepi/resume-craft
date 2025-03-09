@@ -116,6 +116,19 @@ const Profile = () => {
           );
           break;
 
+        case 400:
+          setAlertTitle(err.response.data.error || "Bad Request");
+          message.error(
+            err.response.data.error ||
+              "Bad Request. Please check your input and try again.",
+            5
+          );
+          setError(
+            err.response.data.message ||
+              "bad request. Please check your input and try again."
+          );
+          break;
+
         default:
           setAlertTitle(err.response.data.error || "An error occurred!");
           message.error(err.response.data.error || "An error occurred!");
@@ -206,7 +219,9 @@ const Profile = () => {
                 }
                 endSession={true}
                 type="error"
-                showActionButton={true}
+                showActionButton={
+                  alertTitle !== "Bad Request" || "An error occurred!"
+                }
                 setError={setError}
               />
             )}

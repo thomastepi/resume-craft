@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import axios from "axios";
 import logo from "../assets/images/logo-form.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Form, Input, message, Spin } from "antd";
@@ -9,96 +7,41 @@ import { Formik } from "formik";
 import { loginSchema } from "../utils/validationSchema";
 import { GoogleLogin } from "@react-oauth/google";
 import "../resources/styles/pages/authentication.css";
+import {
+  loginWithGoogle,
+  loginWithCredentials,
+  registerGuestLogin,
+  isUserSessionValid,
+} from "../services/authService";
 
 function Login() {
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState(null);
-  const baseUrl = process.env.REACT_APP_BASE_URL;
+  const [buttonWidth, setButtonWidth] = useState(400);
+  const containerRef = useRef(null);
   const navigate = useNavigate();
 
-  function handleCaptchaChange(token) {
-    setCaptchaToken(token);
-  }
-
-  const handleOAuthSuccess = async (response) => {
-    const { credential } = response;
-    try {
-      const res = await axios.post(`${baseUrl}/api/user/google-oauth`, {
-        token: credential,
-      });
-      const { firstName, username, accessToken } = res.data;
-      localStorage.setItem("user", JSON.stringify(res.data));
-      const name = username === "guest" ? `Guest User` : firstName || username;
-
-      message.success(`Welcome, ${name}!`);
-
-      const decodedToken = jwtDecode(accessToken);
-      const expirationTime = decodedToken.exp;
-
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("tokenExpiry", expirationTime);
-
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
-    } catch (err) {
-      console.error("Failed to log in with Google:", err);
-      message.error(
-        err.response?.data?.message || "An error occurred. Please try again."
-      );
-    }
-  };
+  const handleCaptchaChange = (token) => setCaptchaToken(token);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
+    if (isUserSessionValid()) {
+      setTimeout(() => navigate("/home"), 2000);
     }
   }, [navigate]);
 
-  const handleLogin = async (values, { setSubmitting }) => {
-    if (!captchaToken && values.username !== "guest") {
-      message.error("Please complete the reCAPTCHA.");
-      return;
-    }
-    try {
-      setLoading(true);
-      const response = await axios.post(`${baseUrl}/api/user/login`, {
-        ...values,
-        captchaToken,
-      });
-
-      const { username, firstName, accessToken } = response.data;
-      const name = username === "guest" ? `Guest User` : firstName || username;
-
-      message.success(`Welcome, ${name}!`);
-      localStorage.setItem("user", JSON.stringify(response.data));
-
-      const decodedToken = jwtDecode(accessToken);
-      const expirationTime = decodedToken.exp;
-
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("tokenExpiry", expirationTime);
-
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
-    } catch (err) {
-      console.error("Error", err);
-      if (err.message === "Network Error") {
-        message.error("Network Error. Please check your internet connection.");
-      } else {
-        message.error(
-          err.response?.data?.message || "An error occurred. Please try again."
-        );
+  useEffect(() => {
+    const updateWidth = () => {
+      if (containerRef.current) {
+        const parentWidth = containerRef.current.offsetWidth;
+        const newWidth = Math.min(Math.max(parentWidth, 200), 400);
+        setButtonWidth(newWidth);
       }
-    } finally {
-      setLoading(false);
-      setSubmitting(false);
-    }
-  };
+    };
+
+    updateWidth();
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
 
   return (
     <div className="auth-parent">
@@ -108,7 +51,24 @@ function Login() {
           <Formik
             initialValues={{ username: "", password: "" }}
             validationSchema={loginSchema}
-            onSubmit={handleLogin}
+            onSubmit={async (values, { setSubmitting }) => {
+              try {
+                await loginWithCredentials(
+                  values,
+                  captchaToken,
+                  navigate,
+                  setLoading
+                );
+              } catch (err) {
+                console.error("Login Error:", err);
+                message.error(
+                  err.response?.data?.message ||
+                    "An error occurred. Please try again."
+                );
+              } finally {
+                setSubmitting(false);
+              }
+            }}
           >
             {({
               values,
@@ -125,6 +85,22 @@ function Login() {
                 </div>
                 <h1>Login</h1>
                 <hr />
+                <div className="google-btn-wrapper" ref={containerRef}>
+                  <GoogleLogin
+                    onSuccess={(response) =>
+                      loginWithGoogle(response.credential, navigate, setLoading)
+                    }
+                    onError={() => message.error("Google Login Failed")}
+                    useOneTap
+                    size="large"
+                    width={buttonWidth.toString()}
+                  />
+                </div>
+                <div className="or-divider">
+                  <span>
+                    <strong>OR</strong>
+                  </span>
+                </div>
                 <Form.Item
                   label="Username"
                   validateStatus={
@@ -180,26 +156,6 @@ function Login() {
                 >
                   Login
                 </Button>
-                <div className="or-divider">
-                  <span>
-                    <strong>OR</strong>
-                  </span>
-                </div>
-
-                <div
-                  style={{
-                    marginBottom: "10px",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <GoogleLogin
-                    onSuccess={handleOAuthSuccess}
-                    onError={() => {
-                      console.log("Login Failed");
-                    }}
-                  />
-                </div>
 
                 <hr />
 
@@ -210,17 +166,19 @@ function Login() {
                       className="guest-link"
                       onClick={async () => {
                         try {
-                          setLoading(true);
-                          await axios.post(`${baseUrl}/api/user/guest-log`);
-                          handleLogin(
+                          await loginWithCredentials(
                             { username: "guest", password: "SecurePass123" },
-                            { setSubmitting: () => {} }
+                            null,
+                            navigate,
+                            setLoading
                           );
+                          await registerGuestLogin();
                         } catch (err) {
                           console.error("Failed to log guest session:", err);
-                          message.error("An error occurred. Please try again.");
-                        } finally {
-                          setLoading(false);
+                          message.error(
+                            err.response?.data?.message ||
+                              "An error occurred. Please try again."
+                          );
                         }
                       }}
                     >

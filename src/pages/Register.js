@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import ReCAPTCHA from "react-google-recaptcha";
 import logo from "../assets/images/logo-form.png";
-import axios from "axios";
 import { Button, Form, Input, message, Spin } from "antd";
 import { Formik } from "formik";
 import { registerSchema } from "../utils/validationSchema";
+import {
+  //loginWithGoogle,
+  loginWithCredentials,
+  registerUser,
+  registerGuestLogin,
+  isUserSessionValid,
+} from "../services/authService";
 import "../resources/styles/pages/authentication.css";
 
 function Register() {
@@ -14,61 +19,13 @@ function Register() {
   const [captchaToken, setCaptchaToken] = useState(null);
   const navigate = useNavigate();
 
-  const baseUrl = process.env.REACT_APP_BASE_URL;
-
-  function handleCaptchaChange(token) {
-    setCaptchaToken(token);
-  }
+  const handleCaptchaChange = (token) => setCaptchaToken(token);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      navigate("/home");
+    if (isUserSessionValid()) {
+      setTimeout(() => navigate("/home"), 2000);
     }
   }, [navigate]);
-
-  const handleRegister = async (values, { setSubmitting }) => {
-    if (!captchaToken && values.username !== "guest") {
-      message.error("Please complete the reCAPTCHA.");
-      return;
-    }
-    try {
-      setLoading(true);
-      if (values.username !== "guest") {
-        await axios.post(`${baseUrl}/api/user/register`, values);
-      }
-
-      const res = await axios.post(`${baseUrl}/api/user/login`, {
-        ...values,
-        captchaToken,
-      });
-      localStorage.setItem("user", JSON.stringify(res.data));
-
-      const decodedToken = jwtDecode(res.data.accessToken);
-      const expirationTime = decodedToken.exp;
-
-      localStorage.setItem("accessToken", res.data.accessToken);
-      localStorage.setItem("tokenExpiry", expirationTime);
-
-      message.success(
-        values.username === "guest"
-          ? "Welcome, Guest User!"
-          : `Welcome, ${res.data.firstName || values.username}!`
-      );
-
-      setTimeout(() => {
-        navigate("/home");
-      }, 2000);
-    } catch (err) {
-      console.error("Error", err);
-      message.error(
-        err.response?.data?.message || "An error occurred. Please try again."
-      );
-    } finally {
-      setLoading(false);
-      setSubmitting(false);
-    }
-  };
 
   return (
     <div className="auth-parent">
@@ -78,7 +35,25 @@ function Register() {
           <Formik
             initialValues={{ username: "", password: "", cpassword: "" }}
             validationSchema={registerSchema}
-            onSubmit={handleRegister}
+            onSubmit={async (values, { setSubmitting }) => {
+              try {
+                await registerUser(
+                  values,
+                  captchaToken,
+                  navigate,
+                  setLoading,
+                  setSubmitting
+                );
+              } catch (err) {
+                console.error("Register Error:", err);
+                message.error(
+                  err.response?.data?.message ||
+                    "An error occurred. Please try again."
+                );
+              } finally {
+                setSubmitting(false);
+              }
+            }}
           >
             {({
               values,
@@ -185,17 +160,19 @@ function Register() {
                       onClick={async () => {
                         try {
                           setLoading(true);
-                          await axios.post(`${baseUrl}/api/user/guest-log`);
-                          handleRegister(
-                            {
-                              username: "guest",
-                              password: "SecurePass123",
-                            },
-                            { setSubmitting: () => {} }
+                          await loginWithCredentials(
+                            { username: "guest", password: "SecurePass123" },
+                            null,
+                            navigate,
+                            setLoading
                           );
+                          await registerGuestLogin();
                         } catch (err) {
                           console.error("Failed to log guest session:", err);
-                          message.error("An error occurred. Please try again.");
+                          message.error(
+                            err.response?.data?.message ||
+                              "An error occurred. Please try again."
+                          );
                         } finally {
                           setLoading(false);
                         }
