@@ -276,8 +276,9 @@ const ResumeCustomization = () => {
           )}
 
           <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <button className="generate-button" onClick={handleGenerateResume}>
-              Generate Resume
+            <button className="btn-secondary" onClick={handleGenerateResume}>
+              <div className="btn-seconday-state"></div>
+              <span className="btn-secondary-contents">Generate Resume</span>
             </button>
           </div>
         </>

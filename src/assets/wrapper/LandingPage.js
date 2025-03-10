@@ -31,28 +31,6 @@ const Wrapper = styled.div`
   .main-img {
     display: block;
   }
-  .btn {
-    background-color: rgba(47, 43, 43, 0.818);
-    color: white;
-  }
-
-  .btn:hover {
-    background-color: #716a6a;
-    color: white;
-  }
-
-  .btn-login {
-    background-color: #fff;
-    color: #000;
-    border: 1px solid #000;
-    margin-top: 1rem;
-    width: 100%;
-  }
-
-  .btn-login:hover {
-    background-color: rgb(223, 214, 214);
-    color: #000;
-  }
 
   .logo-mobile {
     display: none;

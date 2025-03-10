@@ -77,7 +77,10 @@ const Profile = () => {
       console.log("error: ", err);
       setLoading(false);
       if (err.message === "Network Error") {
-        message.error("Network Error. Please check your internet connection.");
+        message.error(
+          "Network Error. Please check your internet connection.",
+          5
+        );
         return;
       }
       switch (err.status) {
@@ -131,11 +134,7 @@ const Profile = () => {
 
         default:
           setAlertTitle(err.response.data.error || "An error occurred!");
-          message.error(err.response.data.error || "An error occurred!");
-          setError(
-            err.response.data.message ||
-              "An unexpected error occurred. Please try again."
-          );
+          message.error(err.response.data.error || "An error occurred!", 5);
           break;
       }
     }
@@ -219,23 +218,19 @@ const Profile = () => {
                 }
                 endSession={true}
                 type="error"
-                showActionButton={
-                  alertTitle !== "Bad Request" || "An error occurred!"
-                }
+                showActionButton={alertTitle !== "Bad Request"}
                 setError={setError}
               />
             )}
           </div>
           <button
-            style={{
-              borderRadius: "5px",
-              cursor: error ? "not-allowed" : "pointer",
-            }}
+            className="btn-secondary"
             type="button"
             onClick={handleSubmit}
-            disabled={error}
+            disabled={error || loading}
           >
-            Update Profile
+            <div className="btn-secondary-state"></div>
+            <span className="btn-secondary-contents">Update Profile</span>
           </button>
         </Form>
       </div>

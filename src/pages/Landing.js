@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../assets/images/logo-landing.png";
 import main from "../assets/images/main.svg";
 import Wrapper from "../assets/wrapper/LandingPage";
-import { Link, useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 import { message, Spin } from "antd";
 import { loginWithGoogle, isUserSessionValid } from "../services/authService";
 
 const Landing = () => {
-  const [buttonWidth, setButtonWidth] = useState(200);
   const [loading, setLoading] = useState(false);
-  const containerRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,19 +18,13 @@ const Landing = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        const parentWidth = containerRef.current.offsetWidth;
-        const newWidth = Math.min(Math.max(parentWidth, 200), 400);
-        setButtonWidth(newWidth);
-      }
-    };
-
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      loginWithGoogle(tokenResponse.access_token, navigate, setLoading);
+      //console.log("tokenResponse: ", tokenResponse);
+    },
+    onError: () => message.error("Google Login Failed"),
+  });
 
   return (
     <Wrapper>
@@ -46,36 +39,39 @@ const Landing = () => {
             Create a professional, job-winning resume in minutes—powered by AI.
           </p>
           <div className="auth-child">
-            <div ref={containerRef} style={{ width: "100%" }}>
-              <GoogleLogin
-                onSuccess={(response) =>
-                  loginWithGoogle(response.credential, navigate, setLoading)
-                }
-                onError={() => message.error("Google Login Failed")}
-                useOneTap
-                text="signup_with"
-                theme="outline"
-                size="large"
-                width={buttonWidth.toString()}
+            <div style={{ width: "100%" }}>
+              <GoogleSignInButton
+                btnText="Sign up with Google"
+                loading={loading}
+                onClick={() => login()}
               />
             </div>
+
             <div className="or-divider">
               <span>
                 <strong>OR</strong>
               </span>
             </div>
-            <Link
-              to="/register"
-              className="btn btn-hero"
-              style={{ width: "100%" }}
+
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => navigate("/register")}
             >
-              Create an Account
-            </Link>
+              <div className="btn-secondary-state"></div>
+              <span className="btn-primary-contents">Create an Account</span>
+            </button>
             <div style={{ width: "100%", marginTop: "5rem" }}>
-              <span>Already have an account? </span>
-              <Link to="/login" className="btn btn-login">
-                Log in
-              </Link>
+              <span>Already have an account?</span>
+              <button
+                style={{ marginTop: "0.5rem" }}
+                className="btn-primary"
+                type="button"
+                onClick={() => navigate("/login")}
+              >
+                <div className="btn-primary-state"></div>
+                <span className="btn-primary-contents">Log in</span>
+              </button>
             </div>
           </div>
         </div>

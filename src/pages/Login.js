@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import logo from "../assets/images/logo-form.png";
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Form, Input, message, Spin } from "antd";
+import { Form, Input, message, Spin } from "antd";
 import { Formik } from "formik";
 import { loginSchema } from "../utils/validationSchema";
-import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import "../resources/styles/pages/authentication.css";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 import {
   loginWithGoogle,
   loginWithCredentials,
@@ -17,8 +18,6 @@ import {
 function Login() {
   const [loading, setLoading] = useState(false);
   const [captchaToken, setCaptchaToken] = useState(null);
-  const [buttonWidth, setButtonWidth] = useState(400);
-  const containerRef = useRef(null);
   const navigate = useNavigate();
 
   const handleCaptchaChange = (token) => setCaptchaToken(token);
@@ -29,19 +28,13 @@ function Login() {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        const parentWidth = containerRef.current.offsetWidth;
-        const newWidth = Math.min(Math.max(parentWidth, 200), 400);
-        setButtonWidth(newWidth);
-      }
-    };
-
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => {
+      loginWithGoogle(tokenResponse.access_token, navigate, setLoading);
+      //console.log("tokenResponse: ", tokenResponse);
+    },
+    onError: () => message.error("Google Login Failed"),
+  });
 
   return (
     <div className="auth-parent">
@@ -85,17 +78,15 @@ function Login() {
                 </div>
                 <h1>Login</h1>
                 <hr />
-                <div className="google-btn-wrapper" ref={containerRef}>
-                  <GoogleLogin
-                    onSuccess={(response) =>
-                      loginWithGoogle(response.credential, navigate, setLoading)
-                    }
-                    onError={() => message.error("Google Login Failed")}
-                    useOneTap
-                    size="large"
-                    width={buttonWidth.toString()}
+
+                <div style={{ width: "100%" }}>
+                  <GoogleSignInButton
+                    loading={loading}
+                    onClick={() => login()}
+                    btnText="Sign in with Google"
                   />
                 </div>
+
                 <div className="or-divider">
                   <span>
                     <strong>OR</strong>
@@ -111,6 +102,7 @@ function Login() {
                   }
                 >
                   <Input
+                    className="input-field"
                     name="username"
                     value={values.username}
                     onChange={handleChange}
@@ -148,14 +140,15 @@ function Login() {
                     onChange={handleCaptchaChange}
                   />
                 </div>
-                <Button
+                <button
                   type="primary"
                   htmlType="submit"
-                  className="btn-block"
-                  disabled={isSubmitting || !captchaToken}
+                  className="btn-secondary"
+                  disabled={isSubmitting}
                 >
-                  Login
-                </Button>
+                  <div className="btn-secondary-state"></div>
+                  <span className="btn-secondary-contents">Log in</span>
+                </button>
 
                 <hr />
 

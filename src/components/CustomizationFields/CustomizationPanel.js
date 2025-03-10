@@ -1,6 +1,7 @@
 import React from "react";
 import { Dropdown, Space, ColorPicker } from "antd";
 import { DownOutlined } from "@ant-design/icons";
+import "../../resources/styles/components/CustomizationPanel.css";
 
 const CustomizationPanel = ({
   selectedLayout,
@@ -150,6 +151,7 @@ const CustomizationPanel = ({
         <div className="options-section">
           <label className="options-label">Theme Colors</label>
           <ColorPicker
+            className="color-picker"
             defaultValue="rgb(0, 150, 136)"
             showText
             allowClear
@@ -164,6 +166,7 @@ const CustomizationPanel = ({
           <label className="options-label">Optimize for ATS</label>
           <input
             type="checkbox"
+            style={{ width: "30px", height: "30px" }}
             checked={optimizeForATS}
             onChange={() => setOptimizeForATS(!optimizeForATS)}
           />

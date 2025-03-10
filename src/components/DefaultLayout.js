@@ -70,10 +70,11 @@ function DefaultLayout(props) {
           placement="bottomLeft"
         >
           <Button
-            className="btn-user"
+            className="btn-primary"
+            style={{ width: "fit-content", color: "white", backgroundColor: "black", borderRadius: "5px" }}
             icon={avatarSrc ? <Avatar src={avatarSrc} /> : <UserOutlined />}
           >
-            {user.username}
+            <span className="btn-primary-contents">{user.username}</span>
           </Button>
         </Dropdown>
       </div>

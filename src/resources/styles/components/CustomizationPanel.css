@@ -1,0 +1,37 @@
+.dropdown-button,
+.color-picker {
+  min-width: 12rem;
+  text-align: right;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  margin-left: 3rem;
+  background-color: #f0efef;
+  transition: all 0.3s;
+  border: 1px solid #3a3a3a;
+}
+
+.dropdown-button:hover,
+.color-picker:hover {
+  border-color: rgb(154, 154, 215);
+}
+
+.color-picker {
+  display: flex;
+  justify-content: space-between;
+}
+
+.resume-customization-panel {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: fit-content;
+  align-content: center;
+  margin: auto;
+}
+
+.options-section {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

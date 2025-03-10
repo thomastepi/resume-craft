@@ -71,7 +71,8 @@ const Templates = () => {
       <div className="button-container">
         {params.id === "1" && generatedHTML && (
           <button
-            className="action-btn"
+            className="btn-primary"
+            style={{ width: "fit-content", padding: "0 20px" }}
             disabled={isGenerating}
             onClick={() => setGeneratedHTML(null)}
           >
@@ -79,7 +80,8 @@ const Templates = () => {
           </button>
         )}
         <button
-          className="action-btn"
+          className="btn-primary"
+          style={{ width: "fit-content", padding: "0 20px" }}
           disabled={isGenerating}
           onClick={() => {
             navigate("/home");
@@ -91,7 +93,8 @@ const Templates = () => {
           <>
             {isMobile ? (
               <button
-                className="action-btn"
+                className="btn-secondary"
+                style={{ width: "fit-content", padding: "0 20px" }}
                 disabled={isGenerating}
                 onClick={handleDownloadPDF}
               >
@@ -99,7 +102,8 @@ const Templates = () => {
               </button>
             ) : (
               <button
-                className="action-btn"
+                className="btn-secondary"
+                style={{ width: "fit-content", padding: "0 20px" }}
                 disabled={isGenerating}
                 onClick={handlePrint}
               >
@@ -112,7 +116,8 @@ const Templates = () => {
           <>
             {isMobile ? (
               <button
-                className="action-btn"
+                className="btn-secondary"
+                style={{ width: "fit-content", padding: "0 20px" }}
                 disabled={isGenerating}
                 onClick={handleDownloadPDF}
               >
@@ -120,7 +125,8 @@ const Templates = () => {
               </button>
             ) : (
               <button
-                className="action-btn"
+                className="btn-secondary"
+                style={{ width: "fit-content", padding: "0 20px" }}
                 disabled={isGenerating}
                 onClick={handlePrint}
               >

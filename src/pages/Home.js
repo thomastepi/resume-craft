@@ -95,11 +95,14 @@ function Home() {
                 <div className="text">
                   <p>{template.title}</p>
                   <button
+                    className="btn-primary"
+                    style={{ width: "fit-content" }}
                     onClick={() => {
                       navigate(`/templates/${index + 1}`);
                     }}
                   >
-                    TRY
+                    <div className="btn-primary-state"></div>
+                    <span className="btn-primary-contents">TRY</span>
                   </button>
                 </div>
               </div>

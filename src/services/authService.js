@@ -11,11 +11,11 @@ const storeUserSession = (userData) => {
   localStorage.setItem("tokenExpiry", decodedToken.exp);
 };
 
-export const loginWithGoogle = async (credential, navigate, setLoading) => {
+export const loginWithGoogle = async (access_token, navigate, setLoading) => {
   try {
     setLoading(true);
     const res = await axios.post(`${baseUrl}/api/user/google-oauth`, {
-      token: credential,
+      token: access_token,
     });
     const { firstName, username } = res.data;
 

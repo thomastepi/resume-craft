@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
 import logo from "../assets/images/logo-form.png";
-import { Button, Form, Input, message, Spin } from "antd";
+import { Form, Input, message, Spin } from "antd";
 import { Formik } from "formik";
 import { registerSchema } from "../utils/validationSchema";
 import {
@@ -139,17 +139,18 @@ function Register() {
                   />
                 </div>
 
-                <Button
+                <button
+                  className="btn-secondary"
                   type="primary"
                   htmlType="submit"
-                  className="btn-block btn-register"
-                  disabled={isSubmitting || !captchaToken}
+                  disabled={isSubmitting}
                 >
-                  Register
-                </Button>
-
+                  <div className="btn-secondary-state"></div>
+                  <span className="btn-secondary-contents">Register</span>
+                </button>
+                <hr />
                 <span>
-                  Already have an account? <Link to="/login">Login</Link>
+                  Already have an account? <Link to="/login">Log in</Link>
                 </span>
 
                 <div style={{ marginTop: "10px" }}>
