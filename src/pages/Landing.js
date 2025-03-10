@@ -67,6 +67,7 @@ const Landing = () => {
                 style={{ marginTop: "0.5rem" }}
                 className="btn-primary"
                 type="button"
+                disabled={loading}
                 onClick={() => navigate("/login")}
               >
                 <div className="btn-primary-state"></div>
