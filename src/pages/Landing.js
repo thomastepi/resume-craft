@@ -110,6 +110,29 @@ const Landing = () => {
         </div>
         <img className="img main-img" alt="job junt" src={main} />
       </div>
+      <div style={{ textAlign: "center", padding: "1rem", fontSize: "0.8rem" }}>
+        <span>
+          © 2025 ResumeCraft by{" "}
+          <a
+            className="guest-link"
+            href="https://www.thomastepi.com"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Thomas Tepi
+          </a>
+          . Read my{" "}
+          <a
+            className="guest-link"
+            href="https://www.thomastepi.com/privacy-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Privacy Policy
+          </a>
+          .
+        </span>
+      </div>
     </Wrapper>
   );
 };

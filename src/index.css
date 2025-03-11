@@ -211,16 +211,6 @@ textarea:focus {
   font-size: 17px !important;
 }
 
-/* .btn-main {
-  background-color: rgba(47, 43, 43, 0.818);
-  color: white;
-}
-
-.btn-main:hover {
-  background-color: #716a6a;
-  color: white;
-} */
-
 .passwd-field {
   border: 1px solid gray;
   padding: 0;
