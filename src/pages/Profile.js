@@ -109,7 +109,7 @@ const Profile = () => {
 
         case 403:
           setAlertTitle(err.response.data.error || "Access Denied");
-          message.warning(
+          message.error(
             err.response.data.error ||
               "You don't have permission for this action."
           );
@@ -207,12 +207,14 @@ const Profile = () => {
                 message={error}
                 title={alertTitle}
                 btnText={
-                  alertTitle === "Session Expired" || "Invalid Token"
+                  alertTitle === "Session Expired" ||
+                  alertTitle === "Invalid Token"
                     ? "Log In Now"
                     : "Sign Up Now"
                 }
                 navigateTo={
-                  alertTitle === "Session Expired" || "Invalid Token"
+                  alertTitle === "Session Expired" ||
+                  alertTitle === "Invalid Token"
                     ? "/login"
                     : "/register"
                 }

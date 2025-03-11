@@ -117,9 +117,6 @@ export const registerGuestLogin = async () => {
     axios.post(`${baseUrl}/api/user/guest-log`);
   } catch (err) {
     console.error("Guest Log Failed:", err);
-    message.error(
-      err.response?.data?.message || "An error occurred. Please try again."
-    );
   }
 };
 

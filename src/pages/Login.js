@@ -76,7 +76,7 @@ function Login() {
                 <div className="form-logo">
                   <img src={logo} alt="logo" />
                 </div>
-                <h1>Login</h1>
+                <h1>Sign In</h1>
                 <hr />
 
                 <div style={{ width: "100%" }}>
@@ -147,31 +147,29 @@ function Login() {
                   disabled={isSubmitting}
                 >
                   <div className="btn-secondary-state"></div>
-                  <span className="btn-secondary-contents">Log in</span>
+                  <span className="btn-secondary-contents">Sign in</span>
                 </button>
 
                 <hr />
 
                 <div style={{ margin: "10px 0" }}>
                   <span>
-                    Not ready to Log in?{" "}
+                    Not ready to sign in?{" "}
                     <span
                       className="guest-link"
                       onClick={async () => {
                         try {
-                          await loginWithCredentials(
+                          const res = await loginWithCredentials(
                             { username: "guest", password: "SecurePass123" },
                             null,
                             navigate,
                             setLoading
                           );
-                          await registerGuestLogin();
+                          if (res.status === 200) {
+                            await registerGuestLogin();
+                          }
                         } catch (err) {
                           console.error("Failed to log guest session:", err);
-                          message.error(
-                            err.response?.data?.message ||
-                              "An error occurred. Please try again."
-                          );
                         }
                       }}
                     >
@@ -182,7 +180,7 @@ function Login() {
 
                 <div className="d-flex align-items-center justify-content-between">
                   <span>
-                    Don't have an account? <Link to="/register">Register</Link>
+                    Don't have an account? <Link to="/register">Sign up</Link>
                   </span>
                 </div>
               </Form>

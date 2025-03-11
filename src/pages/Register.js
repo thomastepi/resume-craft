@@ -68,7 +68,7 @@ function Register() {
                 <div className="form-logo">
                   <img src={logo} alt="logo" />
                 </div>
-                <h1>Register</h1>
+                <h1>Sign Up</h1>
                 <hr />
 
                 <Form.Item
@@ -146,34 +146,32 @@ function Register() {
                   disabled={isSubmitting}
                 >
                   <div className="btn-secondary-state"></div>
-                  <span className="btn-secondary-contents">Register</span>
+                  <span className="btn-secondary-contents">Create Account</span>
                 </button>
                 <hr />
                 <span>
-                  Already have an account? <Link to="/login">Log in</Link>
+                  Already have an account? <Link to="/login">Sign in</Link>
                 </span>
 
                 <div style={{ marginTop: "10px" }}>
                   <span>
-                    Not ready to register?{" "}
+                    Not ready to Sign up?{" "}
                     <span
                       className="guest-link"
                       onClick={async () => {
                         try {
                           setLoading(true);
-                          await loginWithCredentials(
+                          const res = await loginWithCredentials(
                             { username: "guest", password: "SecurePass123" },
                             null,
                             navigate,
                             setLoading
                           );
-                          await registerGuestLogin();
+                          if (res.status === 200) {
+                            await registerGuestLogin();
+                          }
                         } catch (err) {
                           console.error("Failed to log guest session:", err);
-                          message.error(
-                            err.response?.data?.message ||
-                              "An error occurred. Please try again."
-                          );
                         } finally {
                           setLoading(false);
                         }

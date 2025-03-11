@@ -6,7 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import GoogleSignInButton from "../components/GoogleSignInButton";
 import { message, Spin } from "antd";
-import { loginWithGoogle, isUserSessionValid } from "../services/authService";
+import {
+  loginWithGoogle,
+  isUserSessionValid,
+  loginWithCredentials,
+  registerGuestLogin,
+} from "../services/authService";
 
 const Landing = () => {
   const [loading, setLoading] = useState(false);
@@ -61,6 +66,33 @@ const Landing = () => {
               <div className="btn-secondary-state"></div>
               <span className="btn-primary-contents">Create an Account</span>
             </button>
+
+            <div style={{ margin: "10px 0", fontSize: "0.8rem" }}>
+              <span>
+                No account? No problem!{" "}
+                <span
+                  className="guest-link"
+                  onClick={async () => {
+                    try {
+                      const res = await loginWithCredentials(
+                        { username: "guest", password: "SecurePass123" },
+                        null,
+                        navigate,
+                        setLoading
+                      );
+                      if (res.status === 200) {
+                        await registerGuestLogin();
+                      }
+                    } catch (err) {
+                      console.error("Failed to log guest session:", err);
+                    }
+                  }}
+                >
+                  Explore as Guest
+                </span>
+              </span>
+            </div>
+
             <div style={{ width: "100%", marginTop: "5rem" }}>
               <span>Already have an account?</span>
               <button
@@ -71,7 +103,7 @@ const Landing = () => {
                 onClick={() => navigate("/login")}
               >
                 <div className="btn-primary-state"></div>
-                <span className="btn-primary-contents">Log in</span>
+                <span className="btn-primary-contents">Sign in</span>
               </button>
             </div>
           </div>
