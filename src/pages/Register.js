@@ -141,8 +141,7 @@ function Register() {
 
                 <button
                   className="btn-secondary"
-                  type="primary"
-                  htmlType="submit"
+                  type="submit"
                   disabled={isSubmitting}
                 >
                   <div className="btn-secondary-state"></div>
@@ -161,15 +160,13 @@ function Register() {
                       onClick={async () => {
                         try {
                           setLoading(true);
-                          const res = await loginWithCredentials(
+                          await loginWithCredentials(
                             { username: "guest", password: "SecurePass123" },
                             null,
                             navigate,
                             setLoading
                           );
-                          if (res.status === 200) {
-                            await registerGuestLogin();
-                          }
+                          await registerGuestLogin();
                         } catch (err) {
                           console.error("Failed to log guest session:", err);
                         } finally {

@@ -1,5 +1,6 @@
 import React from "react";
-import { Alert, Button, message as toastMessage } from "antd";
+import { Alert, Button } from "antd";
+import { logoutUser } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 
 const AlertBox = ({
@@ -35,10 +36,7 @@ const AlertBox = ({
             type="primary"
             onClick={() => {
               if (endSession) {
-                localStorage.clear();
-                toastMessage.success(
-                  "Successfully logged out"
-                );
+                logoutUser(navigate);
               }
               navigate(navigateTo);
             }}

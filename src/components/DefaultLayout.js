@@ -1,10 +1,9 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Dropdown, Button, message, Avatar } from "antd";
+import { Dropdown, Button, Avatar } from "antd";
+import { logoutUser } from "../services/authService";
 import { UserOutlined } from "@ant-design/icons";
 import logo from "../assets/images/logo.png";
-import { jwtDecode } from "jwt-decode";
-
 import "./../resources/styles/defaultLayout.css";
 
 function DefaultLayout(props) {
@@ -12,8 +11,6 @@ function DefaultLayout(props) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const avatarSrc = user.avatar || null;
-
-  const decodedToken = jwtDecode(user.accessToken);
 
   const items = [
     {
@@ -34,21 +31,7 @@ function DefaultLayout(props) {
     },
     {
       key: "3",
-      label: (
-        <span
-          onClick={() => {
-            localStorage.clear();
-            navigate("/landing");
-            message.success(
-              decodedToken.role === "guest"
-                ? "Guest Session Ended"
-                : "Successfully Logged Out"
-            );
-          }}
-        >
-          Logout
-        </span>
-      ),
+      label: <span onClick={() => logoutUser(navigate)}>Logout</span>,
     },
   ];
 
