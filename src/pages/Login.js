@@ -83,7 +83,7 @@ function Login() {
                   <GoogleSignInButton
                     loading={loading}
                     onClick={() => login()}
-                    btnText="Sign in with Google"
+                    btnText="Continue with Google"
                   />
                 </div>
 
