@@ -53,6 +53,7 @@ const Profile = () => {
         `${baseUrl}/api/user/update`,
         {
           ...values,
+          _id: user._id,
           username: user.username,
         },
         {

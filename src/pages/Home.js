@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useNavigate } from "react-router-dom";
 import AlertBox from "../components/AlertBox";
