@@ -1,8 +1,12 @@
-import React from "react";
+// import { useEffect } from "react";
+// import { loadGuidefoxAgent } from "../../lib/loadGuidefox";
 import "../../resources/styles/pages/templates/templates.css";
 
 const Template1 = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  // useEffect(() => {
+  //   loadGuidefoxAgent();
+  // }, []);
   return (
     <div className="template1-parent">
       <div className="top d-flex justify-content-between">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import DefaultLayout from "../components/DefaultLayout";
 import { Tabs, Form, Spin, message } from "antd";
@@ -9,6 +9,8 @@ import CertificationsLanguage from "../components/CertificationsLanguage";
 import AlertBox from "../components/AlertBox";
 import useIsMobile from "../hooks/useIsMobile";
 import { useNavigate } from "react-router-dom";
+// import { loadGuidefoxAgent } from "../lib/loadGuidefox";
+// import { waitFor, generateHintMessage } from "../utils/profileProgress";
 
 const items = [
   {
@@ -42,6 +44,7 @@ const Profile = () => {
   const isMobile = useIsMobile();
 
   const navigate = useNavigate();
+
   const user = JSON.parse(localStorage.getItem("user"));
 
   const baseUrl = process.env.REACT_APP_BASE_URL;
@@ -176,6 +179,21 @@ const Profile = () => {
       );
     }
   };
+
+  // useEffect(() => {
+  //   (async () => {
+  //     await loadGuidefoxAgent();
+  //     await waitFor(
+  //       () =>
+  //         window.bw &&
+  //         window.bw.hint &&
+  //         window.bwonboarddata &&
+  //         Array.isArray(window.bwonboarddata.hint)
+  //     );
+  //     const user = JSON.parse(localStorage.getItem("user")) || {};
+  //     generateHintMessage(user);
+  //   })().catch((err) => console.error("[Guidefox] init error", err));
+  // }, []);
 
   return (
     <DefaultLayout>
