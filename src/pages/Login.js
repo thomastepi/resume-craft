@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
 import logo from "../assets/images/logo-form.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Form, Input, message, Spin } from "antd";
@@ -14,19 +13,13 @@ import {
   registerGuestLogin,
   isUserSessionValid,
 } from "../services/authService";
+import GoogleReCaptcha from "../components/GoogleReCaptcha";
 
 function Login() {
   const [loading, setLoading] = useState(false);
   const [isValidatedUsername, setIsValidatedUsername] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState(null);
   const navigate = useNavigate();
   const recaptchaRef = useRef(null);
-
-  const handleCaptchaChange = (token) => setCaptchaToken(token);
-  const resetCaptcha = () => {
-    handleCaptchaChange(null);
-    recaptchaRef.current?.reset();
-  };
 
   useEffect(() => {
     if (isUserSessionValid()) {
@@ -37,7 +30,6 @@ function Login() {
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
       loginWithGoogle(tokenResponse.access_token, navigate, setLoading);
-      //console.log("tokenResponse: ", tokenResponse);
     },
     onError: () => message.error("Google Login Failed"),
   });
@@ -52,6 +44,11 @@ function Login() {
             validationSchema={loginSchema}
             onSubmit={async (values, { setSubmitting }) => {
               try {
+                const captchaToken = await recaptchaRef.current?.execute();
+                if (!captchaToken) {
+                  message.error("reCAPTCHA failed. Please try again.");
+                  return;
+                }
                 await loginWithCredentials(
                   values,
                   captchaToken,
@@ -64,8 +61,8 @@ function Login() {
                   err.response?.data?.message ||
                     "An error occurred. Please try again."
                 );
-                resetCaptcha();
               } finally {
+                recaptchaRef.current?.reset();
                 setSubmitting(false);
               }
             }}
@@ -153,8 +150,6 @@ function Login() {
                     <div
                       style={{
                         fontSize: 14,
-                        // display: "flex",
-                        // flexDirection: "column",
                         opacity: 0.85,
                         backgroundColor: "#f0f0f0",
                         padding: 8,
@@ -185,49 +180,28 @@ function Login() {
                         onBlur={handleBlur}
                       />
                     </Form.Item>
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      <ReCAPTCHA
-                        ref={recaptchaRef}
-                        onExpired={resetCaptcha}
-                        onErrored={resetCaptcha}
-                        sitekey={"6Lco1-oqAAAAAEiEbzvjXKUk_dHhb7jWQsup0cxi"}
-                        size="normal"
-                        onChange={handleCaptchaChange}
-                      />
+                    <GoogleReCaptcha ref={recaptchaRef} />
+                    <div style={{ width: "100%" }}>
+                      <p>
+                        This site is protected by reCAPTCHA and the Google{" "}
+                        <a
+                          href="https://policies.google.com/privacy"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Privacy Policy
+                        </a>{" "}
+                        and{" "}
+                        <a
+                          href="https://policies.google.com/terms"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Terms of Service
+                        </a>{" "}
+                        apply.
+                      </p>
                     </div>
-                    <p
-                      style={{
-                        fontSize: 10,
-                        //opacity: 1,
-                        textAlign: "center",
-                        marginTop: -5,
-                        marginBottom: 10,
-                      }}
-                    >
-                      This site is protected by reCAPTCHA and the Google{" "}
-                      <a
-                        href="https://policies.google.com/privacy"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Privacy Policy
-                      </a>{" "}
-                      and{" "}
-                      <a
-                        href="https://policies.google.com/terms"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Terms of Service
-                      </a>{" "}
-                      apply.
-                    </p>
                     <button
                       type="submit"
                       className="btn-secondary"
@@ -242,7 +216,7 @@ function Login() {
                       className="btn-primary"
                       onClick={() => {
                         values.password = "";
-                        handleCaptchaChange(null);
+                        recaptchaRef.current?.reset();
                         setIsValidatedUsername(false);
                       }}
                     >
@@ -254,7 +228,12 @@ function Login() {
 
                 <hr />
 
-                <div style={{ margin: "10px 0" }}>
+                {/* implementation in progress */}
+                {/* <div>
+                  <span className="guest-link">Forgot your password? </span>
+                </div> */}
+
+                <div style={{ margin: "3px 0" }}>
                   <span>
                     Not ready to sign in?{" "}
                     <span

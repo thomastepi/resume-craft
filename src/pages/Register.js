@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha";
 import logo from "../assets/images/logo-form.png";
 import { Form, Input, message, Spin } from "antd";
 import { Formik } from "formik";
@@ -12,14 +11,13 @@ import {
   registerGuestLogin,
   isUserSessionValid,
 } from "../services/authService";
+import GoogleReCaptcha from "../components/GoogleReCaptcha";
 import "../resources/styles/pages/authentication.css";
 
 function Register() {
   const [loading, setLoading] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState(null);
   const navigate = useNavigate();
-
-  const handleCaptchaChange = (token) => setCaptchaToken(token);
+  const recaptchaRef = useRef(null);
 
   useEffect(() => {
     if (isUserSessionValid()) {
@@ -37,6 +35,11 @@ function Register() {
             validationSchema={registerSchema}
             onSubmit={async (values, { setSubmitting }) => {
               try {
+                const captchaToken = await recaptchaRef.current?.execute();
+                if (!captchaToken) {
+                  message.error("reCAPTCHA failed. Please try again.");
+                  return;
+                }
                 await registerUser(
                   values,
                   captchaToken,
@@ -51,6 +54,7 @@ function Register() {
                     "An error occurred. Please try again."
                 );
               } finally {
+                recaptchaRef.current?.reset();
                 setSubmitting(false);
               }
             }}
@@ -125,19 +129,26 @@ function Register() {
                     onBlur={handleBlur}
                   />
                 </Form.Item>
-
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginBottom: "8px",
-                  }}
-                >
-                  <ReCAPTCHA
-                    sitekey={"6Lco1-oqAAAAAEiEbzvjXKUk_dHhb7jWQsup0cxi"}
-                    onChange={handleCaptchaChange}
-                  />
-                </div>
+                <GoogleReCaptcha ref={recaptchaRef} />
+                <p>
+                  This site is protected by reCAPTCHA and the Google{" "}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://policies.google.com/terms"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  apply.
+                </p>
 
                 <button
                   className="btn-secondary"

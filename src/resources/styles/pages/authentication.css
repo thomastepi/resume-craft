@@ -19,11 +19,11 @@
 }
 
 .auth-child p {
-  font-size: 20px;
-  color: rgba(0, 0, 0, 0.585);
-  margin: 0;
-  padding: 0;
-  margin-right: 20px;
+  font-size: 10px;
+  color: #00000095;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .auth-parent form {
@@ -58,7 +58,7 @@
 @media only screen and (max-width: 1000px) {
   .brand,
   .auth-child p {
-    display: none;
+    /* display: none; */
   }
 }
 
