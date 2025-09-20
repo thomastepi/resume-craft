@@ -1,7 +1,15 @@
+import { useEffect, useRef } from "react";
 import "./App.css";
 import "antd";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { Error, Home, Login, Register, Profile, Landing } from "./pages";
+import { message } from "antd";
 import Templates from "./pages/templates/index";
 import { ResumeProvider } from "./context/ResumeContext";
 
@@ -56,11 +64,19 @@ function App() {
 
 export default App;
 
-export function ProtectedRoute(props) {
+export function ProtectedRoute({ children }) {
+  const location = useLocation();
+  const shownRef = useRef(false);
   const user = JSON.parse(localStorage.getItem("user"));
-  if (user) {
-    return props.children;
-  } else {
-    return <Navigate to="/landing" />;
+  useEffect(() => {
+    if (!user && !shownRef.current) {
+      message.error("You need to log in first.");
+      shownRef.current = true;
+    }
+  }, [user]);
+
+  if (!user) {
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
+  return children;
 }
