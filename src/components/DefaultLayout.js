@@ -4,7 +4,7 @@ import { Dropdown, Button, Avatar } from "antd";
 import { logoutUser } from "../services/authService";
 import { UserOutlined } from "@ant-design/icons";
 import logo from "../assets/images/logo.png";
-import "./../resources/styles/defaultLayout.css";
+import s from "./../resources/styles/defaultLayout.module.css";
 
 function DefaultLayout(props) {
   const navigate = useNavigate();
@@ -36,8 +36,8 @@ function DefaultLayout(props) {
   ];
 
   return (
-    <div className="layout">
-      <div className="header">
+    <div className={s["layout"]}>
+      <div className={s["header"]}>
         <img
           className="logo"
           onClick={() => {
@@ -46,6 +46,7 @@ function DefaultLayout(props) {
           src={logo}
           alt="logo"
         />
+        <span id="onboard-tour-final-step-placeholder"></span>
         <Dropdown
           menu={{
             items,
@@ -54,14 +55,20 @@ function DefaultLayout(props) {
         >
           <Button
             className="btn-primary"
-            style={{ width: "fit-content", color: "white", backgroundColor: "black", borderRadius: "5px" }}
+            id="user-dropdown-btn"
+            style={{
+              width: "fit-content",
+              color: "white",
+              backgroundColor: "black",
+              borderRadius: "5px",
+            }}
             icon={avatarSrc ? <Avatar src={avatarSrc} /> : <UserOutlined />}
           >
             <span className="btn-primary-contents">{user.username}</span>
           </Button>
         </Dropdown>
       </div>
-      <div className="content">{props.children}</div>
+      <div className={s["content"]}>{props.children}</div>
     </div>
   );
 }

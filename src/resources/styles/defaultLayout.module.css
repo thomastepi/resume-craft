@@ -37,6 +37,12 @@
   cursor: pointer;
 }
 
+.home-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .content {
   height: calc(100vh - 4.5rem);
   border: 1px solid gray;
@@ -46,6 +52,9 @@
   padding: 10px;
   background-color: white;
   overflow-x: hidden;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
 }
 
 .col-md-4 {

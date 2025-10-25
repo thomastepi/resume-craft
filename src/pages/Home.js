@@ -5,13 +5,14 @@ import AlertBox from "../components/AlertBox";
 import { jwtDecode } from "jwt-decode";
 import useAuthCheck from "../hooks/useAuthCheck";
 import useInactivityLogout from "../hooks/useInactivityLogout";
+import { loadGuidefoxAgent } from "../lib/loadGuidefox";
 
 const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/temp1.png";
 const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
 const aiGeneration = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
 
 function Home() {
-  const [showBanner, setShowBanner] = useState(false);
+  // const [showBanner, setShowBanner] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   const navigate = useNavigate();
 
@@ -25,7 +26,12 @@ function Home() {
       firstName && lastName && email && mobileNumber && address && summary
         ? true
         : false;
-    if (!returningUser) setShowBanner(true);
+    if (!returningUser) {
+      // setShowBanner(true);
+      setTimeout(() => {
+        loadGuidefoxAgent();
+      }, 2000);
+    }
   }, []);
 
   useEffect(() => {
@@ -44,22 +50,30 @@ function Home() {
 
   const templates = [
     {
+      id: "ai-generation",
       title: "Generate With AI",
       image: aiGeneration,
     },
     {
+      id: "simple-template",
       title: "Simple Template",
       image: template1,
     },
     {
+      id: "professional-template",
       title: "Professional Template",
       image: template2,
     },
   ];
   return (
     <DefaultLayout>
-      {showBanner && (
-        <div style={{ display: "flex", justifyContent: "center" }}>
+      {/* {showBanner && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
           <AlertBox
             message="To create the perfect resume, update your profile with your latest details."
             title="🎉 Welcome to Resume Craft!"
@@ -70,7 +84,7 @@ function Home() {
             showActionButton={true}
           />
         </div>
-      )}
+      )} */}
 
       {isGuest && (
         <div style={{ display: "flex", justifyContent: "center" }}>
@@ -86,14 +100,23 @@ function Home() {
         </div>
       )}
 
-      <div className="row home">
+      <div
+        className="row home"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+        }}
+      >
         {templates.map((template, index) => {
           return (
             <div key={index} className="col-md-4">
               <div className="template">
                 <img src={template.image} alt={`template ${index + 1}`} />
                 <div className="text">
-                  <p>{template.title}</p>
+                  <p id={template.id}>{template.title}</p>
                   <button
                     className="btn-primary"
                     style={{ width: "fit-content" }}

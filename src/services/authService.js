@@ -1,6 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { message } from "antd";
+import { unloadGuidefoxAgent } from "../lib/loadGuidefox";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -121,6 +122,7 @@ export const registerGuestLogin = async () => {
 };
 
 export const logoutUser = (navigate) => {
+  unloadGuidefoxAgent();
   localStorage.removeItem("user");
   localStorage.removeItem("accessToken");
   localStorage.removeItem("tokenExpiry");
