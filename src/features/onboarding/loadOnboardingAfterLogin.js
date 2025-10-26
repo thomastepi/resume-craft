@@ -1,4 +1,4 @@
-import { loadGuidefoxAgent } from "../lib/loadGuidefox";
+import { loadGuidefoxAgent } from "../../lib/loadGuidefox";
 
 export default function loadOnboardingAfterLogin(user) {
   if (!user) return;

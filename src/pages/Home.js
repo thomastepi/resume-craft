@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useNavigate } from "react-router-dom";
-import AlertBox from "../components/AlertBox";
-import { jwtDecode } from "jwt-decode";
+// import AlertBox from "../components/AlertBox";
+// import { jwtDecode } from "jwt-decode";
 import useAuthCheck from "../hooks/useAuthCheck";
 import useInactivityLogout from "../hooks/useInactivityLogout";
 import { loadGuidefoxAgent } from "../lib/loadGuidefox";
@@ -13,7 +13,7 @@ const aiGeneration = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
 
 function Home() {
   // const [showBanner, setShowBanner] = useState(false);
-  const [isGuest, setIsGuest] = useState(false);
+  // const [isGuest, setIsGuest] = useState(false);
   const navigate = useNavigate();
 
   useAuthCheck();
@@ -34,19 +34,19 @@ function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.accessToken) {
-      try {
-        const decodedToken = jwtDecode(user.accessToken);
-        if (decodedToken.role === "guest") {
-          setIsGuest(true);
-        }
-      } catch (error) {
-        console.error("Error decoding token:", error);
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   if (user?.accessToken) {
+  //     try {
+  //       const decodedToken = jwtDecode(user.accessToken);
+  //       if (decodedToken.role === "guest") {
+  //         setIsGuest(true);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error decoding token:", error);
+  //     }
+  //   }
+  // }, []);
 
   const templates = [
     {
@@ -85,20 +85,6 @@ function Home() {
           />
         </div>
       )} */}
-
-      {isGuest && (
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <AlertBox
-            message="Enjoy browsing all features, but note that profile updates and AI resume generation are disabled for guest users. To unlock all features, create a free account today!"
-            title="🚀 You're Exploring as a Guest!"
-            type="warning"
-            navigateTo="/register"
-            btnText="Sign Up Now"
-            endSession={true}
-            showActionButton={true}
-          />
-        </div>
-      )}
 
       <div
         className="row home"

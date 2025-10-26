@@ -6,9 +6,7 @@ import { Formik } from "formik";
 import { registerSchema } from "../utils/validationSchema";
 import {
   //loginWithGoogle,
-  loginWithCredentials,
   registerUser,
-  registerGuestLogin,
   isUserSessionValid,
 } from "../services/authService";
 import GoogleReCaptcha from "../components/GoogleReCaptcha";
@@ -168,22 +166,7 @@ function Register() {
                     Not ready to Sign up?{" "}
                     <span
                       className="guest-link"
-                      onClick={async () => {
-                        try {
-                          setLoading(true);
-                          await loginWithCredentials(
-                            { username: "guest", password: "SecurePass123" },
-                            null,
-                            navigate,
-                            setLoading
-                          );
-                          await registerGuestLogin();
-                        } catch (err) {
-                          console.error("Failed to log guest session:", err);
-                        } finally {
-                          setLoading(false);
-                        }
-                      }}
+                      onClick={() => navigate("/guest-login")}
                     >
                       Explore as Guest
                     </span>

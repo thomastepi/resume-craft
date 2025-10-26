@@ -10,7 +10,6 @@ import GoogleSignInButton from "../components/GoogleSignInButton";
 import {
   loginWithGoogle,
   loginWithCredentials,
-  registerGuestLogin,
   isUserSessionValid,
 } from "../services/authService";
 import GoogleReCaptcha from "../components/GoogleReCaptcha";
@@ -238,19 +237,7 @@ function Login() {
                     Not ready to sign in?{" "}
                     <span
                       className="guest-link"
-                      onClick={async () => {
-                        try {
-                          await loginWithCredentials(
-                            { username: "guest", password: "SecurePass123" },
-                            null,
-                            navigate,
-                            setLoading
-                          );
-                          await registerGuestLogin();
-                        } catch (err) {
-                          console.error("Failed to log guest session:", err);
-                        }
-                      }}
+                      onClick={() => navigate("/guest-login")}
                     >
                       Explore as Guest
                     </span>

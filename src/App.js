@@ -8,7 +8,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import { Error, Home, Login, Register, Profile, Landing } from "./pages";
+import { Error, Home, Login, Register, GuestLogin, Profile, Landing } from "./pages";
 import { message } from "antd";
 import Templates from "./pages/templates/index";
 import { ResumeProvider } from "./context/ResumeContext";
@@ -22,6 +22,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/guest-login" element={<GuestLogin />} />
             <Route
               path="/home"
               element={

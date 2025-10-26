@@ -90,7 +90,7 @@ const Profile = () => {
       switch (err.status) {
         case 401:
           setAlertTitle(err.response.data.error || "Unauthorized");
-          message.error(
+          message.warning(
             err.response?.data?.error ||
               "You are not authorized to perform this action.",
             6
@@ -104,7 +104,7 @@ const Profile = () => {
 
         case 429:
           setAlertTitle(err.response.data.error || "Rate Limit Exceeded");
-          message.error(
+          message.warning(
             err.response.data.error ||
               "You've reached the limit of resume generations. Please wait."
           );
@@ -113,7 +113,7 @@ const Profile = () => {
 
         case 403:
           setAlertTitle(err.response.data.error || "Access Denied");
-          message.error(
+          message.warning(
             err.response.data.error ||
               "You don't have permission for this action."
           );
@@ -125,7 +125,7 @@ const Profile = () => {
 
         case 400:
           setAlertTitle(err.response.data.error || "Bad Request");
-          message.error(
+          message.warning(
             err.response.data.error ||
               "Bad Request. Please check your input and try again.",
             5
@@ -138,7 +138,7 @@ const Profile = () => {
 
         default:
           setAlertTitle(err.response.data.error || "An error occurred!");
-          message.error(err.response.data.error || "An error occurred!", 5);
+          message.warning(err.response.data.error || "An error occurred!", 5);
           break;
       }
     }
@@ -238,7 +238,7 @@ const Profile = () => {
                     : "/register"
                 }
                 endSession={true}
-                type="error"
+                type="warning"
                 showActionButton={alertTitle !== "Bad Request"}
                 setError={setError}
               />

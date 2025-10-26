@@ -1,4 +1,4 @@
-import { HTTP_ERRORS } from "../constants/httpErrors";
+import { HTTP_ERRORS } from "./constants";
 
 export const getErrorMessage = async (error) => {
   if (!error) return "An unexpected error occurred.";

@@ -4,6 +4,7 @@ import Login from './Login';
 import Register from './Register';
 import Profile from './Profile';
 import Landing from './Landing';
+import GuestLogin from './GuestLogin';
 
 
 export {
@@ -12,5 +13,6 @@ export {
     Login,
     Register,
     Profile,
-    Landing
+    Landing,
+    GuestLogin
     };

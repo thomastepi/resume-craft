@@ -6,12 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import GoogleSignInButton from "../components/GoogleSignInButton";
 import { message, Spin } from "antd";
-import {
-  loginWithGoogle,
-  isUserSessionValid,
-  loginWithCredentials,
-  registerGuestLogin,
-} from "../services/authService";
+import { loginWithGoogle, isUserSessionValid } from "../services/authService";
 
 const Landing = () => {
   const [loading, setLoading] = useState(false);
@@ -72,19 +67,7 @@ const Landing = () => {
                 No account? No problem!{" "}
                 <span
                   className="guest-link"
-                  onClick={async () => {
-                    try {
-                      await loginWithCredentials(
-                        { username: "guest", password: "SecurePass123" },
-                        null,
-                        navigate,
-                        setLoading
-                      );
-                      await registerGuestLogin();
-                    } catch (err) {
-                      console.error("Failed to log guest session:", err);
-                    }
-                  }}
+                  onClick={() => navigate("/guest-login")}
                 >
                   Explore as Guest
                 </span>

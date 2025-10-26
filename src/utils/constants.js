@@ -8,3 +8,8 @@ export const HTTP_ERRORS = {
   500: "Our servers are currently down. Please try again later.",
   503: "Service Unavailable: The server is temporarily unavailable.",
 };
+
+export const GUEST_USER = {
+  username: "guest",
+  password: "SecurePass123",
+};
