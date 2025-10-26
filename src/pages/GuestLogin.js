@@ -33,7 +33,7 @@ function GuestLogin() {
   }, [navigate]);
 
   return (
-    <div className="auth-parent">
+    <div className="auth-parent" style={{ marginTop: "-5rem" }}>
       {loading && <Spin size="large" />}
       <div className="auth-child">
         <div className="form">
