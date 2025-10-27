@@ -10,6 +10,7 @@ import {
   registerGuestLogin,
   isUserSessionValid,
 } from "../services/authService";
+import useIsMobile from "../hooks/useIsMobile";
 import { GUEST_USER } from "../utils/constants";
 import { loadGuidefoxAgent, unloadGuidefoxAgent } from "../lib/loadGuidefox";
 
@@ -17,14 +18,15 @@ function GuestLogin() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const recaptchaRef = useRef(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     setTimeout(() => {
-      loadGuidefoxAgent();
+      if (!isMobile) loadGuidefoxAgent();
     }, 2000);
 
     return () => unloadGuidefoxAgent();
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
     if (isUserSessionValid()) {
@@ -70,9 +72,9 @@ function GuestLogin() {
                     fontSize: "0.9rem",
                   }}
                 >
-                  See how ResumeCraft works without creating an account. Guest
-                  access is read-only. Editing your profile and generating AI
-                  resumes requires a free account.
+                  {isMobile
+                    ? "You're exploring as a Guest! While you can browse freely, creating, editing, and deleting content requires an account. Sign up for free to unlock all features!"
+                    : "Explore our platform with limited access. Sign up for full features!"}
                 </p>
                 <hr style={{ margin: "2rem 0" }} />
 
