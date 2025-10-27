@@ -13,3 +13,36 @@ export const GUEST_USER = {
   username: "guest",
   password: "SecurePass123",
 };
+
+export const templateTourStyles = (tourStepNum, index) => {
+  return {
+    backgroundColor: `${
+      tourStepNum === 1 && index === 0
+        ? "black"
+        : tourStepNum === 2 && index === 1
+        ? "black"
+        : ""
+    }`,
+    opacity: `${
+      tourStepNum === 1 && index === 0
+        ? 0.8
+        : tourStepNum === 2 && index === 1
+        ? 0.8
+        : 0
+    }`,
+    color: `${
+      tourStepNum === 1 && index === 0
+        ? "white"
+        : tourStepNum === 2 && index === 1
+        ? "white"
+        : "black"
+    }`,
+    fontSize: `${
+      tourStepNum === 1 && index === 0
+        ? "35px"
+        : tourStepNum === 2 && index === 1
+        ? "35px"
+        : "16px"
+    }`,
+  };
+};

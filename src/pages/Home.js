@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import useAuthCheck from "../hooks/useAuthCheck";
 import useInactivityLogout from "../hooks/useInactivityLogout";
 import { loadGuidefoxAgent } from "../lib/loadGuidefox";
+import { templateTourStyles } from "../utils/constants";
 
 const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/temp1.png";
 const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
@@ -14,6 +15,7 @@ const aiGeneration = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
 function Home() {
   // const [showBanner, setShowBanner] = useState(false);
   // const [isGuest, setIsGuest] = useState(false);
+  const [tourStepNum, setTourStepNum] = useState(null);
   const navigate = useNavigate();
 
   useAuthCheck();
@@ -32,6 +34,20 @@ function Home() {
         loadGuidefoxAgent();
       }, 2000);
     }
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const stepNum = window.bw?.tour?.currentStep;
+
+      setTourStepNum((prev) => {
+        if (stepNum === 0) return null;
+        if (!stepNum || stepNum === prev) return prev;
+        return stepNum;
+      });
+    }, 300);
+
+    return () => clearInterval(interval);
   }, []);
 
   // useEffect(() => {
@@ -101,9 +117,13 @@ function Home() {
             <div key={index} className="col-md-4">
               <div className="template">
                 <img src={template.image} alt={`template ${index + 1}`} />
-                <div className="text">
-                  <p id={template.id}>{template.title}</p>
+                <div
+                  className="text"
+                  style={templateTourStyles(tourStepNum, index)}
+                >
+                  <p>{template.title}</p>
                   <button
+                    id={template.id}
                     className="btn-primary"
                     style={{ width: "fit-content" }}
                     onClick={() => {

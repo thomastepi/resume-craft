@@ -13,6 +13,10 @@
   bottom: 0;
   left: 0;
   opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .template img {
@@ -20,14 +24,14 @@
 }
 
 .home .template .text:hover {
-  background-color: black;
-  opacity: 0.8;
-  color: white;
+  background-color: black !important;
+  opacity: 0.8 !important;
+  color: white !important;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 35px;
+  font-size: 35px !important;
 }
 
 .home .template button {
