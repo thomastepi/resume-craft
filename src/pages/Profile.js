@@ -9,6 +9,7 @@ import CertificationsLanguage from "../components/CertificationsLanguage";
 import AlertBox from "../components/AlertBox";
 import useIsMobile from "../hooks/useIsMobile";
 import { useNavigate } from "react-router-dom";
+import DeleteAccount from "../components/DeleteAccount";
 // import { loadGuidefoxAgent } from "../lib/loadGuidefox";
 // import { waitFor, generateHintMessage } from "../utils/profileProgress";
 
@@ -180,21 +181,6 @@ const Profile = () => {
     }
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await loadGuidefoxAgent();
-  //     await waitFor(
-  //       () =>
-  //         window.bw &&
-  //         window.bw.hint &&
-  //         window.bwonboarddata &&
-  //         Array.isArray(window.bwonboarddata.hint)
-  //     );
-  //     const user = JSON.parse(localStorage.getItem("user")) || {};
-  //     generateHintMessage(user);
-  //   })().catch((err) => console.error("[Guidefox] init error", err));
-  // }, []);
-
   return (
     <DefaultLayout>
       {loading && <Spin size="large" />}
@@ -255,7 +241,9 @@ const Profile = () => {
           </button>
         </Form>
       </div>
-      <div className="divider mt-3"></div>
+      {/* <div className="divider mt-3"></div> */}
+      <hr />
+      {activeTab === "1" && <DeleteAccount />}
     </DefaultLayout>
   );
 };

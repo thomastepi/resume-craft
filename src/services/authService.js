@@ -188,6 +188,15 @@ export const logoutUser = (navigate) => {
   navigate("/login");
 };
 
+export const clearUserDataOnDelete = (navigate) => {
+  unloadGuidefoxAgent();
+  localStorage.removeItem("user");
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("tokenExpiry");
+  message.success("Account deleted successfully!");
+  navigate("/register");
+};
+
 export const isUserSessionValid = () => {
   const tokenExpiry = localStorage.getItem("tokenExpiry");
   if (!tokenExpiry) return false;
