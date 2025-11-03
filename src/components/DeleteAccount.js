@@ -19,7 +19,11 @@ const DeleteAccount = () => {
       clearUserDataOnDelete(navigate);
     } catch (error) {
       console.error("Account Deletion Error: ", error);
-      message.error("Failed to delete account.");
+      message.error(
+        `${error?.response?.data?.error} Your account could not be deleted` ||
+          "Failed to delete account.",
+        [5]
+      );
     }
   };
 
