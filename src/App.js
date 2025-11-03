@@ -8,7 +8,18 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import { Error, Home, Login, Register, GuestLogin, Profile, Landing } from "./pages";
+import {
+  Error,
+  Home,
+  Login,
+  Register,
+  GuestLogin,
+  Profile,
+  Landing,
+  ForgotPassword,
+  Resetpassword,
+  CheckEmail,
+} from "./pages";
 import { message } from "antd";
 import Templates from "./pages/templates/index";
 import { ResumeProvider } from "./context/ResumeContext";
@@ -23,6 +34,9 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/guest-login" element={<GuestLogin />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/set-new-password" element={<Resetpassword />} />
+            <Route path="/check-email" element={<CheckEmail />} />
             <Route
               path="/home"
               element={

@@ -129,7 +129,7 @@ function Register() {
                 </Form.Item>
                 <GoogleReCaptcha ref={recaptchaRef} />
                 <p>
-                  This site is protected by reCAPTCHA and the Google{" "}
+                  Protected by reCAPTCHA{" "}
                   <a
                     href="https://policies.google.com/privacy"
                     target="_blank"
@@ -137,7 +137,7 @@ function Register() {
                   >
                     Privacy Policy
                   </a>{" "}
-                  and{" "}
+                  |{" "}
                   <a
                     href="https://policies.google.com/terms"
                     target="_blank"
@@ -145,7 +145,6 @@ function Register() {
                   >
                     Terms of Service
                   </a>{" "}
-                  apply.
                 </p>
 
                 <button

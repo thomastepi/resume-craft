@@ -7,6 +7,7 @@ import useAuthCheck from "../hooks/useAuthCheck";
 import useInactivityLogout from "../hooks/useInactivityLogout";
 import { loadGuidefoxAgent } from "../lib/loadGuidefox";
 import { templateTourStyles } from "../utils/constants";
+import CustomModal from "../components/CustomModal";
 
 const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/temp1.png";
 const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
@@ -16,6 +17,8 @@ function Home() {
   // const [showBanner, setShowBanner] = useState(false);
   // const [isGuest, setIsGuest] = useState(false);
   const [tourStepNum, setTourStepNum] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
 
   useAuthCheck();
@@ -23,9 +26,15 @@ function Home() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    const { firstName, lastName, email, mobileNumber, address, summary } = user;
+    const { _id, firstName, lastName, email, mobileNumber, address, summary } =
+      user;
+    if (!email) {
+      setUserId(_id);
+      setOpen(true);
+      return;
+    }
     const returningUser =
-      firstName && lastName && email && mobileNumber && address && summary
+      firstName && lastName && mobileNumber && address && summary
         ? true
         : false;
     if (!returningUser) {
@@ -34,7 +43,7 @@ function Home() {
         loadGuidefoxAgent();
       }, 2000);
     }
-  }, []);
+  }, [open]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -48,7 +57,7 @@ function Home() {
     }, 300);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [open]);
 
   // useEffect(() => {
   //   const user = JSON.parse(localStorage.getItem("user"));
@@ -101,7 +110,7 @@ function Home() {
           />
         </div>
       )} */}
-
+      <CustomModal open={open} setOpen={setOpen} _id={userId} />
       <div
         className="row home"
         style={{

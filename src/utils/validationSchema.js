@@ -79,3 +79,9 @@ export const personalInfoSchema = Yup.object().shape({
     .max(200, "Address must be at most 200 characters")
     .required("Address is required"),
 });
+
+export const EmailSchema = Yup.object().shape({
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+});

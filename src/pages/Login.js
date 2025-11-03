@@ -182,7 +182,7 @@ function Login() {
                     <GoogleReCaptcha ref={recaptchaRef} />
                     <div style={{ width: "100%" }}>
                       <p>
-                        This site is protected by reCAPTCHA and the Google{" "}
+                        Protected by reCAPTCHA{" "}
                         <a
                           href="https://policies.google.com/privacy"
                           target="_blank"
@@ -190,7 +190,7 @@ function Login() {
                         >
                           Privacy Policy
                         </a>{" "}
-                        and{" "}
+                        |{" "}
                         <a
                           href="https://policies.google.com/terms"
                           target="_blank"
@@ -198,7 +198,6 @@ function Login() {
                         >
                           Terms of Service
                         </a>{" "}
-                        apply.
                       </p>
                     </div>
                     <button
@@ -227,10 +226,14 @@ function Login() {
 
                 <hr />
 
-                {/* implementation in progress */}
-                {/* <div>
-                  <span className="guest-link">Forgot your password? </span>
-                </div> */}
+                <div>
+                  <span
+                    className="guest-link"
+                    onClick={() => navigate("/forgot-password")}
+                  >
+                    Forgot your password?{" "}
+                  </span>
+                </div>
 
                 <div style={{ margin: "3px 0" }}>
                   <span>

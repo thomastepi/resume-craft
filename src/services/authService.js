@@ -41,6 +41,64 @@ export const loginWithGoogle = async (access_token, navigate, setLoading) => {
   }
 };
 
+export const forgetPassword = async (
+  email,
+  captchaToken,
+  setLoading,
+  navigate
+) => {
+  if (!captchaToken) {
+    message.error("Please complete the reCAPTCHA.");
+    return;
+  }
+  try {
+    setLoading(true);
+    const res = await axios.post(`${baseUrl}/api/user/forget-password`, {
+      email,
+      captchaToken,
+    });
+    //message.success("Password reset link sent to your email.", [2]);
+    navigate("/check-email");
+    return res.data;
+  } catch (e) {
+    console.log("Error Resetting Password: ", e);
+    message.error(
+      e.response?.data?.error || "Something went wrong. Please try again later",
+      [6]
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
+export const resetPassword = async (
+  newPassword,
+  resetToken,
+  captchaToken,
+  setLoading,
+  navigate
+) => {
+  try {
+    setLoading(true);
+    const res = await axios.post(`${baseUrl}/api/user/reset-password`, {
+      newPassword,
+      resetToken,
+      captchaToken,
+    });
+    message.success("Password reset successfully.", [6]);
+    setTimeout(() => navigate("/login"), 2000);
+    return res.data;
+  } catch (e) {
+    console.log("Error Resetting Password: ", e);
+    message.error(
+      e.response?.data?.error || "Something went wrong. Please try again later",
+      [6]
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 export const loginWithCredentials = async (
   values,
   captchaToken,

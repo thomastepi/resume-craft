@@ -5,14 +5,20 @@ import Register from './Register';
 import Profile from './Profile';
 import Landing from './Landing';
 import GuestLogin from './GuestLogin';
+import ForgotPassword from './ForgotPassword';
+import Resetpassword from './Resetpassword';
+import CheckEmail from './CheckEmail';
 
 
 export {
-    Error,
-    Home,
-    Login,
-    Register,
-    Profile,
-    Landing,
-    GuestLogin
-    };
+  Error,
+  Home,
+  Login,
+  Register,
+  Profile,
+  Landing,
+  GuestLogin,
+  ForgotPassword,
+  Resetpassword,
+  CheckEmail,
+};
