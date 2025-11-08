@@ -189,13 +189,20 @@ export const registerUser = async (
       message.error("Network Error!", 5);
       setError(
         err.response?.data || {
-          error: "Network Error. Please check your internet connection.",
+          error: "Network Error!",
+          message: "Network Error. Please check your internet connection.",
         }
       );
       return;
     }
     message.error(
-      err.response?.data?.message || "An error occurred. Please try again."
+      err.response?.data?.error || "An error occurred. Please try again."
+    );
+    setError(
+      err.response?.data || {
+        error: "An error occurred",
+        message: "Registration failed. Please try again.",
+      }
     );
   } finally {
     setLoading(false);
