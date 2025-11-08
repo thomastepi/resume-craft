@@ -8,6 +8,7 @@ import GuestLogin from './GuestLogin';
 import ForgotPassword from './ForgotPassword';
 import Resetpassword from './Resetpassword';
 import CheckEmail from './CheckEmail';
+import ResetSuccess from './ResetSuccess';
 
 
 export {
@@ -21,4 +22,5 @@ export {
   ForgotPassword,
   Resetpassword,
   CheckEmail,
+  ResetSuccess
 };

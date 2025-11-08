@@ -28,3 +28,28 @@ export const getErrorMessage = async (error) => {
     "An unexpected error occurred."
   );
 };
+
+export const handleError = (error, setError = () => {}, code = "Error:") => {
+  console.error(error.response?.data?.code || code, error);
+  if (!error.response) {
+    if (!navigator.onLine) {
+      const networkError = {
+        error: "Network Error",
+        message: "You are offline. Please check your internet connection.",
+      };
+      setError(networkError);
+      return;
+    }
+    setError({
+      error: "Internal Server Error",
+      message: "Something went wrong on our end. Please try again later.",
+    });
+    return;
+  }
+  setError({
+    error: error.response.data.error || "An error occurred.",
+    message:
+      error.response.data.message ||
+      "Something went wrong. Please try again later.",
+  });
+};

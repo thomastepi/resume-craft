@@ -19,6 +19,7 @@ import {
   ForgotPassword,
   Resetpassword,
   CheckEmail,
+  ResetSuccess
 } from "./pages";
 import { message } from "antd";
 import Templates from "./pages/templates/index";
@@ -37,6 +38,7 @@ function App() {
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/set-new-password" element={<Resetpassword />} />
             <Route path="/check-email" element={<CheckEmail />} />
+            <Route path="/reset-success" element={<ResetSuccess />} />
             <Route
               path="/home"
               element={
