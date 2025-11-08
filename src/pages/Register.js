@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo-form.png";
-import { Form, Input, message, Spin } from "antd";
+import { Form, Input, message, Spin, Alert } from "antd";
 import { Formik } from "formik";
 import { registerSchema } from "../utils/validationSchema";
 import {
@@ -14,6 +14,7 @@ import "../resources/styles/pages/authentication.css";
 
 function Register() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const recaptchaRef = useRef(null);
 
@@ -43,7 +44,8 @@ function Register() {
                   captchaToken,
                   navigate,
                   setLoading,
-                  setSubmitting
+                  //setSubmitting,
+                  setError
                 );
               } catch (err) {
                 console.error("Register Error:", err);
@@ -127,6 +129,15 @@ function Register() {
                     onBlur={handleBlur}
                   />
                 </Form.Item>
+                {error && (
+                  <Alert
+                    message={
+                      error.message || error.error || "An error occurred."
+                    }
+                    type="error"
+                    style={{ marginBottom: "16px" }}
+                  />
+                )}
                 <GoogleReCaptcha ref={recaptchaRef} />
                 <p>
                   Protected by reCAPTCHA{" "}

@@ -82,18 +82,18 @@ const Profile = () => {
       console.log("error: ", err);
       setLoading(false);
       if (err.message === "Network Error") {
-        message.error(
-          "Network Error. Please check your internet connection.",
-          5
+        message.error("Network Error!", 5);
+        setError(
+          err.response?.data?.message ||
+            "Network Error. Please check your internet connection."
         );
         return;
       }
       switch (err.status) {
         case 401:
-          setAlertTitle(err.response.data.error || "Unauthorized");
+          setAlertTitle(err.response?.data?.error || "Unauthorized Access!");
           message.warning(
-            err.response?.data?.error ||
-              "You are not authorized to perform this action.",
+            err.response?.data?.error || "Unauthorized Access!",
             6
           );
           setError(err.response?.data?.message || "Please log in to continue.");
@@ -104,42 +104,42 @@ const Profile = () => {
           break;
 
         case 429:
-          setAlertTitle(err.response.data.error || "Rate Limit Exceeded");
-          message.warning(
-            err.response.data.error ||
+          setAlertTitle(err.response?.data?.error || "Rate Limit Exceeded");
+          message.warning(err.response?.data?.error || "Rate Limit Exceeded");
+          setError(
+            err.response?.data?.message ||
               "You've reached the limit of resume generations. Please wait."
           );
-          setError(err.response.data.message || "Try again later.");
           break;
 
         case 403:
-          setAlertTitle(err.response.data.error || "Access Denied");
+          setAlertTitle(err.response?.data?.error || "Access Denied");
           message.warning(
-            err.response.data.error ||
+            err.response?.data?.error ||
               "You don't have permission for this action."
           );
           setError(
-            err.response.data.message ||
+            err.response?.data?.message ||
               "Please sign up to unlock this feature."
           );
           break;
 
         case 400:
-          setAlertTitle(err.response.data.error || "Bad Request");
-          message.warning(
-            err.response.data.error ||
-              "Bad Request. Please check your input and try again.",
-            5
-          );
+          setAlertTitle(err.response?.data?.error || "Bad Request");
+          message.warning(err.response?.data?.error || "Bad Request", 5);
           setError(
-            err.response.data.message ||
+            err.response?.data?.message ||
               "bad request. Please check your input and try again."
           );
           break;
 
         default:
-          setAlertTitle(err.response.data.error || "An error occurred!");
-          message.warning(err.response.data.error || "An error occurred!", 5);
+          setAlertTitle(err.response?.data?.error || "An error occurred!");
+          message.warning(err.response?.data?.error || "An error occurred!", 5);
+          setError(
+            err.response?.data?.message ||
+              "An Error occured. Please try again later"
+          );
           break;
       }
     }

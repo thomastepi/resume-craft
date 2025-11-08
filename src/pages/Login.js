@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import logo from "../assets/images/logo-form.png";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Input, message, Spin } from "antd";
+import { Form, Input, message, Spin, Alert } from "antd";
 import { Formik } from "formik";
 import { loginSchema } from "../utils/validationSchema";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -16,6 +16,7 @@ import GoogleReCaptcha from "../components/GoogleReCaptcha";
 
 function Login() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [isValidatedUsername, setIsValidatedUsername] = useState(false);
   const navigate = useNavigate();
   const recaptchaRef = useRef(null);
@@ -28,7 +29,12 @@ function Login() {
 
   const login = useGoogleLogin({
     onSuccess: (tokenResponse) => {
-      loginWithGoogle(tokenResponse.access_token, navigate, setLoading);
+      loginWithGoogle(
+        tokenResponse.access_token,
+        navigate,
+        setLoading,
+        setError
+      );
     },
     onError: () => message.error("Google Login Failed"),
   });
@@ -52,7 +58,8 @@ function Login() {
                   values,
                   captchaToken,
                   navigate,
-                  setLoading
+                  setLoading,
+                  setError
                 );
               } catch (err) {
                 console.error("Login Error:", err);
@@ -179,6 +186,16 @@ function Login() {
                         onBlur={handleBlur}
                       />
                     </Form.Item>
+                    {error && (
+                      <Alert
+                        message={
+                          error.message ||
+                          "Something went wrong. Please try again."
+                        }
+                        type="error"
+                        style={{ marginBottom: 16 }}
+                      />
+                    )}
                     <GoogleReCaptcha ref={recaptchaRef} />
                     <div style={{ width: "100%" }}>
                       <p>
@@ -216,6 +233,7 @@ function Login() {
                         values.password = "";
                         recaptchaRef.current?.reset();
                         setIsValidatedUsername(false);
+                        setError(null);
                       }}
                     >
                       <div className="btn-secondary-state"></div>

@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import logo from "../assets/images/logo-form.png";
-import { Form, Input, message, Spin, Button } from "antd";
+import { Form, Input, message, Spin, Button, Alert } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Formik } from "formik";
 import { EmailSchema } from "../utils/validationSchema";
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 function ForgotPassword() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const recaptchaRef = useRef(null);
   const navigate = useNavigate();
 
@@ -33,9 +34,10 @@ function ForgotPassword() {
                   values,
                   captchaToken,
                   setLoading,
-                  navigate
+                  navigate,
+                  setError
                 );
-                values.email = "";
+
                 recaptchaRef.current?.reset();
               } catch (err) {
                 console.error("Password Reset Error: ", err);
@@ -94,6 +96,17 @@ function ForgotPassword() {
                       onBlur={handleBlur}
                     />
                   </Form.Item>
+                  {error && (
+                    <Alert
+                      message={
+                        error.message ||
+                        error.error ||
+                        "Something went wrong. Please try again."
+                      }
+                      type="error"
+                      style={{ marginBottom: 16 }}
+                    />
+                  )}
                   <div style={{ width: "100%" }}>
                     <p>
                       protected by reCAPTCHA{" "}

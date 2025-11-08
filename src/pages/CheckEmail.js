@@ -1,11 +1,13 @@
 import logo from "../assets/images/logo-form.png";
 import { Form, Button } from "antd";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../resources/styles/pages/authentication.css";
 
 function CheckEmail() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { email } = location.state?.email;
 
   return (
     <div className="auth-parent" style={{ marginTop: "-5rem" }}>
@@ -24,8 +26,9 @@ function CheckEmail() {
                 fontSize: "0.9rem",
               }}
             >
-              We've sent a password reset link to your email. Please check your
-              inbox and follow the instructions to reset your password.
+              We've sent a password reset link to <strong>{email}</strong>.
+              Please check your inbox and follow the instructions to reset your
+              password. This link will expire in <strong>1 hour</strong>.
             </p>
             <hr style={{ margin: "2rem 0" }} />
 

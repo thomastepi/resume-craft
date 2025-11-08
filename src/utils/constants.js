@@ -9,6 +9,17 @@ export const HTTP_ERRORS = {
   503: "Service Unavailable: The server is temporarily unavailable.",
 };
 
+export const fatalCodes = new Set([
+  "INVALID_OR_EXPIRED_TOKEN",
+  "USER_NOT_FOUND",
+  "ACCOUNT_DELETED",
+  "UNAUTHORIZED_ACCESS",
+  "FORBIDDEN_ACTION",
+  "RATE_LIMIT_EXCEEDED",
+  "BAD_REQUEST",
+  "SERVER_ERROR",
+]);
+
 export const GUEST_USER = {
   username: "guest",
   password: "SecurePass123",

@@ -12,7 +12,12 @@ const storeUserSession = (userData) => {
   localStorage.setItem("tokenExpiry", decodedToken.exp);
 };
 
-export const loginWithGoogle = async (access_token, navigate, setLoading) => {
+export const loginWithGoogle = async (
+  access_token,
+  navigate,
+  setLoading,
+  setError
+) => {
   try {
     setLoading(true);
     const res = await axios.post(`${baseUrl}/api/user/google-oauth`, {
@@ -34,7 +39,10 @@ export const loginWithGoogle = async (access_token, navigate, setLoading) => {
       return;
     }
     message.error(
-      err.response?.data?.message || "An error occurred. Please try again."
+      err.response?.data?.error || "An error occurred. Please try again."
+    );
+    setError(
+      err.response?.data || { error: "An error occurred. Please try again." }
     );
   } finally {
     setLoading(false);
@@ -45,7 +53,8 @@ export const forgetPassword = async (
   email,
   captchaToken,
   setLoading,
-  navigate
+  navigate,
+  setError
 ) => {
   if (!captchaToken) {
     message.error("Please complete the reCAPTCHA.");
@@ -58,10 +67,13 @@ export const forgetPassword = async (
       captchaToken,
     });
     //message.success("Password reset link sent to your email.", [2]);
-    navigate("/check-email");
+    navigate("/check-email", { state: { email } });
     return res.data;
   } catch (e) {
     console.log("Error Resetting Password: ", e);
+    setError(
+      e.response?.data || { error: "An error occurred. Please try again later" }
+    );
     message.error(
       e.response?.data?.error || "Something went wrong. Please try again later",
       [6]
@@ -76,7 +88,8 @@ export const resetPassword = async (
   resetToken,
   captchaToken,
   setLoading,
-  navigate
+  navigate,
+  setError
 ) => {
   try {
     setLoading(true);
@@ -91,8 +104,10 @@ export const resetPassword = async (
   } catch (e) {
     console.log("Error Resetting Password: ", e);
     message.error(
-      e.response?.data?.error || "Something went wrong. Please try again later",
-      [6]
+      e.response?.data?.error || "An error occurred. Please try again later"
+    );
+    setError(
+      e.response?.data || { error: "An error occurred. Please try again later" }
     );
   } finally {
     setLoading(false);
@@ -103,7 +118,8 @@ export const loginWithCredentials = async (
   values,
   captchaToken,
   navigate,
-  setLoading
+  setLoading,
+  setError
 ) => {
   if (!captchaToken && values.username !== "guest") {
     message.error("Please complete the reCAPTCHA.");
@@ -131,9 +147,12 @@ export const loginWithCredentials = async (
       message.error("Network Error. Please check your internet connection.", 5);
     } else {
       message.error(
-        err.response?.data?.message || "An error occurred. Please try again."
+        err.response?.data?.error || "An error occurred. Please try again."
       );
     }
+    setError(
+      err.response?.data || { error: "An error occurred. Please try again." }
+    );
   } finally {
     setLoading(false);
   }
@@ -143,7 +162,8 @@ export const registerUser = async (
   values,
   captchaToken,
   navigate,
-  setLoading
+  setLoading,
+  setError
 ) => {
   if (!captchaToken && values.username !== "guest") {
     message.error("Please complete the reCAPTCHA.");
@@ -156,11 +176,22 @@ export const registerUser = async (
       await axios.post(`${baseUrl}/api/user/register`, values);
     }
 
-    await loginWithCredentials(values, captchaToken, navigate, setLoading);
+    await loginWithCredentials(
+      values,
+      captchaToken,
+      navigate,
+      setLoading,
+      setError
+    );
   } catch (err) {
     console.error("Registration Error:", err);
     if (err.message === "Network Error") {
-      message.error("Network Error. Please check your internet connection.", 5);
+      message.error("Network Error!", 5);
+      setError(
+        err.response?.data || {
+          error: "Network Error. Please check your internet connection.",
+        }
+      );
       return;
     }
     message.error(

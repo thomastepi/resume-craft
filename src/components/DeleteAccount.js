@@ -20,7 +20,7 @@ const DeleteAccount = () => {
     } catch (error) {
       console.error("Account Deletion Error: ", error);
       message.error(
-        `${error?.response?.data?.error} Your account could not be deleted` ||
+        `${error?.response?.data?.error} This account could not be deleted` ||
           "Failed to delete account.",
         [5]
       );

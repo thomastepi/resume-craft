@@ -1,19 +1,25 @@
 import { useState } from "react";
-import { Modal, message } from "antd";
+import { Modal, message, Button } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../services/authService";
 
 const CustomModal = ({ open, setOpen }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [email, setEmail] = useState("");
-
-  console.log("email: ", email);
-
+  const navigate = useNavigate();
   const baseUrl = process.env.REACT_APP_BASE_URL;
   const user = JSON.parse(localStorage.getItem("user"));
   const { _id, username, accessToken } = user;
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (email) => {
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      message.error("Please enter a valid email address.");
+      return;
+    }
     try {
+      setConfirmLoading(true);
       const { data } = await axios.patch(
         `${baseUrl}/api/user/update-email`,
         {
@@ -46,6 +52,7 @@ const CustomModal = ({ open, setOpen }) => {
         e.response?.data?.message,
         "Something went wrong. Please try again later"
       );
+      setConfirmLoading(false);
     }
   };
 
@@ -76,14 +83,26 @@ const CustomModal = ({ open, setOpen }) => {
 
         <button
           className="btn-secondary"
+          disabled={confirmLoading}
           type="button"
           style={{ maxWidth: "100%" }}
           onClick={() => {
-            handleSubmit();
+            handleSubmit(email);
           }}
         >
           Submit
         </button>
+        <Button
+          style={{ marginTop: "10px", textAlign: "center", width: "100%" }}
+          type="link"
+          onClick={() => {
+            logoutUser(navigate);
+          }}
+          icon={<ArrowLeftOutlined />}
+        >
+          <div className="btn-secondary-state"></div>
+          <span className="btn-secondary-contents">Logout</span>
+        </Button>
       </Modal>
     </>
   );

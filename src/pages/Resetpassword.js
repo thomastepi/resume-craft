@@ -1,21 +1,26 @@
 import { useState, useRef, useEffect } from "react";
 import logo from "../assets/images/logo-form.png";
-import { Form, Input, message, Spin } from "antd";
+import { Form, Input, message, Spin, Alert, Button } from "antd";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import { Formik } from "formik";
 import "../resources/styles/pages/authentication.css";
 import { resetPassword } from "../services/authService";
 import GoogleReCaptcha from "../components/GoogleReCaptcha";
 import { useNavigate, useLocation } from "react-router-dom";
 import * as Yup from "yup";
+import { fatalCodes } from "../utils/constants";
 
 function ResetPassword() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const recaptchaRef = useRef(null);
 
   const queryParams = new URLSearchParams(location.search);
   const resetToken = queryParams.get("token");
+
+  const isFatal = error && fatalCodes.has(error.code);
 
   useEffect(() => {
     if (!resetToken) {
@@ -53,9 +58,9 @@ function ResetPassword() {
                   resetToken,
                   captchaToken,
                   setLoading,
-                  navigate
+                  navigate,
+                  setError
                 );
-                values.newPassword = "";
                 recaptchaRef.current?.reset();
               } catch (err) {
                 console.error("Password Reset Error: ", err);
@@ -83,72 +88,120 @@ function ResetPassword() {
                   <img src={logo} alt="logo" />
                 </div>
                 <h1 style={{ textAlign: "center" }}>Reset your password</h1>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "0.5rem",
-                    color: "#666",
-                    fontSize: "0.9rem",
-                  }}
-                >
-                  Enter your new password below to secure your account. Make
-                  sure it’s something strong and easy for you to remember.
-                </p>
+                {!isFatal && (
+                  <p
+                    style={{
+                      textAlign: "center",
+                      marginTop: "0.5rem",
+                      color: "#666",
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    Enter your new password below to secure your account. Make
+                    sure it’s something strong and easy for you to remember.
+                  </p>
+                )}
                 <hr />
 
-                <>
-                  <Form.Item
-                    label="New Password"
-                    validateStatus={
-                      touched.newPassword && errors.newPassword ? "error" : ""
-                    }
-                    help={
-                      touched.newPassword && errors.newPassword
-                        ? errors.newPassword
-                        : ""
-                    }
-                  >
-                    <Input.Password
-                      className="passwd-field"
-                      name="newPassword"
-                      type="password"
-                      autoFocus
-                      value={values.newPassword}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
+                {isFatal ? (
+                  <>
+                    <Alert
+                      message={
+                        error.message || error.error || "An error occurred."
+                      }
+                      type="error"
+                      style={{ marginBottom: "16px" }}
                     />
-                  </Form.Item>
+                    <button
+                      type="button"
+                      className="btn-secondary"
+                      onClick={() => navigate("/forgot-password")}
+                    >
+                      <div className="btn-secondary-state"></div>
+                      <span className="btn-secondary-contents">
+                        Request new link
+                      </span>
+                    </button>
+                    <Button
+                      type="link"
+                      style={{
+                        width: "100%",
+                        textAlign: "center",
+                        marginTop: "12px",
+                      }}
+                      icon={<ArrowLeftOutlined />}
+                      onClick={() => navigate("/login")}
+                    >
+                      Back to Login
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Form.Item
+                      label="New Password"
+                      validateStatus={
+                        touched.newPassword && errors.newPassword ? "error" : ""
+                      }
+                      help={
+                        touched.newPassword && errors.newPassword
+                          ? errors.newPassword
+                          : ""
+                      }
+                    >
+                      <Input.Password
+                        className="passwd-field"
+                        name="newPassword"
+                        type="password"
+                        autoFocus
+                        value={values.newPassword}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                    </Form.Item>
 
-                  <button
-                    type="submit"
-                    className="btn-secondary"
-                    disabled={isSubmitting}
-                  >
-                    <div className="btn-secondary-state"></div>
-                    <span className="btn-secondary-contents">Submit</span>
-                  </button>
-                  <GoogleReCaptcha ref={recaptchaRef} />
-                  <div style={{ width: "100%" }}>
-                    <p>
-                      protected by reCAPTCHA{" "}
-                      <a
-                        href="https://policies.google.com/privacy"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Privacy Policy
-                      </a>{" "}
-                      |{" "}
-                      <a
-                        href="https://policies.google.com/terms"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        Terms of Service
-                      </a>{" "}
-                    </p>
-                  </div>
-                </>
+                    {error && (
+                      <Alert
+                        message={
+                          error.message ||
+                          "Something went wrong. Please try again."
+                        }
+                        type="error"
+                        showIcon
+                        style={{ marginBottom: 16 }}
+                      />
+                    )}
+
+                    <button
+                      type="submit"
+                      className="btn-secondary"
+                      disabled={isSubmitting}
+                    >
+                      <div className="btn-secondary-state"></div>
+                      <span className="btn-secondary-contents">Submit</span>
+                    </button>
+                    <GoogleReCaptcha ref={recaptchaRef} />
+                    <div style={{ width: "100%" }}>
+                      <p>
+                        protected by reCAPTCHA{" "}
+                        <a
+                          href="https://policies.google.com/privacy"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Privacy Policy
+                        </a>{" "}
+                        |{" "}
+                        <a
+                          href="https://policies.google.com/terms"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Terms of Service
+                        </a>{" "}
+                      </p>
+                    </div>
+                  </>
+                )}
               </Form>
             )}
           </Formik>
