@@ -29,6 +29,10 @@
   margin: auto;
 }
 
+.resume-customization-panel .ant-input, .ant-input-number-input{
+  border: none !important;
+}
+
 .options-section {
   margin-bottom: 1rem;
   display: flex;

@@ -148,7 +148,7 @@ const CustomizationPanel = ({
           </Dropdown>
         </div>
 
-        <div className="options-section">
+        <div className="options-section theme-color-section">
           <label className="options-label">Theme Colors</label>
           <ColorPicker
             className="color-picker"

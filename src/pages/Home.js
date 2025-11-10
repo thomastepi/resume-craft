@@ -37,7 +37,7 @@ function Home() {
       firstName && lastName && mobileNumber && address && summary
         ? true
         : false;
-    if (!returningUser) {
+    if (!returningUser || user.username === "guest") {
       // setShowBanner(true);
       setTimeout(() => {
         loadGuidefoxAgent();

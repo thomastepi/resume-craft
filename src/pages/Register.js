@@ -139,24 +139,6 @@ function Register() {
                   />
                 )}
                 <GoogleReCaptcha ref={recaptchaRef} />
-                <p>
-                  Protected by reCAPTCHA{" "}
-                  <a
-                    href="https://policies.google.com/privacy"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Privacy Policy
-                  </a>{" "}
-                  |{" "}
-                  <a
-                    href="https://policies.google.com/terms"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Terms of Service
-                  </a>{" "}
-                </p>
 
                 <button
                   className="btn-secondary"
@@ -166,12 +148,41 @@ function Register() {
                   <div className="btn-secondary-state"></div>
                   <span className="btn-secondary-contents">Create Account</span>
                 </button>
+
+                <p className="disclaimer">
+                  This form is protected by reCAPTCHA and the Google{" "}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://policies.google.com/terms"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  apply. By signing up, you agree to our{" "}
+                  <a
+                    href="https://www.thomastepi.com/en/privacy-policy"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Privacy Policy
+                  </a>
+                  .
+                </p>
+
                 <hr />
                 <span>
                   Already have an account? <Link to="/login">Sign in</Link>
                 </span>
 
-                <div style={{ marginTop: "10px" }}>
+                <div style={{ marginTop: "3px" }}>
                   <span>
                     Not ready to Sign up?{" "}
                     <span

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import logo from "../assets/images/logo-form.png";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, message, Spin } from "antd";
+import { Form, message, Spin, Alert } from "antd";
 import { Formik } from "formik";
 import { loginSchema } from "../utils/validationSchema";
 import "../resources/styles/pages/authentication.css";
@@ -10,23 +10,13 @@ import {
   registerGuestLogin,
   isUserSessionValid,
 } from "../services/authService";
-import useIsMobile from "../hooks/useIsMobile";
 import { GUEST_USER } from "../utils/constants";
-import { loadGuidefoxAgent, unloadGuidefoxAgent } from "../lib/loadGuidefox";
 
 function GuestLogin() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const recaptchaRef = useRef(null);
-  const isMobile = useIsMobile();
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (!isMobile) loadGuidefoxAgent();
-    }, 2000);
-
-    return () => unloadGuidefoxAgent();
-  }, [isMobile]);
 
   useEffect(() => {
     if (isUserSessionValid()) {
@@ -44,7 +34,13 @@ function GuestLogin() {
             validationSchema={loginSchema}
             onSubmit={async (values, { setSubmitting }) => {
               try {
-                await loginWithCredentials(values, null, navigate, setLoading);
+                await loginWithCredentials(
+                  values,
+                  null,
+                  navigate,
+                  setLoading,
+                  setError
+                );
                 await registerGuestLogin();
               } catch (err) {
                 console.error("Login Error:", err);
@@ -64,19 +60,29 @@ function GuestLogin() {
                   <img src={logo} alt="logo" />
                 </div>
                 <h1 style={{ textAlign: "center" }}>Browse as Guest</h1>
-                <p
-                  style={{
-                    textAlign: "center",
-                    marginTop: "0.5rem",
-                    color: "#666",
-                    fontSize: "0.9rem",
-                  }}
-                >
-                  {isMobile
-                    ? "You're exploring as a Guest! While you can browse freely, creating, editing, and deleting content requires an account. Sign up for free to unlock all features!"
-                    : "Explore our platform with limited access. Sign up for full features!"}
-                </p>
+                <div>
+                  <ul
+                    className="guest-feature-list"
+                    aria-label="Guest capabilities"
+                    style={{ textAlign: "left" }}
+                  >
+                    <li>Update the sample profile</li>
+                    <li>Try existing resume templates</li>
+                    <li>Generate content with AI</li>
+                    <li>Export or continue later by creating an account</li>
+                  </ul>
+                </div>
                 <hr style={{ margin: "2rem 0" }} />
+
+                {error && (
+                  <Alert
+                    message={
+                      error.message || error.error || "An error occurred."
+                    }
+                    type="error"
+                    style={{ marginBottom: "16px" }}
+                  />
+                )}
 
                 <>
                   <button
