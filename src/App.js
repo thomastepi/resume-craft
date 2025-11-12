@@ -19,7 +19,8 @@ import {
   ForgotPassword,
   Resetpassword,
   CheckEmail,
-  ResetSuccess
+  ResetSuccess,
+  AiResumeCustomization,
 } from "./pages";
 import { message } from "antd";
 import Templates from "./pages/templates/index";
@@ -60,6 +61,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Templates />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/ai-resume-customization"
+              element={
+                <ProtectedRoute>
+                  <AiResumeCustomization />
                 </ProtectedRoute>
               }
             />

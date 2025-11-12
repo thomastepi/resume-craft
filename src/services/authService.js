@@ -101,10 +101,14 @@ export const loginWithCredentials = async (
   }
   try {
     setLoading(true);
-    const res = await axios.post(`${baseUrl}/api/user/login`, {
-      ...values,
-      captchaToken,
-    });
+    const res = await axios.post(
+      `${baseUrl}/api/user/login`,
+      {
+        ...values,
+        captchaToken,
+      },
+      { withCredentials: true, timeout: 10000 }
+    );
     const { firstName, username } = res.data;
     storeUserSession(res.data);
     const name = username === "guest" ? `Guest User` : firstName || username;

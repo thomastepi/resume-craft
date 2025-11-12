@@ -1,17 +1,18 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext, useRef } from "react";
 import { message, Spin } from "antd";
-import AIResumeComponent from "../../components/AIResumeComponent";
-import AlertBox from "../../components/AlertBox";
-import useIsMobile from "../../hooks/useIsMobile";
-import "../../resources/styles/pages/templates/template3.css";
-import checkMandatoryFields from "../../utils/validatePrompt";
-import { generateResumePrompt } from "../../utils/aiResumeUtils";
-import { ResumeContext } from "../../context/ResumeContext";
-import { getErrorMessage } from "../../utils/errorHandler";
-import CustomizationPanel from "../../components/CustomizationFields/CustomizationPanel";
+import AIResumeComponent from "../components/AIResumeComponent";
+import AlertBox from "../components/AlertBox";
+import useIsMobile from "../hooks/useIsMobile";
+import checkMandatoryFields from "../utils/validatePrompt";
+import { generateResumePrompt } from "../utils/aiResumeUtils";
+import { ResumeContext } from "../context/ResumeContext";
+import { getErrorMessage } from "../utils/errorHandler";
+import CustomizationPanel from "../components/CustomizationFields/CustomizationPanel";
+import DefaultLayout from "../components/DefaultLayout";
+import ResumeActionButtons from "../components/ResumeActionButtons";
 import { useNavigate } from "react-router-dom";
 
-const ResumeCustomization = () => {
+const AiResumeCustomization = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("English");
   const [alert, setAlert] = useState("");
   const [error, setError] = useState("");
@@ -25,6 +26,8 @@ const ResumeCustomization = () => {
 
   const [errorStatus, setErrorStatus] = useState(null);
   const [remainingGenerations, setRemainingGenerations] = useState(null);
+
+  const AiResumeRef = useRef(null);
   const navigate = useNavigate();
 
   const isMobile = useIsMobile();
@@ -45,6 +48,8 @@ const ResumeCustomization = () => {
     loading,
     setLoading,
     setIsGenerating,
+    //setStreamCompleted,
+    setStreamCompleted,
   } = useContext(ResumeContext);
 
   const handleGenerateResume = async () => {
@@ -74,10 +79,12 @@ const ResumeCustomization = () => {
       const prompt = generateResumePrompt(user, resumeCustomiztions);
       setLoading(true);
       setIsGenerating(true);
+      setStreamCompleted(false);
       setAlert("LOADING...please wait while the AI Robots work their magic");
       setGeneratedHTML("");
       const result = await fetch(`${baseUrl}/api/user/build`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user.accessToken}`,
@@ -122,6 +129,7 @@ const ResumeCustomization = () => {
       }
       setIsGenerating(false);
       message.success("Resume Generated Successfully!");
+      setStreamCompleted(true);
     } catch (err) {
       console.error("Error", err);
       setLoading(false);
@@ -192,9 +200,13 @@ const ResumeCustomization = () => {
   };
 
   return (
-    <>
+    <DefaultLayout>
+      <ResumeActionButtons ref={AiResumeRef} />
       <div
-        style={{ width: `${isMobile ? "95%" : "50%"}`, margin: "10px auto" }}
+        style={{
+          width: `${isMobile ? "95%" : "50%"}`,
+          margin: "20px auto",
+        }}
       >
         {error && (
           <AlertBox
@@ -232,10 +244,21 @@ const ResumeCustomization = () => {
         </>
       )}
 
-      {generatedHTML && <AIResumeComponent />}
+      {generatedHTML && (
+        <div ref={AiResumeRef}>
+          <AIResumeComponent />
+        </div>
+      )}
 
       {!generatedHTML && !alert && !error && (
-        <>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <div style={{ textAlign: "center", marginBottom: "30px" }}>
             <h4>Customize your resume before generating</h4>
           </div>
@@ -271,6 +294,7 @@ const ResumeCustomization = () => {
                 } left this hour.`}
                 type={remainingGenerations > 2 ? "info" : "warning"}
                 showIcon
+                closable={false}
               />
             </div>
           )}
@@ -281,10 +305,10 @@ const ResumeCustomization = () => {
               <span className="btn-secondary-contents">Generate Resume</span>
             </button>
           </div>
-        </>
+        </div>
       )}
-    </>
+    </DefaultLayout>
   );
 };
 
-export default ResumeCustomization;
+export default AiResumeCustomization;

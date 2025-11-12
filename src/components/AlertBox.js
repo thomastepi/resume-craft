@@ -1,7 +1,7 @@
-import React from "react";
 import { Alert, Button } from "antd";
 import { logoutUser } from "../services/authService";
 import { useNavigate } from "react-router-dom";
+import s from "../resources/styles/components/AlertBox.module.css";
 
 const AlertBox = ({
   message,
@@ -12,6 +12,9 @@ const AlertBox = ({
   btnText,
   setError,
   showActionButton,
+  closable,
+  actionBtnId,
+  showIcon,
 }) => {
   const navigate = useNavigate();
   const onCloseAction = () => {
@@ -20,17 +23,17 @@ const AlertBox = ({
 
   return (
     <Alert
-      style={{ maxWidth: "1080px" }}
-      className="home-alert-banner"
+      className={s.main}
       message={title}
       description={message}
       type={type}
       onClose={onCloseAction}
-      closable
-      showIcon
+      closable={closable}
+      showIcon={showIcon}
       action={
         showActionButton && (
           <Button
+            id={actionBtnId}
             className="home-alert-banner-btn"
             size="small"
             type="primary"

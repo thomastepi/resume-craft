@@ -6,6 +6,7 @@ export const ResumeProvider = ({ children }) => {
   const [generatedHTML, setGeneratedHTML] = useState(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isPrinting, setIsPrinting] = useState(false);
+  const [streamCompleted, setStreamCompleted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   return (
@@ -19,6 +20,8 @@ export const ResumeProvider = ({ children }) => {
         setIsPrinting,
         loading,
         setLoading,
+        streamCompleted,
+        setStreamCompleted,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { ResumeContext } from "../context/ResumeContext";
 import "../resources/styles/components/AIResumeComponent.css";
 
@@ -19,7 +19,7 @@ const AIResumeComponent = () => {
     }
   }, [generatedHTML]);
 
-  return <div className="shadow-host" ref={shadowHostRef} />;
+  return <div id="shadow-host-element" className="shadow-host" ref={shadowHostRef} />;
 };
 
 export default AIResumeComponent;

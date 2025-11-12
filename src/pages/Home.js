@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import DefaultLayout from "../components/DefaultLayout";
 import { useNavigate } from "react-router-dom";
-// import AlertBox from "../components/AlertBox";
-// import { jwtDecode } from "jwt-decode";
+import AlertBox from "../components/AlertBox";
 import useAuthCheck from "../hooks/useAuthCheck";
 import useInactivityLogout from "../hooks/useInactivityLogout";
 import { loadGuidefoxAgent } from "../lib/loadGuidefox";
@@ -11,11 +10,8 @@ import CustomModal from "../components/CustomModal";
 
 const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/temp1.png";
 const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
-const aiGeneration = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
 
 function Home() {
-  // const [showBanner, setShowBanner] = useState(false);
-  // const [isGuest, setIsGuest] = useState(false);
   const [tourStepNum, setTourStepNum] = useState(null);
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState(null);
@@ -38,7 +34,6 @@ function Home() {
         ? true
         : false;
     if (!returningUser || user.username === "guest") {
-      // setShowBanner(true);
       setTimeout(() => {
         loadGuidefoxAgent();
       }, 2000);
@@ -59,57 +54,30 @@ function Home() {
     return () => clearInterval(interval);
   }, [open]);
 
-  // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem("user"));
-  //   if (user?.accessToken) {
-  //     try {
-  //       const decodedToken = jwtDecode(user.accessToken);
-  //       if (decodedToken.role === "guest") {
-  //         setIsGuest(true);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error decoding token:", error);
-  //     }
-  //   }
-  // }, []);
-
   const templates = [
     {
-      id: "ai-generation",
-      title: "Generate With AI",
-      image: aiGeneration,
-    },
-    {
-      id: "simple-template",
-      title: "Simple Template",
+      id: "template-one",
+      title: "Template One",
       image: template1,
     },
     {
-      id: "professional-template",
-      title: "Professional Template",
+      id: "template-two",
+      title: "Template Two",
+      image: template2,
+    },
+    {
+      id: "template-three",
+      title: "Template Three",
+      image: template2,
+    },
+    {
+      id: "template-four",
+      title: "Template Four",
       image: template2,
     },
   ];
   return (
     <DefaultLayout>
-      {/* {showBanner && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <AlertBox
-            message="To create the perfect resume, update your profile with your latest details."
-            title="🎉 Welcome to Resume Craft!"
-            type="info"
-            navigateTo="/profile"
-            btnText="Update Profile"
-            endSession={false}
-            showActionButton={true}
-          />
-        </div>
-      )} */}
       <CustomModal open={open} setOpen={setOpen} _id={userId} />
       <div
         className="row home"
@@ -121,6 +89,37 @@ function Home() {
           height: "100%",
         }}
       >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: "40px",
+            width: "100%",
+          }}
+        >
+          <AlertBox
+            actionBtnId="ai-generate-btn"
+            message="Want a personalized resume? Choose your preferred language, colors, fonts, and layout, then let AI build it for you. Or scroll down to explore our sample templates."
+            title="🤖 Let AI Design Your Resume!"
+            type="info"
+            navigateTo="/ai-resume-customization"
+            btnText="Generate with AI"
+            endSession={false}
+            showActionButton={true}
+            closable={false}
+            showIcon={false}
+          />
+        </div>
+        <div style={{ width: "100%", margin: "40px 0" }}>
+          <h2 style={{ textAlign: "center", width: "100%" }}>
+            Choose a Template to Get Started
+          </h2>
+          <p style={{ textAlign: "center", marginTop: 8, opacity: 0.85 }}>
+            Your resume templates will be automatically filled with your saved
+            profile information.
+          </p>
+        </div>
         {templates.map((template, index) => {
           return (
             <div key={index} className="col-md-4">
@@ -140,7 +139,7 @@ function Home() {
                     }}
                   >
                     <div className="btn-primary-state"></div>
-                    <span className="btn-primary-contents">TRY</span>
+                    <span className="btn-primary-contents">Use Template</span>
                   </button>
                 </div>
               </div>
