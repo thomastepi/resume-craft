@@ -9,6 +9,7 @@ import CertificationsLanguage from "../components/CertificationsLanguage";
 import AlertBox from "../components/AlertBox";
 import useIsMobile from "../hooks/useIsMobile";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import DeleteAccount from "../components/DeleteAccount";
 // import { loadGuidefoxAgent } from "../lib/loadGuidefox";
 // import { waitFor, generateHintMessage } from "../utils/profileProgress";
@@ -48,11 +49,33 @@ const Profile = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
+  let userRole = user?.role;
+  try {
+    if (!userRole && user?.accessToken) {
+      const decoded = jwtDecode(user.accessToken);
+      userRole = decoded?.role;
+    }
+  } catch (e) {
+    console.error("Failed to decode token", e);
+  }
+
   const baseUrl = process.env.REACT_APP_BASE_URL;
 
   const onFinish = async (values) => {
     setLoading(true);
     try {
+      if (userRole === "guest") {
+        const updatedGuestUser = {
+          ...user,
+          ...values,
+        };
+        localStorage.setItem("user", JSON.stringify(updatedGuestUser));
+        setTimeout(() => {
+          setLoading(false);
+          message.success("Profile updated for this guest session only.", [6]);
+        }, 1000);
+        return;
+      }
       const { data } = await axios.patch(
         `${baseUrl}/api/user/update`,
         {
