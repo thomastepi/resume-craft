@@ -8,8 +8,12 @@ import { loadGuidefoxAgent } from "../lib/loadGuidefox";
 import { templateTourStyles } from "../utils/constants";
 import CustomModal from "../components/CustomModal";
 
-const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/temp1.png";
-const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/temp2.png";
+const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/template1.png";
+const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/template2.png";
+const template3 = "https://ik.imagekit.io/thormars/ResumeCraft/template3.png";
+const template4 = "https://ik.imagekit.io/thormars/ResumeCraft/template4.png";
+const template5 = "https://ik.imagekit.io/thormars/ResumeCraft/template5.png";
+const template6 = "https://ik.imagekit.io/thormars/ResumeCraft/template6.png";
 
 function Home() {
   const [tourStepNum, setTourStepNum] = useState(null);
@@ -68,12 +72,22 @@ function Home() {
     {
       id: "template-three",
       title: "Template Three",
-      image: template2,
+      image: template3,
     },
     {
       id: "template-four",
       title: "Template Four",
-      image: template2,
+      image: template4,
+    },
+    {
+      id: "template-five",
+      title: "Template Five",
+      image: template5,
+    },
+    {
+      id: "template-six",
+      title: "Template Six",
+      image: template6,
     },
   ];
   return (

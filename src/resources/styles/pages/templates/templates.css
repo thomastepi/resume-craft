@@ -2,7 +2,7 @@
 .home .template {
   margin: 10px;
   box-shadow: 0 0 3px grey;
-  padding: 10px;
+  /* padding: 10px; */
   position: relative;
 }
 
@@ -41,10 +41,23 @@
   padding: 0 20px;
 }
 
-/* template 1 */
-.template1-parent {
-  color: rgba(0, 0, 0, 0.7) !important;
-  padding: 100px;
+/* shared parent styles */
+.template1-parent,
+.template2-parent,
+.template4-parent,
+.template5-parent,
+.template3-parent,
+.template6-parent {
+  /* max-width: 900px; */
+   max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
 }
 
 @media (max-width: 768px) {
@@ -81,10 +94,7 @@
 }
 
 /* template 4 */
-.template4-parent {
-  font-size: 14px;
-  padding: 100px;
-}
+
 .template4-sidebar {
   background: #f6f8fb;
   border-radius: 12px;
@@ -117,10 +127,7 @@
 }
 
 /* template 5 */
-.template5-parent {
-  font-size: 14px;
-  padding: 100px;
-}
+
 .template5-subhead span {
   margin: 0 0.3rem;
   color: #6c757d;
@@ -175,5 +182,188 @@
 @media (max-width: 768px) {
   .template5-parent {
     padding: 5px;
+  }
+}
+
+/* Template 3 and Template 6 */
+
+.template3-parent h1,
+.template6-parent h1 {
+  font-size: 26px;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.template3-parent p,
+.template6-parent p {
+  margin-bottom: 4px;
+}
+
+.template3-section-title,
+.template6-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: #f0f0f0;
+  padding: 8px 10px;
+  margin: 0;
+}
+
+.divider {
+  height: 1px;
+  background-color: #dddddd;
+}
+
+/* Template 3 (Two-column) */
+.template3-header {
+  border-bottom: 2px solid #dddddd;
+  padding-bottom: 8px;
+}
+
+.template3-name h1 {
+  margin: 0;
+}
+
+.template3-contact p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.template3-body {
+  display: flex;
+  gap: 24px;
+}
+
+.template3-left-column {
+  flex: 0 0 32%;
+}
+
+.template3-right-column {
+  flex: 1;
+}
+
+.template3-left-column > div,
+.template3-right-column > div {
+  margin-bottom: 18px;
+}
+
+.template3-parent hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 6px 0 8px;
+}
+
+/* Template 6 (Single-column) */
+.template6-header {
+  padding-bottom: 8px;
+  border-bottom: 2px solid #dddddd;
+}
+
+.template6-header h1 {
+  margin-bottom: 8px;
+}
+
+.template6-contact p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.template6-parent .objective,
+.template6-parent .experience,
+.template6-parent .projects,
+.template6-parent .education,
+.template6-parent .skills,
+.template6-parent .certifications,
+.template6-parent .languages {
+  margin-top: 16px;
+}
+
+.template6-experience-item,
+.template6-project-item,
+.template6-education-item,
+.template6-cert-item,
+.template6-language-item {
+  margin-bottom: 10px;
+}
+
+.template6-range {
+  font-size: 12px;
+  color: #666666;
+}
+
+.template6-place {
+  font-style: italic;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.template6-skills-list {
+  list-style: disc;
+  padding-left: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+.template6-skills-list li {
+  margin: 0;
+}
+
+.template6-parent hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 6px 0 8px;
+}
+/* Responsive Styles for Template 3 and Template 6 */
+@media (max-width: 768px) {
+  .template3-parent,
+  .template6-parent {
+    padding: 16px 12px;
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  .template3-body {
+    flex-direction: column;
+  }
+
+  .template3-left-column,
+  .template3-right-column {
+    flex: 1 0 100%;
+  }
+
+  .template3-header {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .template3-contact {
+    text-align: left;
+    margin-top: 4px;
+  }
+}
+
+/* Print Styles all Templates */
+@media print {
+  .template3-parent,
+  .template6-parent,
+  .template1-parent,
+  .template4-parent,
+  .template5-parent {
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .template3-section-title,
+  .template6-section-title {
+    background-color: #f0f0f0 !important;
   }
 }
