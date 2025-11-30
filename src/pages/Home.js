@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Divider } from "antd";
 import DefaultLayout from "../components/DefaultLayout";
 import { useNavigate } from "react-router-dom";
 import AlertBox from "../components/AlertBox";
@@ -17,6 +18,7 @@ const template6 = "https://ik.imagekit.io/thormars/ResumeCraft/template6.png";
 
 function Home() {
   const [tourStepNum, setTourStepNum] = useState(null);
+  const [userTemplates, setUserTemplates] = useState([]);
   const [open, setOpen] = useState(false);
   const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
@@ -26,6 +28,8 @@ function Home() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    const templates = JSON.parse(localStorage.getItem("templates"));
+    setUserTemplates(templates);
     const { _id, firstName, lastName, email, mobileNumber, address, summary } =
       user;
     if (!email) {
@@ -133,6 +137,47 @@ function Home() {
             Your resume templates will be automatically filled with your saved
             profile information.
           </p>
+        </div>
+        {userTemplates.length > 0 && (
+          <div className="row">
+            <div className="col-md-12">
+              <Divider style={{ borderColor: "black" }}>
+                Your Saved Templates
+              </Divider>
+            </div>
+            {userTemplates.map((template, index) => {
+              return (
+                <div key={index} className="col-md-4">
+                  <div className="template">
+                    <img src={template1} alt={`template ${index + 1}`} />
+                    <div
+                      className="text"
+                      style={templateTourStyles(tourStepNum, index)}
+                    >
+                      <p>{template.name}</p>
+                      <button
+                        id={template._id}
+                        className="btn-primary"
+                        style={{ width: "fit-content" }}
+                        onClick={() => {
+                          navigate(`/templates/${template._id}`);
+                        }}
+                      >
+                        <div className="btn-primary-state"></div>
+                        <span className="btn-primary-contents">
+                          Use Template
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="col-md-12">
+          <Divider style={{ borderColor: "black", margin: "40px 0" }}>Sample Templates</Divider>
         </div>
         {templates.map((template, index) => {
           return (

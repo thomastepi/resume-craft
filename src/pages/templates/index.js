@@ -5,6 +5,7 @@ import Template3 from "./Template3";
 import Template4 from "./Template4";
 import Template5 from "./Template5";
 import Template6 from "./Template6";
+import ResumePreview from "./ResumePreview";
 import ResumeActionButtons from "../../components/ResumeActionButtons";
 import "./Templates.css";
 import DefaultLayout from "../../components/DefaultLayout";
@@ -29,7 +30,7 @@ const Templates = () => {
       case "6":
         return <Template6 />;
       default:
-        return null;
+        return <ResumePreview id={params.id} />;
     }
   };
   return (

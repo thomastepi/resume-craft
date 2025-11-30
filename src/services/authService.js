@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { message } from "antd";
 import { unloadGuidefoxAgent } from "../lib/loadGuidefox";
 import { handleError } from "../utils/errorHandler";
+import { getTemplates } from "./templates";
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
@@ -24,8 +25,9 @@ export const loginWithGoogle = async (
     const res = await axios.post(`${baseUrl}/api/user/google-oauth`, {
       token: access_token,
     });
-    const { firstName, username } = res.data;
+    const { accessToken, firstName, username } = res.data;
     storeUserSession(res.data);
+    await getTemplates(accessToken);
     const name = username === "guest" ? `Guest User` : firstName || username;
     message.success(`Welcome, ${name}!`);
     setTimeout(() => navigate("/home"), 2000);
@@ -109,8 +111,9 @@ export const loginWithCredentials = async (
       },
       { withCredentials: true, timeout: 10000 }
     );
-    const { firstName, username } = res.data;
+    const { accessToken, firstName, username } = res.data;
     storeUserSession(res.data);
+    await getTemplates(accessToken);
     const name = username === "guest" ? `Guest User` : firstName || username;
     message.success(`Welcome, ${name}!`);
     setTimeout(() => navigate("/home"), 2000);
@@ -165,6 +168,7 @@ export const logoutUser = (navigate) => {
   localStorage.removeItem("user");
   localStorage.removeItem("accessToken");
   localStorage.removeItem("tokenExpiry");
+  localStorage.removeItem("templates");
   message.success("Logged out successfully!");
   navigate("/login");
 };
@@ -174,6 +178,7 @@ export const clearUserDataOnDelete = (navigate) => {
   localStorage.removeItem("user");
   localStorage.removeItem("accessToken");
   localStorage.removeItem("tokenExpiry");
+  localStorage.removeItem("templates");
   message.success("Account deleted successfully!");
   navigate("/register");
 };

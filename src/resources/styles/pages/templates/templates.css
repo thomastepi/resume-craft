@@ -60,6 +60,14 @@
   border-radius: 4px;
 }
 
+.resume-preview-parent {
+   max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
 @media (max-width: 768px) {
   .template1-parent {
     padding: 2px;
