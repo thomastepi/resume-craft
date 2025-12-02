@@ -164,6 +164,10 @@
   @media (max-width: 992px) {
     .analyzer-input {
       grid-template-columns: 1fr;
+      gap: 7rem;
+    }
+    .analyze-button-container {
+      margin-top: 7rem;
     }
     .keywords-lists {
         grid-template-columns: 1fr;
