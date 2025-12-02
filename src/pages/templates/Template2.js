@@ -34,7 +34,7 @@ const Template2 = () => {
         {user.skills.map((skill, index) => {
           return (
             <div key={index} className="d-flex flex-column">
-              <p>- {skill.skill}</p>
+              <p>- {skill.skill || skill}</p>
             </div>
           );
         })}
@@ -43,17 +43,24 @@ const Template2 = () => {
       <div className="divider mt-3"></div>
 
       <div className="education mt-3">
-        <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Education</h3>
+        <h3 style={{ backgroundColor: "grey", padding: "10px" }}>
+          {user.education.length > 0 ? "Education" : ""}
+        </h3>
         <hr />
-        {user.education.map((education, index) => {
+        {user.education.map((e, index) => {
           return (
             <div key={index} className="d-flex align-items-center">
               <h6 style={{ width: 120 }}>
-                <strong>{education.range} : </strong>
+                <strong>
+                  {e.range || ""} {e.range && ":"}{" "}
+                </strong>
+                <strong>
+                  {e.startDate ? `${e.startDate} - ${e.endDate}` : e.endDate} :{" "}
+                </strong>
               </h6>
               <p>
-                <strong>{education.qualification} </strong> |
-                <strong> {education.institution}</strong> |
+                <strong>{e.qualification || e.degree} </strong> |
+                <strong> {e.institution}</strong> |
               </p>
             </div>
           );
@@ -78,12 +85,24 @@ const Template2 = () => {
                 >
                   <p>
                     <strong>{exp.company} </strong> |
-                    <strong> {exp.role} </strong> |<strong> {exp.place}</strong>
+                    <strong> {exp.role || exp.title} </strong> |
+                    <strong> {exp.place || exp.location}</strong>
                   </p>
-                  <h6 style={{ width: 120 }}>
-                    <strong>{exp.range} : </strong>
+                  <h6 style={{ width: 500 }}>
+                    <strong>{exp.range || ""} </strong>
+                    <strong>
+                      {exp.startDate
+                        ? `${exp.startDate} - ${exp.endDate}`
+                        : exp.endDate}
+                    </strong>
                   </h6>
-                  <p>{exp.roleDescription}</p>
+                  <p>{exp.roleDescription || ""}</p>
+                  <ul>
+                    {exp.description?.length > 0 &&
+                      exp.description.map((d, index) => (
+                        <li key={index}>{d}</li>
+                      ))}
+                  </ul>
                 </div>
               );
             })}
@@ -105,10 +124,17 @@ const Template2 = () => {
                 <div key={index} className="d-flex flex-column">
                   <h6>
                     <strong>
-                      {project.title} [{project.range}]{" "}
+                      {project.title || project.name} {[project.range || ""]}{" "}
                     </strong>
                   </h6>
-                  <p>{project.description}</p>
+                  <p>{project.description || ""}</p>
+                  <ul>
+                    {Array.isArray(project.description) &&
+                      project.description.length > 0 &&
+                      project.description.map((d, index) => (
+                        <li key={index}>{d}</li>
+                      ))}
+                  </ul>
                 </div>
               );
             })}
@@ -129,8 +155,9 @@ const Template2 = () => {
               return (
                 <div key={index} className="d-flex flex-column">
                   <p>
-                    <strong>{cert.name} </strong> ({cert.organization}) [
-                    {cert.year}]
+                    <strong>{cert.name || cert || ""} </strong>
+                    {cert.organization} {cert.year && "- "}
+                    {cert.year}
                   </p>
                 </div>
               );
@@ -139,21 +166,28 @@ const Template2 = () => {
         </>
       )}
 
-      <div className="divider mt-3"></div>
+      {user.languages.length > 0 && (
+        <>
+          <div className="divider mt-3"></div>
 
-      <div className="languages mt-3">
-        <h3 style={{ backgroundColor: "grey", padding: "10px" }}>Languages</h3>
-        <hr />
-        {user.languages.map((lang, index) => {
-          return (
-            <div key={index} className="d-flex flex-column">
-              <p>
-                <strong>{lang.language} </strong> ({lang.proficiency})
-              </p>
-            </div>
-          );
-        })}
-      </div>
+          <div className="languages mt-3">
+            <h3 style={{ backgroundColor: "grey", padding: "10px" }}>
+              {user.languages.length > 0 ? "Languages" : ""}
+            </h3>
+            <hr />
+            {user.languages.map((lang, index) => {
+              return (
+                <div key={index} className="d-flex flex-column">
+                  <p>
+                    <strong>{lang.language || lang} </strong>{" "}
+                    {lang.proficiency || ""}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 };

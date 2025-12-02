@@ -23,7 +23,6 @@ const Template3 = () => {
       <div className="divider mt-3"></div>
 
       <div className="template3-body d-flex mt-3">
-        {/* left column */}
         <div className="template3-left-column">
           {/* Summary */}
           {user.summary && (
@@ -41,7 +40,7 @@ const Template3 = () => {
               <hr />
               {user.skills.map((skill, index) => (
                 <div key={index} className="d-flex flex-column">
-                  <p>- {skill.skill}</p>
+                  <p>- {skill.skill || skill}</p>
                 </div>
               ))}
             </div>
@@ -55,7 +54,8 @@ const Template3 = () => {
               {user.languages.map((lang, index) => (
                 <div key={index} className="d-flex flex-column">
                   <p>
-                    <strong>{lang.language}</strong> ({lang.proficiency})
+                    <strong>{lang.language || lang}</strong>{" "}
+                    {lang.proficiency ? lang.proficiency : ""}
                   </p>
                 </div>
               ))}
@@ -77,13 +77,27 @@ const Template3 = () => {
                   style={{ marginBottom: 15 }}
                 >
                   <p>
-                    <strong>{exp.company}</strong> | <strong>{exp.role}</strong>{" "}
-                    | <strong>{exp.place}</strong>
+                    <strong>{exp.company}</strong> |{" "}
+                    <strong>{exp.role || exp.title}</strong> |{" "}
+                    <strong>{exp.place || exp.location}</strong>
                   </p>
-                  <h6 style={{ width: 120 }}>
-                    <strong>{exp.range} :</strong>
+                  <h6 style={{ width: 500 }}>
+                    <strong>
+                      {exp.range || ""} {exp.range && ":"}
+                    </strong>
+                    <strong>
+                      {exp.startDate
+                        ? `${exp.startDate} - ${exp.endDate}`
+                        : exp.endDate}
+                    </strong>
                   </h6>
-                  <p>{exp.roleDescription}</p>
+                  <p>{exp.roleDescription || ""}</p>
+                  <ul>
+                    {exp.description?.length > 0 &&
+                      exp.description.map((d, index) => (
+                        <li key={index}>{d}</li>
+                      ))}
+                  </ul>
                 </div>
               ))}
             </div>
@@ -98,10 +112,17 @@ const Template3 = () => {
                 <div key={index} className="d-flex flex-column">
                   <h6>
                     <strong>
-                      {project.title} [{project.range}]
+                      {project.title || project.name} {[project.range || ""]}
                     </strong>
                   </h6>
-                  <p>{project.description}</p>
+                  <p>{project.description || ""}</p>
+                  <ul>
+                    {Array.isArray(project.description) &&
+                      project.description.length > 0 &&
+                      project.description.map((d, index) => (
+                        <li key={index}>{d}</li>
+                      ))}
+                  </ul>
                 </div>
               ))}
             </div>
@@ -112,14 +133,21 @@ const Template3 = () => {
             <div className="education mb-4">
               <h3 className="template3-section-title">Education</h3>
               <hr />
-              {user.education.map((education, index) => (
+              {user.education.map((e, index) => (
                 <div key={index} className="d-flex align-items-center">
                   <h6 style={{ width: 120 }}>
-                    <strong>{education.range} :</strong>
+                    <strong>
+                      {e.range || ""} {e.range && ":"}
+                    </strong>
+                    <strong>
+                      {e.startDate
+                        ? `${e.startDate} - ${e.endDate}`
+                        : e.endDate}{" "}
+                    </strong>
                   </h6>
                   <p>
-                    <strong>{education.qualification}</strong> |{" "}
-                    <strong>{education.institution}</strong>
+                    <strong>{e.qualification || e.degree}</strong> |{" "}
+                    <strong>{e.institution}</strong>
                   </p>
                 </div>
               ))}
@@ -134,8 +162,9 @@ const Template3 = () => {
               {user.certifications.map((cert, index) => (
                 <div key={index} className="d-flex flex-column">
                   <p>
-                    <strong>{cert.name}</strong> ({cert.organization}) [
-                    {cert.year}]
+                    <strong>{cert.name || cert || ""} </strong>
+                    {cert.organization} {cert.year && "- "}
+                    {cert.year}
                   </p>
                 </div>
               ))}

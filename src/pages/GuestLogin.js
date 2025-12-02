@@ -68,7 +68,7 @@ function GuestLogin() {
                   >
                     <li>Update the sample profile</li>
                     <li>Try existing resume templates</li>
-                    <li>Generate content with AI</li>
+                    <li>Generate and analyze resumes with AI</li>
                     <li>Export or continue later by creating an account</li>
                   </ul>
                 </div>

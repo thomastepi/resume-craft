@@ -3,10 +3,8 @@ import logo from "../assets/images/logo-landing.png";
 import main from "../assets/images/main.svg";
 import Wrapper from "../assets/wrapper/LandingPage";
 import { useNavigate } from "react-router-dom";
-import { useGoogleLogin } from "@react-oauth/google";
-import GoogleSignInButton from "../components/GoogleSignInButton";
-import { message, Spin } from "antd";
-import { loginWithGoogle, isUserSessionValid } from "../services/authService";
+import { Spin } from "antd";
+import { isUserSessionValid } from "../services/authService";
 
 const Landing = () => {
   const [loading, setLoading] = useState(false);
@@ -18,13 +16,6 @@ const Landing = () => {
     }
   }, [navigate]);
 
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      loginWithGoogle(tokenResponse.access_token, navigate, setLoading);
-    },
-    onError: () => message.error("Google Login Failed"),
-  });
-
   return (
     <>
       <Wrapper>
@@ -35,79 +26,57 @@ const Landing = () => {
 
         <div className="container page">
           <div className="info">
-            <h1 className="title">AI-Powered Resume Builder</h1>
-            <p className="sub-title">
-              Build, edit, and generate resumes with AI.
-            </p>
+            <h1 className="title">The Smarter Way to Craft Your Resume</h1>
+            <ul className="feature-list">
+              <li>
+                <span className="icon">✨</span>
+                <strong style={{ marginRight: "0.5rem" }}>Generate:</strong>
+                Instantly create a professional resume with AI.
+              </li>
+              <li>
+                <span className="icon">🔍</span>
+                <strong style={{ marginRight: "0.5rem" }}>Analyze:</strong> Get
+                instant feedback by comparing your resume against any job
+                description.
+              </li>
+              <li>
+                <span className="icon">🎯</span>
+                <strong style={{ marginRight: "0.5rem" }}>Tailor:</strong>{" "}
+                Receive expert suggestions to create a resume that lands
+                interviews.
+              </li>
+            </ul>
 
-            <div
-              className="guest-cta auth-child"
-              role="region"
-              aria-label="Try as guest"
-            >
-              <div className="guest-cta-header">
-                <span className="pill landing-span">No sign-up needed</span>
-              </div>
-
+            <div className="auth-cta">
               <button
                 type="button"
-                className="btn-primary guest-primary-btn"
-                aria-label="Explore as Guest"
-                onClick={() => navigate("/guest-login")}
-                disabled={loading}
+                className="btn-secondary"
+                onClick={() => navigate("/login")}
+                //disabled={loading}
+                aria-label="Get Started for Free"
+                style={{
+                  marginBottom: "1rem",
+                }}
               >
                 <div className="btn-primary-state"></div>
-                <span className="btn-primary-contents">Explore as Guest</span>
-              </button>
-            </div>
-
-            <div className="auth-child">
-              <div>
-                <span className="disclaimer landing-span">
-                  To save your work, create an account.
+                <span className="btn-primary-contents">
+                  Get Started for Free
                 </span>
-              </div>
-              <div style={{ marginTop: "0.5rem" }}>
-                <div style={{ width: "100%" }}>
-                  <GoogleSignInButton
-                    btnText="Sign up with Google"
-                    loading={loading}
-                    onClick={() => login()}
-                  />
-                </div>
+              </button>
 
-                <div className="or-divider landing-or-divider">
-                  <span>
-                    <strong>OR</strong>
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => navigate("/register")}
-                  disabled={loading}
-                  aria-label="Create an account with email"
+              <div style={{ textAlign: "center", width: "100%" }}>
+                <span className="landing-span">No Account? No Problem! </span>
+                <a
+                  href="/login"
+                  className="guest-link"
+                  style={{ fontWeight: "bold", fontSize: "14px" }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/guest-login");
+                  }}
                 >
-                  <div className="btn-secondary-state"></div>
-                  <span className="btn-primary-contents">
-                    Create an Account
-                  </span>
-                </button>
-              </div>
-
-              <div style={{ width: "100%", marginTop: "4rem" }}>
-                <span className="landing-span">Already have an account?</span>
-                <button
-                  style={{ marginTop: "0.5rem" }}
-                  className="btn-primary"
-                  type="button"
-                  disabled={loading}
-                  onClick={() => navigate("/login")}
-                >
-                  <div className="btn-primary-state"></div>
-                  <span className="btn-primary-contents">Sign in</span>
-                </button>
+                  Explore as Guest
+                </a>
               </div>
             </div>
           </div>
@@ -117,6 +86,178 @@ const Landing = () => {
             alt="Illustration of job hunt"
             src={main}
           />
+        </div>
+
+        <div className="landing-section trusted-by-section">
+          <p>Trusted by professionals at top companies</p>
+          <div className="logos">
+            <span>Google</span>
+            <span>Microsoft</span>
+            <span>Amazon</span>
+            <span>Netflix</span>
+            <span>Meta</span>
+          </div>
+        </div>
+
+        <div className="landing-section how-it-works-section">
+          <h2>How It Works in 3 Easy Steps</h2>
+          <div className="steps-container">
+            <div className="step">
+              <div className="step-icon">1</div>
+              <h3>Provide Your Info</h3>
+              <p>
+                Fill out your profile manually or upload an existing resume. Add
+                a job description to start the analysis.
+              </p>
+            </div>
+            <div className="step">
+              <div className="step-icon">2</div>
+              <h3>Get AI Feedback</h3>
+              <p>
+                Our AI analyzes your resume, highlighting missing keywords and
+                suggesting improvements for each section.
+              </p>
+            </div>
+            <div className="step">
+              <div className="step-icon">3</div>
+              <h3>Land the Interview</h3>
+              <p>
+                Apply with a perfectly tailored resume designed to catch the eye
+                of recruiters and get you noticed.
+              </p>
+            </div>
+          </div>
+        </div>
+
+              <div className="landing-section stats-section">
+
+                <div className="stat-item">
+
+                  <h3>3x</h3>
+
+                  <p>More Interviews</p>
+
+                </div>
+
+                <div className="stat-item">
+
+                  <h3>10k+</h3>
+
+                  <p>Resumes Created</p>
+
+                </div>
+
+                <div className="stat-item">
+
+                  <h3>98%</h3>
+
+                  <p>User Satisfaction</p>
+
+                </div>
+
+              </div>
+
+        
+
+              <div className="landing-section testimonial-section">
+
+                <h2>Why Professionals Love ResumeCraft</h2>
+
+                <div className="testimonials-container">
+
+                  <div className="testimonial-card">
+
+                    <p className="quote">
+
+                      "The AI analyzer is a game-changer. It instantly showed me which
+
+                      keywords were missing for my target job. I felt so much more
+
+                      confident applying."
+
+                    </p>
+
+                    <div className="author">
+
+                      <span className="author-name">Mirabel M.</span>
+
+                      <span className="author-title">Product Manager</span>
+
+                    </div>
+
+                  </div>
+
+                  <div className="testimonial-card">
+
+                    <p className="quote">
+
+                      "I needed a professional resume fast, and ResumeCraft delivered. I
+
+                      went from a blank page to a stunning, downloadable PDF in under
+
+                      15 minutes."
+
+                    </p>
+
+                    <div className="author">
+
+                      <span className="author-name">Andrew K.</span>
+
+                      <span className="author-title">Software Engineer</span>
+
+                    </div>
+
+                  </div>
+
+                  <div className="testimonial-card">
+
+                    <p className="quote">
+
+                      "I wasn't getting any callbacks. After using ResumeCraft to
+
+                      tailor my resume, I landed three interviews in one week. Cannot
+
+                      recommend it enough!"
+
+                    </p>
+
+                    <div className="author">
+
+                      <span className="author-name">Jason T.</span>
+
+                      <span className="author-title">UX Designer</span>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+        
+
+              <div className="landing-section final-cta-section">
+
+                <h2>Ready to Build Your Future?</h2>
+
+                <p>
+
+                  Join thousands of users who trust ResumeCraft to create job-winning
+
+                  resumes.
+
+                </p>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => navigate("/login")}
+            //disabled={loading}
+            aria-label="Create an account"
+          >
+            <div className="btn-primary-state"></div>
+            <span className="btn-primary-contents">Get Started for Free</span>
+          </button>
         </div>
       </Wrapper>
 

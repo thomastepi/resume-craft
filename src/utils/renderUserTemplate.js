@@ -21,7 +21,9 @@ function renderTemplateHtml(templateHtml, user) {
   // Skills
   if (Array.isArray(user.skills) && user.skills.length > 0) {
     const skillsHtml =
-      "<ul>" + user.skills.map((s) => `<li>${s.skill}</li>`).join("") + "</ul>";
+      "<ul>" +
+      user.skills.map((s) => `<li>${s.skill || s}</li>`).join("") +
+      "</ul>";
     html = html.replace("[[SKILLS_SECTION]]", skillsHtml);
   } else {
     html = html.replace("[[SKILLS_SECTION]]", "");
@@ -36,10 +38,18 @@ function renderTemplateHtml(templateHtml, user) {
         (exp) => `
         <div class="experience-item">
           <p>
-            <strong>${exp.company}</strong> | <strong>${exp.role}</strong> | <strong>${exp.place}</strong>
+            <strong>${exp.company}</strong> | <strong>${
+          exp.role || exp.title
+        }</strong> | <strong>${exp.place || exp.location}</strong>
           </p>
-          <p><strong>${exp.range}</strong></p>
-          <p>${exp.roleDescription}</p>
+          <p><strong>${exp.range || exp.startDate} - ${exp.endDate}</strong></p>
+           <p>${exp.roleDescription || ""}</p>
+          ${
+            exp.description &&
+            `<ul>
+            ${exp.description.map((d) => `<li>${d}</li>`).join("")}
+          </ul>`
+          }
         </div>
       `
       )
@@ -58,8 +68,8 @@ function renderTemplateHtml(templateHtml, user) {
         (e) => `
         <div class="education-item">
           <p>
-            <strong>${e.range}</strong> – 
-            <strong>${e.qualification}</strong>, ${e.institution}
+            <strong>${e.range || e.startDate} ${e.startDate && "-"} ${e.endDate}</strong> – 
+            <strong>${e.qualification || e.degree}</strong>, ${e.institution}
           </p>
         </div>
       `
@@ -78,7 +88,7 @@ function renderTemplateHtml(templateHtml, user) {
       .map(
         (p) => `
         <div class="project-item">
-          <h4>${p.title} [${p.range}]</h4>
+          <h4>${p.title || p.name} [${p.range || ""}]</h4>
           <p>${p.description}</p>
         </div>
       `
@@ -97,7 +107,9 @@ function renderTemplateHtml(templateHtml, user) {
       .map(
         (c) => `
         <div class="cert-item">
-          <p><strong>${c.name}</strong> (${c.organization}) [${c.year}]</p>
+          <p><strong>${c.name || c || ""}</strong> ${c.organization || ""} ${
+          [c.year] || ""
+        }</p>
         </div>
       `
       )
@@ -115,7 +127,7 @@ function renderTemplateHtml(templateHtml, user) {
       .map(
         (l) => `
         <div class="lang-item">
-          <p><strong>${l.language}</strong> (${l.proficiency})</p>
+          <p><strong>${l.language || l}</strong> ${l.proficiency || ""}</p>
         </div>
       `
       )

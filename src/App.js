@@ -20,8 +20,10 @@ import {
   Resetpassword,
   CheckEmail,
   ResetSuccess,
-  AiResumeCustomization,
+  AIToolkit,
+  GenerateResume,
 } from "./pages";
+import AIResumeAnalyzer from "./components/AIResumeAnalyzer";
 import { message } from "antd";
 import Templates from "./pages/templates/index";
 import { ResumeProvider } from "./context/ResumeContext";
@@ -65,10 +67,26 @@ function App() {
               }
             />
             <Route
-              path="/ai-resume-customization"
+              path="/ai-toolkit"
               element={
                 <ProtectedRoute>
-                  <AiResumeCustomization />
+                  <AIToolkit />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/ai-toolkit/analyzer"
+              element={
+                <ProtectedRoute>
+                  <AIResumeAnalyzer />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/ai-toolkit/generate"
+              element={
+                <ProtectedRoute>
+                  <GenerateResume />
                 </ProtectedRoute>
               }
             />

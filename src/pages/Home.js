@@ -118,11 +118,11 @@ function Home() {
         >
           <AlertBox
             actionBtnId="ai-generate-btn"
-            message="Want a personalized resume? Choose your preferred language, colors, fonts, and layout, then let AI build it for you. Or scroll down to explore our sample templates."
-            title="🤖 Let AI Design Your Resume!"
+            message="Want to improve your resume? Our AI tools can help you analyze your resume against a job description or generate a new one from scratch."
+            title="🤖 Supercharge Your Resume with AI!"
             type="info"
-            navigateTo="/ai-resume-customization"
-            btnText="Generate with AI"
+            navigateTo="/ai-toolkit"
+            btnText="Open AI Toolkit"
             endSession={false}
             showActionButton={true}
             closable={false}

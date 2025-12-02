@@ -30,7 +30,7 @@ const Template6 = () => {
       )}
 
       {/* Experience */}
-      {user.experience && user.experience.length > 0 && (
+      {user.experience?.length > 0 && (
         <>
           <div className="divider mt-3"></div>
           <div className="experience mt-3">
@@ -44,12 +44,22 @@ const Template6 = () => {
               >
                 <div className="d-flex justify-content-between">
                   <p>
-                    <strong>{exp.role}</strong> - <strong>{exp.company}</strong>
+                    <strong>{exp.role || exp.title}</strong> -{" "}
+                    <strong>{exp.company}</strong>
                   </p>
-                  <p className="template6-range">{exp.range}</p>
+                  <p className="template6-range">
+                    {exp.range || ""}{" "}
+                    {exp.startDate
+                      ? `${exp.startDate} - ${exp.endDate}`
+                      : exp.endDate}
+                  </p>
                 </div>
-                <p className="template6-place">{exp.place}</p>
-                <p>{exp.roleDescription}</p>
+                <p className="template6-place">{exp.place || exp.location}</p>
+                <p>{exp.roleDescription || ""}</p>
+                <ul>
+                  {exp.description?.length > 0 &&
+                    exp.description.map((d, index) => <li key={index}>{d}</li>)}
+                </ul>
               </div>
             ))}
           </div>
@@ -63,15 +73,20 @@ const Template6 = () => {
           <div className="projects mt-3">
             <h3 className="template6-section-title">Projects</h3>
             <hr />
-            {user.projects.map((project, index) => (
+            {user.projects.map((p, index) => (
               <div key={index} className="template6-project-item mb-3">
                 <div className="d-flex justify-content-between">
                   <h6>
-                    <strong>{project.title}</strong>
+                    <strong>{p.title || p.name}</strong>
                   </h6>
-                  <span className="template6-range">{project.range}</span>
+                  <span className="template6-range">{p.range || ""}</span>
                 </div>
-                <p>{project.description}</p>
+                <p>{p.description}</p>
+                <ul>
+                  {Array.isArray(p.description) &&
+                    p.description.length > 0 &&
+                    p.description.map((d, index) => <li key={index}>{d}</li>)}
+                </ul>
               </div>
             ))}
           </div>
@@ -85,14 +100,17 @@ const Template6 = () => {
           <div className="education mt-3">
             <h3 className="template6-section-title">Education</h3>
             <hr />
-            {user.education.map((education, index) => (
+            {user.education.map((e, index) => (
               <div key={index} className="template6-education-item mb-2">
                 <div className="d-flex justify-content-between">
                   <p>
-                    <strong>{education.qualification}</strong> -{" "}
-                    <strong>{education.institution}</strong>
+                    <strong>{e.qualification || e.degree}</strong> -{" "}
+                    <strong>{e.institution}</strong>
                   </p>
-                  <span className="template6-range">{education.range}</span>
+                  <span className="template6-range">
+                    {e.range}{" "}
+                    {e.startDate ? `${e.startDate} - ${e.endDate}` : e.endDate}
+                  </span>
                 </div>
               </div>
             ))}
@@ -108,8 +126,8 @@ const Template6 = () => {
             <h3 className="template6-section-title">Skills</h3>
             <hr />
             <ul className="template6-skills-list">
-              {user.skills.map((skill, index) => (
-                <li key={index}>{skill.skill}</li>
+              {user.skills.map((s, index) => (
+                <li key={index}>{s.skill || s}</li>
               ))}
             </ul>
           </div>
@@ -123,11 +141,12 @@ const Template6 = () => {
           <div className="certifications mt-3">
             <h3 className="template6-section-title">Certifications</h3>
             <hr />
-            {user.certifications.map((cert, index) => (
+            {user.certifications.map((c, index) => (
               <div key={index} className="template6-cert-item">
                 <p>
-                  <strong>{cert.name}</strong> ({cert.organization}) [
-                  {cert.year}]
+                  <strong>{c.name || c || ""} </strong>
+                  {c.organization} {c.year && "- "}
+                  {c.year}
                 </p>
               </div>
             ))}
@@ -145,7 +164,8 @@ const Template6 = () => {
             {user.languages.map((lang, index) => (
               <div key={index} className="template6-language-item">
                 <p>
-                  <strong>{lang.language}</strong> ({lang.proficiency})
+                  <strong>{lang.language || lang}</strong>{" "}
+                  {lang.proficiency && "-"} {lang.proficiency}
                 </p>
               </div>
             ))}

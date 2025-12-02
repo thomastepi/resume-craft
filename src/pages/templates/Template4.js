@@ -1,7 +1,7 @@
 import "../../resources/styles/pages/templates/templates.css";
 
 function Template4() {
-    const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="template4-parent">
       {/* Header */}
@@ -41,23 +41,28 @@ function Template4() {
             <ul className="mb-0 ps-3">
               {user.skills?.map((skill, i) => (
                 <li key={i} className="small">
-                  {skill.skill}
+                  {skill.skill || skill}
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Languages */}
-          <div className="mb-2">
-            <h5 className="template4-section-title">Languages</h5>
-            <ul className="mb-0 ps-3">
-              {user.languages?.map((lang, i) => (
-                <li key={i} className="small">
-                  <strong>{lang.language}</strong> — {lang.proficiency}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {user.languages?.length > 0 && (
+            <>
+              <div className="mb-2">
+                <h5 className="template4-section-title">Languages</h5>
+                <ul className="mb-0 ps-3">
+                  {user.languages?.map((lang, i) => (
+                    <li key={i} className="small">
+                      <strong>{lang.language || lang}</strong>{" "}
+                      {lang.language && "-"} {lang.proficiency || ""}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
         </aside>
 
         <main className="flex-grow-1">
@@ -76,31 +81,52 @@ function Template4() {
               {user.experience.map((exp, i) => (
                 <div key={i} className="mb-3">
                   <div className="d-flex justify-content-between">
-                    <strong>{exp.role}</strong>
-                    <small className="text-muted">{exp.range}</small>
+                    <strong>{exp.role || exp.title}</strong>
+                    <small className="text-muted">
+                      {exp.range || ""}{" "}
+                      {exp.startDate
+                        ? `${exp.startDate} - ${exp.endDate}`
+                        : exp.endDate}
+                    </small>
                   </div>
                   <div className="text-muted">
-                    {exp.company} · {exp.place}
+                    {exp.company} · {exp.place || exp.location}
                   </div>
                   <p className="mb-0">{exp.roleDescription}</p>
+                  <ul>
+                    {exp.description?.length > 0 &&
+                      exp.description.map((d, index) => (
+                        <li key={index}>{d}</li>
+                      ))}
+                  </ul>
                 </div>
               ))}
             </section>
           )}
 
           {/* Education */}
-          <section className="mb-4">
-            <h3 className="template4-h3">Education</h3>
-            <div className="template4-divider" />
-            {user.education?.map((ed, i) => (
-              <div key={i} className="mb-2 d-flex justify-content-between">
-                <div>
-                  <strong>{ed.qualification}</strong> — {ed.institution}
-                </div>
-                <small className="text-muted">{ed.range}</small>
-              </div>
-            ))}
-          </section>
+          {user.education?.length > 0 && (
+            <>
+              <section className="mb-4">
+                <h3 className="template4-h3">Education</h3>
+                <div className="template4-divider" />
+                {user.education?.map((e, i) => (
+                  <div key={i} className="mb-2 d-flex justify-content-between">
+                    <div>
+                      <strong>{e.qualification || e.degree}</strong> —{" "}
+                      {e.institution}
+                    </div>
+                    <small className="text-muted">
+                      {e.range}{" "}
+                      {e.startDate
+                        ? `${e.startDate} - ${e.endDate}`
+                        : e.endDate}
+                    </small>
+                  </div>
+                ))}
+              </section>
+            </>
+          )}
 
           {/* Projects */}
           {user.projects?.length > 0 && (
@@ -109,9 +135,16 @@ function Template4() {
               <div className="template4-divider" />
               {user.projects.map((project, i) => (
                 <div key={i} className="mb-2">
-                  <strong>{project.title}</strong>{" "}
-                  <small className="text-muted">[{project.range}]</small>
-                  <p className="mb-0">{project.description}</p>
+                  <strong>{project.title || project.name}</strong>{" "}
+                  <small className="text-muted">{[project.range || ""]}</small>
+                  <p className="mb-0">{project.description || ""}</p>
+                  <ul>
+                    {Array.isArray(project.description) &&
+                      project.description.length > 0 &&
+                      project.description.map((d, index) => (
+                        <li key={index}>{d}</li>
+                      ))}
+                  </ul>
                 </div>
               ))}
             </section>
@@ -124,8 +157,8 @@ function Template4() {
               <div className="template4-divider" />
               {user.certifications.map((cert, i) => (
                 <div key={i} className="mb-1">
-                  <strong>{cert.name}</strong> ({cert.organization}) —{" "}
-                  {cert.year}
+                  <strong>{cert.name || cert}</strong> {cert.organization || ""}{" "}
+                  {cert.year && "-"} {cert.year || ""}
                 </div>
               ))}
             </section>
@@ -136,4 +169,4 @@ function Template4() {
   );
 }
 
-export default Template4
+export default Template4;

@@ -7,6 +7,7 @@ const limitText = (text, limit) =>
   text.length > limit ? text.slice(0, limit) + "..." : text;
 
 export const generateResumePrompt = (userData, resumeCustomiztions) => {
+  console.log("generateResumePrompt: ", userData, resumeCustomiztions);
   const {
     selectedLanguage,
     selectedLayout,
@@ -26,7 +27,9 @@ export const generateResumePrompt = (userData, resumeCustomiztions) => {
 
   const skillsString =
     userData.skills?.length > 0
-      ? userData.skills.map((skill) => sanitize(skill.skill)).join(", ")
+      ? userData.skills
+          .map((skill) => sanitize(skill.skill || skill))
+          .join(", ")
       : "N/A";
 
   const educationString =
@@ -35,8 +38,10 @@ export const generateResumePrompt = (userData, resumeCustomiztions) => {
           .map(
             (edu) =>
               `Qualification: ${sanitize(
-                edu.qualification
-              )}, Institution: ${sanitize(edu.institution)}, Year: ${edu.range}`
+                edu.qualification || edu.degree
+              )}, Institution: ${sanitize(edu.institution)}, Year: ${
+                edu.range || edu.endDate || ""
+              }`
           )
           .join(", ")
       : "N/A";
@@ -46,9 +51,11 @@ export const generateResumePrompt = (userData, resumeCustomiztions) => {
       ? userData.certifications
           .map(
             (cert) =>
-              `Certification: ${sanitize(cert.name)}, Issuer: ${sanitize(
-                cert.organization
-              )}, Date: ${sanitize(cert.year)}`
+              `Certification: ${sanitize(
+                cert.name || cert
+              )}, Issuer: ${sanitize(
+                cert.organization || ""
+              )}, Date: ${sanitize(cert.year || "")}`
           )
           .join(", ")
       : "N/A";
@@ -58,9 +65,9 @@ export const generateResumePrompt = (userData, resumeCustomiztions) => {
       ? userData.languages
           .map(
             (lang) =>
-              `Language: ${sanitize(lang.language)}, Proficiency: ${sanitize(
-                lang.proficiency
-              )}`
+              `Language: ${sanitize(
+                lang.language || lang
+              )}, Proficiency: ${sanitize(lang.proficiency || "")}`
           )
           .join(", ")
       : "N/A";
@@ -71,10 +78,20 @@ export const generateResumePrompt = (userData, resumeCustomiztions) => {
           .map(
             (exp) =>
               `Employer: ${sanitize(limitText(exp.company, 100))}, 
-              Role: ${sanitize(limitText(exp.role, 100))}, 
-              Description: ${sanitize(limitText(exp.roleDescription, 1000))},  
-              Place: ${sanitize(limitText(exp.place, 100))}, 
-              Duration: ${sanitize(limitText(exp.range, 50))}`
+              Role: ${sanitize(limitText(exp.role || exp.title, 100))}, 
+              Description: ${sanitize(
+                limitText(exp.roleDescription || "", 1000)
+              )} ${
+                exp.description &&
+                exp.description.length > 0 &&
+                exp.description
+                  .map((d) => `- ${sanitize(limitText(d || "", 1000))}`)
+                  .join("\n")
+              },  
+              Place: ${sanitize(limitText(exp.place || exp.location, 100))}, 
+              Duration: ${sanitize(
+                limitText(exp.range || exp.endDate || "", 50)
+              )}`
           )
           .join(", ")
       : "N/A";
