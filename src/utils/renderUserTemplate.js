@@ -42,13 +42,16 @@ function renderTemplateHtml(templateHtml, user) {
           exp.role || exp.title
         }</strong> | <strong>${exp.place || exp.location}</strong>
           </p>
-          <p><strong>${exp.range || exp.startDate} - ${exp.endDate}</strong></p>
+          <p><strong>${exp.range || exp.startDate || ""} ${
+          exp.endDate ? "-" : ""
+        } ${exp.endDate || ""}</strong></p>
            <p>${exp.roleDescription || ""}</p>
           ${
-            exp.description &&
-            `<ul>
+            exp.description
+              ? `<ul>
             ${exp.description.map((d) => `<li>${d}</li>`).join("")}
           </ul>`
+              : ""
           }
         </div>
       `
@@ -68,7 +71,9 @@ function renderTemplateHtml(templateHtml, user) {
         (e) => `
         <div class="education-item">
           <p>
-            <strong>${e.range || e.startDate} ${e.startDate && "-"} ${e.endDate}</strong> – 
+            <strong>${e.range || e.startDate} ${e.startDate && "-"} ${
+          e.endDate
+        }</strong> – 
             <strong>${e.qualification || e.degree}</strong>, ${e.institution}
           </p>
         </div>

@@ -7,7 +7,6 @@ const limitText = (text, limit) =>
   text.length > limit ? text.slice(0, limit) + "..." : text;
 
 export const generateResumePrompt = (userData, resumeCustomiztions) => {
-  console.log("generateResumePrompt: ", userData, resumeCustomiztions);
   const {
     selectedLanguage,
     selectedLayout,

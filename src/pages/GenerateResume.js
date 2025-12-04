@@ -53,7 +53,6 @@ const GenerateResume = () => {
   } = useContext(ResumeContext);
 
   const handleGenerateResume = async () => {
-    console.log("user", user);
     const missingFields = checkMandatoryFields(user);
     if (missingFields.length > 0) {
       setAlertTitle("Missing Fields");
