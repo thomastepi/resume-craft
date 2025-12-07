@@ -1,0 +1,128 @@
+.header {
+  background-color: #fff;
+  border-bottom: 1px solid var(--neutral-300);
+  padding: 1rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--neutral-900);
+  z-index: 110;
+}
+
+.logo img {
+  height: 40px;
+  width: 40px;
+}
+
+.nav {
+  display: none;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--neutral-700);
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+.nav a:hover {
+  color: var(--primary-500);
+}
+
+.actions {
+  display: none;
+}
+
+.loginButton,
+.signupButton {
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.loginButton {
+  background-color: transparent;
+  color: var(--neutral-700);
+}
+
+.loginButton:hover {
+  background-color: var(--neutral-100);
+}
+
+.signupButton {
+  background-color: var(--secondary-500);
+  color: #fff;
+}
+
+.signupButton:hover {
+  filter: brightness(110%);
+}
+
+.hamburgerButton {
+  display: block;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 110;
+}
+
+.mobileNav {
+  position: absolute;
+  top: 69px;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem 2rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-bottom: 1px solid var(--neutral-300);
+}
+
+.mobileNav a {
+  text-decoration: none;
+  color: var(--neutral-900);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+@media screen and (min-width: 769px) {
+  .nav {
+    display: flex;
+    gap: 2rem;
+  }
+  .actions {
+    display: flex;
+    gap: 1rem;
+  }
+  .hamburgerButton {
+    display: none;
+  }
+  .loginButton,
+  .signupButton {
+    width: auto;
+  }
+}

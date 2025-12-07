@@ -1,210 +1,313 @@
 import { useState, useEffect } from "react";
-import { Divider } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { message, Spin, Modal, Input, Select, Pagination } from "antd";
 import DefaultLayout from "../components/DefaultLayout";
-import { useNavigate } from "react-router-dom";
-import AlertBox from "../components/AlertBox";
 import useAuthCheck from "../hooks/useAuthCheck";
 import useInactivityLogout from "../hooks/useInactivityLogout";
-import { loadGuidefoxAgent } from "../lib/loadGuidefox";
-import { templateTourStyles } from "../utils/constants";
-import CustomModal from "../components/CustomModal";
+import { calculateProfileProgress } from "../utils/profileProgress";
+import s from "../resources/styles/pages/home.module.css";
+import AddApplicationModal from "../components/AddApplicationModal";
+import { sampleTips } from "../utils/constants";
+import { getAllJobs, deleteJob } from "../services/jobTracker.service";
 
-const template1 = "https://ik.imagekit.io/thormars/ResumeCraft/template1.png";
-const template2 = "https://ik.imagekit.io/thormars/ResumeCraft/template2.png";
-const template3 = "https://ik.imagekit.io/thormars/ResumeCraft/template3.png";
-const template4 = "https://ik.imagekit.io/thormars/ResumeCraft/template4.png";
-const template5 = "https://ik.imagekit.io/thormars/ResumeCraft/template5.png";
-const template6 = "https://ik.imagekit.io/thormars/ResumeCraft/template6.png";
+const { Search } = Input;
+const { Option } = Select;
 
 function Home() {
-  const [tourStepNum, setTourStepNum] = useState(null);
-  const [userTemplates, setUserTemplates] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
+  const [templates, setTemplates] = useState([]);
+  const [applications, setApplications] = useState([]);
+  const [progress, setProgress] = useState(0);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [jobToEdit, setJobToEdit] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [filterStatus, setFilterStatus] = useState(undefined);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(5);
+  //const [dropdownVisibleId, setDropdownVisibleId] = useState(null);
+
   const navigate = useNavigate();
 
+  const randomTip = sampleTips[Math.floor(Math.random() * sampleTips.length)];
+
+  // Custom hooks for auth and session management
   useAuthCheck();
   useInactivityLogout();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const templates = JSON.parse(localStorage.getItem("templates"));
-    setUserTemplates(templates);
-    const { _id, firstName, lastName, email, mobileNumber, address, summary } =
-      user;
-    if (!email) {
-      setUserId(_id);
-      setOpen(true);
-      return;
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const userTemplates = JSON.parse(localStorage.getItem("templates"));
+    if (userData) {
+      setUser(userData);
+      setTemplates(userTemplates);
+      setProgress(calculateProfileProgress(userData));
     }
-    const returningUser =
-      firstName && lastName && mobileNumber && address && summary
-        ? true
-        : false;
-    if (!returningUser || user.username === "guest") {
-      setTimeout(() => {
-        loadGuidefoxAgent();
-      }, 2000);
-    }
-  }, [open]);
+  }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const stepNum = window.bw?.tour?.currentStep;
+    const fetchJobs = async () => {
+      const user = JSON.parse(localStorage.getItem("user"));
+      try {
+        setLoading(true);
+        const jobs = await getAllJobs(user.accessToken);
+        setApplications(jobs);
+      } catch (error) {
+        message.error(
+          error || error.response?.data?.error || "Failed to fetch jobs."
+        );
+        console.error("Error fetching jobs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchJobs();
+  }, []);
 
-      setTourStepNum((prev) => {
-        if (stepNum === 0) return null;
-        if (!stepNum || stepNum === prev) return prev;
-        return stepNum;
-      });
-    }, 300);
+  const handleAddApplication = (newApp) => {
+    setApplications((prevApps) => [...prevApps, newApp]);
+    setIsAddModalVisible(false);
+  };
 
-    return () => clearInterval(interval);
-  }, [open]);
+  const handleEditApplication = (updatedApp) => {
+    setApplications((prevApps) =>
+      prevApps.map((app) => (app._id === updatedApp._id ? updatedApp : app))
+    );
+    setIsAddModalVisible(false);
+    setIsEditing(false);
+  };
 
-  const templates = [
-    {
-      id: "template-one",
-      title: "Template One",
-      image: template1,
-    },
-    {
-      id: "template-two",
-      title: "Template Two",
-      image: template2,
-    },
-    {
-      id: "template-three",
-      title: "Template Three",
-      image: template3,
-    },
-    {
-      id: "template-four",
-      title: "Template Four",
-      image: template4,
-    },
-    {
-      id: "template-five",
-      title: "Template Five",
-      image: template5,
-    },
-    {
-      id: "template-six",
-      title: "Template Six",
-      image: template6,
-    },
-  ];
+  const openModalOnEdit = (id) => {
+    const job = applications.find((app) => app._id === id);
+    setJobToEdit(job);
+    setIsAddModalVisible(true);
+    setIsEditing(true);
+  };
+
+  const handleDeleteApplication = (id) => {
+    Modal.confirm({
+      title: "Delete Application",
+      content: "Are you sure you want to delete this application?",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk: async () => {
+        try {
+          await deleteJob(id, user.accessToken);
+          setApplications((prevApps) =>
+            prevApps.filter((app) => app._id !== id)
+          );
+          message.success("Application deleted successfully!");
+        } catch (error) {
+          message.error(
+            error.error ||
+              error.response?.data?.error ||
+              "Failed to delete job."
+          );
+          console.error("Error deleting job:", error);
+        }
+      },
+    });
+  };
+
+  // Filtering logic
+  const filteredApplications = applications.filter((app) => {
+    const matchesSearchText = searchText
+      ? app.jobTitle.toLowerCase().includes(searchText.toLowerCase()) ||
+        app.company.toLowerCase().includes(searchText.toLowerCase())
+      : true;
+    const matchesStatus = filterStatus ? app.status === filterStatus : true;
+    return matchesSearchText && matchesStatus;
+  });
+
+  // Pagination logic
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const displayedApplications = filteredApplications.slice(
+    startIndex,
+    endIndex
+  );
+
+  if (!user) {
+    return <DefaultLayout title="Home"></DefaultLayout>;
+  }
+
   return (
-    <DefaultLayout>
-      <CustomModal open={open} setOpen={setOpen} _id={userId} />
-      <div
-        className="row home"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100%",
-          height: "100%",
+    <DefaultLayout title="Home">
+      <AddApplicationModal
+        visible={isAddModalVisible}
+        isEditing={isEditing}
+        jobToEdit={isEditing ? jobToEdit : null}
+        loading={loading}
+        setLoading={setLoading}
+        onClose={() => {
+          setIsAddModalVisible(false);
+          setIsEditing(false);
         }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "40px",
-            width: "100%",
-          }}
-        >
-          <AlertBox
-            actionBtnId="ai-generate-btn"
-            message="Want to improve your resume? Our AI tools can help you analyze your resume against a job description or generate a new one from scratch."
-            title="🤖 Supercharge Your Resume with AI!"
-            type="info"
-            navigateTo="/ai-toolkit"
-            btnText="Open AI Toolkit"
-            endSession={false}
-            showActionButton={true}
-            closable={false}
-            showIcon={false}
-          />
-        </div>
-        <div style={{ width: "100%", margin: "40px 0" }}>
-          <h2 style={{ textAlign: "center", width: "100%" }}>
-            Choose a Template to Get Started
-          </h2>
-          <p style={{ textAlign: "center", marginTop: 8, opacity: 0.85 }}>
-            Your resume templates will be automatically filled with your saved
-            profile information.
-          </p>
-        </div>
-        {userTemplates.length > 0 && (
-          <div className="row">
-            <div className="col-md-12">
-              <Divider style={{ borderColor: "black" }}>
-                Your Saved Templates
-              </Divider>
+        onAddApplication={handleAddApplication}
+        onEditApplication={handleEditApplication}
+      />
+      <div className={s.welcomeHeader}>
+        <h1>Welcome back, {user.username}!</h1>
+        <p>Let's get your resume ready to land that dream job.</p>
+      </div>
+
+      <div className={s.dashboardGrid}>
+        <main>
+          {progress < 100 && (
+            <div className={`${s.card} ${s.progressCard}`}>
+              <h3>Profile Completion</h3>
+              <div className={s.progressBarContainer}>
+                <div
+                  className={s.progressBar}
+                  style={{ width: `${progress}%` }}
+                ></div>
+              </div>
+              <p className={s.progressText}>{progress}% Complete</p>
+              <p>
+                A complete profile is key to a standout resume.{" "}
+                <Link to="/profile">Fill out yours now!</Link>
+              </p>
             </div>
-            {userTemplates.map((template, index) => {
-              return (
-                <div key={index} className="col-md-4">
-                  <div className="template">
-                    <img src={template1} alt={`template ${index + 1}`} />
-                    <div
-                      className="text"
-                      style={templateTourStyles(tourStepNum, index)}
-                    >
-                      <p>{template.name}</p>
+          )}
+
+          <div className={`${s.card} ${s.documentsCard}`}>
+            <h3>Your Documents</h3>
+            <div className={s.documentsGrid}>
+              {templates.length === 0 && <p>No saved templates found.</p>}
+              {templates.map((doc) => (
+                <div key={doc._id} className={s.documentItem}>
+                  <div className={s.thumbnail}>{doc.icon || "📄"}</div>
+                  <div className={s.docInfo}>
+                    <h4>{doc.name}</h4>
+                    <p>Last edited: {doc.updatedAt.slice(0, 10)}</p>
+                    <div className={s.docActions}>
                       <button
-                        id={template._id}
-                        className="btn-primary"
-                        style={{ width: "fit-content" }}
-                        onClick={() => {
-                          navigate(`/templates/${template._id}`);
-                        }}
+                        className={s.docButton}
+                        onClick={() => navigate(`/templates/${doc._id}`)}
                       >
-                        <div className="btn-primary-state"></div>
-                        <span className="btn-primary-contents">
-                          Use Template
-                        </span>
+                        Open
                       </button>
+                      {/* implement dropdown with rename, duplicate, delete functionalities */}
+                      {/* <button className={`${s.docButton} ${s.moreButton}`}>
+                        ...
+                      </button> */}
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
-
-        <div className="col-md-12">
-          <Divider style={{ borderColor: "black", margin: "40px 0" }}>Sample Templates</Divider>
-        </div>
-        {templates.map((template, index) => {
-          return (
-            <div key={index} className="col-md-4">
-              <div className="template">
-                <img src={template.image} alt={`template ${index + 1}`} />
-                <div
-                  className="text"
-                  style={templateTourStyles(tourStepNum, index)}
-                >
-                  <p>{template.title}</p>
-                  <button
-                    id={template.id}
-                    className="btn-primary"
-                    style={{ width: "fit-content" }}
-                    onClick={() => {
-                      navigate(`/templates/${index + 1}`);
-                    }}
-                  >
-                    <div className="btn-primary-state"></div>
-                    <span className="btn-primary-contents">Use Template</span>
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
-          );
-        })}
+          </div>
+
+          <div className={`${s.card} ${s.trackerCard}`}>
+            <h3>Job Application Tracker</h3>
+            <div className={s.trackerControls}>
+              <Search
+                placeholder="Search by job title or company"
+                onSearch={setSearchText}
+                onChange={(e) => setSearchText(e.target.value)}
+                style={{ width: 250 }}
+              />
+              <Select
+                placeholder="Filter by status"
+                allowClear
+                onChange={setFilterStatus}
+                style={{
+                  width: 150,
+                  height: 40,
+                  border: "1px solid gray",
+                  borderRadius: 5,
+                }}
+              >
+                <Option value="Wishlist">Wishlist</Option>
+                <Option value="Applied">Applied</Option>
+                <Option value="Interview">Interviewing</Option>
+                <Option value="Offer">Offer</Option>
+                <Option value="Rejected">Rejected</Option>
+              </Select>
+            </div>
+            {loading ? (
+              <Spin size="large" />
+            ) : (
+              <>
+                <div className={s.applicationList}>
+                  {displayedApplications.length > 0 ? (
+                    displayedApplications.map((app) => (
+                      <div key={app._id} className={s.applicationItem}>
+                        <h4>{app.jobTitle}</h4>
+                        <p>{app.company}</p>
+                        <span
+                          className={`${s.statusTag} ${
+                            s[`status${app.status}`]
+                          }`}
+                        >
+                          {app.status}
+                        </span>
+                        <div className={s.applicationActions}>
+                          <button
+                            className={s.actionBtn}
+                            onClick={() => openModalOnEdit(app._id)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className={`${s.actionBtn} ${s.deleteBtn}`}
+                            onClick={() => handleDeleteApplication(app._id)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No applications found matching your criteria.</p>
+                  )}
+                </div>
+                <Pagination
+                  className={s.pagination}
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={filteredApplications.length}
+                  onChange={(page, newPageSize) => {
+                    setCurrentPage(page);
+                    setPageSize(newPageSize);
+                  }}
+                  showSizeChanger
+                  pageSizeOptions={["5", "10", "20"]}
+                />
+              </>
+            )}
+            <button
+              className={s.addApplicationButton}
+              onClick={() => setIsAddModalVisible(true)}
+            >
+              Add New Application
+            </button>
+          </div>
+        </main>
+        <aside>
+          <div className={`${s.card} ${s.actionsCard}`}>
+            <h3>Quick Actions</h3>
+            <div className={s.actionsContainer}>
+              <Link to="/profile" className={s.actionButton}>
+                Edit Profile
+              </Link>
+              <Link to="/templates" className={s.actionButton}>
+                Browse Templates
+              </Link>
+              <Link to="/ai-toolkit" className={s.actionButton}>
+                AI Toolkit
+              </Link>
+            </div>
+          </div>
+
+          <div className={`${s.card} ${s.tipCard}`}>
+            <h3>Tip of the Day</h3>
+            <p className={s.tipContent}>{randomTip}</p>
+            <div className={s.tipIcon}>💡</div>
+          </div>
+        </aside>
       </div>
     </DefaultLayout>
   );

@@ -1,0 +1,81 @@
+.pageHeader {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.pageHeader p {
+  font-size: 1.1rem;
+  color: var(--neutral-700);
+  max-width: 600px;
+  margin: 0.5rem auto 0;
+}
+
+.templatesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  object-position: top;
+  border-bottom: 1px solid var(--neutral-100);
+}
+
+.cardContent {
+  padding: 1.5rem;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardContent h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: var(--neutral-900);
+}
+
+.useButton {
+  background-color: var(--secondary-500);
+  color: white;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.useButton:hover {
+  filter: brightness(110%);
+}
+
+.sectionTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--neutral-900);
+  margin: 3rem 0 1.5rem 0;
+  text-align: center;
+}

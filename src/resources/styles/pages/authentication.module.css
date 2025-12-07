@@ -1,0 +1,119 @@
+.auth-parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
+}
+
+.auth-parent .auth-child {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-child img {
+  width: 25%;
+  margin: 0 auto;
+}
+
+.auth-child p {
+  font-size: 10px;
+  color: #00000095;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.auth-parent form {
+  width: 25rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 5px 30px 10px 30px;
+  opacity: 0.85;
+}
+
+.form-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-parent h1 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.brand {
+  font-size: 40px !important;
+  width: 100%;
+  color: rgba(0, 0, 0, 0.585);
+  margin-right: 20px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .brand,
+  .auth-child p {
+    /* display: none; */
+  }
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 14px;
+}
+
+.or-divider::before,
+.or-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+  margin: 0 10px;
+}
+
+.guest-link {
+  color: #0d6efd;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.guest-link:hover {
+  color: #6590d1;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.google-btn-wrapper {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.input-field {
+  height: 40px;
+}
+
+.input-field, input {
+    border: 1px solid grey !important;
+}
+
+.passwd-field {
+  border: 1px solid gray;
+  padding: 0;
+  border-radius: 5px;
+  > input {
+    padding: 4px 11px !important;
+    height: 40px;
+    border: none !important;
+  }
+}
+
+.passwd-field svg {
+  margin-right: 20px;
+}

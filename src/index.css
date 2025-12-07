@@ -1,5 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Merriweather&family=Montserrat:wght@200;400&family=Sacramento&display=swap");
 
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --primary-500: #2563eb;
+  --secondary-500: #14b8a6;
+
+  --neutral-900: #111827;
+  --neutral-700: #374151;
+  --neutral-300: #d1d5db;
+  --neutral-100: #f3f4f6;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -32,8 +46,8 @@ body {
   background-color: WHITE;
   background-image: none;
   border: 1px solid #747775;
-  -webkit-border-radius: 20px;
-  border-radius: 20px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   color: #1f1f1f;
@@ -58,13 +72,15 @@ body {
 }
 
 .btn-primary:not(:disabled):hover {
-  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, .30), 0 1px 3px 1px rgba(60, 64, 67, .15);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
 }
 
 .btn-primary .btn-primary-state {
-  -webkit-transition: opacity .218s;
-  transition: opacity .218s;
+  -webkit-transition: opacity 0.218s;
+  transition: opacity 0.218s;
   bottom: 0;
   left: 0;
   opacity: 0;
@@ -83,7 +99,7 @@ body {
   opacity: 38%;
 }
 
-.btn-primary:not(:disabled):active .btn-primary-state, 
+.btn-primary:not(:disabled):active .btn-primary-state,
 .btn-primary:not(:disabled):focus .btn-primary-state {
   background-color: #303030;
   opacity: 12%;
@@ -102,8 +118,8 @@ body {
   background-color: rgba(47, 43, 43, 0.818);
   background-image: none;
   border: 1px solid #747775;
-  -webkit-border-radius: 20px;
-  border-radius: 20px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   color: WHITE;
@@ -129,8 +145,10 @@ body {
 
 .btn-secondary:not(:disabled):hover {
   background-color: rgba(77, 73, 73, 0.9);
-  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  -webkit-box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
+    0 1px 3px 1px rgba(60, 64, 67, 0.15);
 }
 
 .btn-secondary .btn-secondary-state {
@@ -155,7 +173,7 @@ body {
   opacity: 38%;
 }
 
-.btn-secondary:not(:disabled):active .btn-secondary-state, 
+.btn-secondary:not(:disabled):active .btn-secondary-state,
 .btn-secondary:not(:disabled):focus .btn-secondary-state {
   background-color: rgba(255, 255, 255, 0.2);
   opacity: 12%;
@@ -166,13 +184,12 @@ body {
   opacity: 8%;
 }
 
-
 input,
 textarea {
   outline: none !important;
   box-shadow: none !important;
   border: gray solid 1px !important;
-  border-radius: 20px !important;
+  border-radius: 5px !important;
   height: 40px !important;
 }
 
@@ -200,7 +217,7 @@ textarea:focus {
   background-color: white !important;
   border: 1px dashed grey !important;
   width: 200px !important;
-  border-radius: 20px !important;
+  border-radius: 5px !important;
 }
 
 .ant-message {
@@ -214,7 +231,7 @@ textarea:focus {
 .passwd-field {
   border: 1px solid gray;
   padding: 0;
-  border-radius: 20px;
+  border-radius: 5px;
   > input {
     padding: 4px 11px !important;
     height: 40px;
@@ -235,7 +252,7 @@ textarea:focus {
 
   .home-alert-banner-btn {
     background: #1677ff !important;
-    border-radius: 20px !important;
+    border-radius: 5px !important;
   }
 
   .home-alert-banner-btn:hover {

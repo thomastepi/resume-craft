@@ -194,10 +194,10 @@ const ResumeActionButtons = forwardRef((props, ref) => {
         style={{ width: "fit-content", padding: "0 20px" }}
         disabled={isGenerating}
         onClick={() => {
-          navigate("/home");
+          navigate("/templates");
         }}
       >
-        {generatedHTML ? "Back to Home" : "Back"}
+        Templates
       </button>
       {!params.id && generatedHTML && (
         <>

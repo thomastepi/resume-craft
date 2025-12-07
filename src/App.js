@@ -26,6 +26,7 @@ import {
 import AIResumeAnalyzer from "./components/AIResumeAnalyzer";
 import { message } from "antd";
 import Templates from "./pages/templates/index";
+import TemplatesGallery from "./pages/templates/TemplatesGallery";
 import { ResumeProvider } from "./context/ResumeContext";
 
 function App() {
@@ -55,6 +56,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/templates"
+              element={
+                <ProtectedRoute>
+                  <TemplatesGallery />
                 </ProtectedRoute>
               }
             />

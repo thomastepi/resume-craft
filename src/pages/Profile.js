@@ -205,7 +205,7 @@ const Profile = () => {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout title="Profile">
       {loading && <Spin size="large" />}
       <h4>
         <strong>Update Profile</strong>

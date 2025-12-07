@@ -1,0 +1,52 @@
+.pageHeader {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.pageHeader p {
+  font-size: 1.1rem;
+  color: var(--neutral-700);
+  max-width: 600px;
+  margin: 0.5rem auto 0;
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.optionCard {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+}
+
+.optionCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.optionCard h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--neutral-900);
+  margin-bottom: 1rem;
+}
+
+.optionCard p {
+  color: var(--neutral-700);
+  font-size: 1rem;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.cardIcon {
+  font-size: 3rem;
+  margin-top: 2rem;
+}

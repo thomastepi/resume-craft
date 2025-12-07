@@ -14,6 +14,8 @@ import {
   getTailoredResume,
 } from "../services/resumeAnalyzer";
 import "./../resources/styles/components/AIResumeAnalyzer.css";
+import { isUserSessionValid } from "../services/authService";
+import FeaturePreviewCTA from "./FeaturePreviewCTA";
 
 const { Dragger } = Upload;
 const { TextArea } = Input;
@@ -27,8 +29,13 @@ const AIResumeAnalyzer = () => {
   //const [tailoredResumeData, setTailoredResumeData] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const navigate = useNavigate();
+  const isAuthenticated = isUserSessionValid();
 
   const handleAnalyze = async () => {
+    if (!isAuthenticated) {
+      message.error("Please log in to use the analyzer.");
+      return;
+    }
     if (!file || !jobDescription) {
       message.error("Please upload a resume and paste a job description.");
       return;
@@ -44,7 +51,8 @@ const AIResumeAnalyzer = () => {
       message.error(
         e.error || e.message || "An error occured. Please try again."
       );
-    } finally {
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -72,7 +80,8 @@ const AIResumeAnalyzer = () => {
       message.error(
         e.error || e.message || "An error occured. Please try again."
       );
-    } finally {
+    }
+    finally {
       setLoading(false);
       setIsModalVisible(false);
     }
@@ -196,8 +205,11 @@ const AIResumeAnalyzer = () => {
   );
 
   return (
-    <DefaultLayout>
-      <div className="analyzer-container">
+    <DefaultLayout title="AI Toolkit - Resume Analyzer">
+      <div className="analyzer-container" style={{ position: "relative" }}>
+        {!isAuthenticated && (
+          <FeaturePreviewCTA title="Unlock the AI Analyzer" />
+        )}
         {!analysisResult ? (
           <>
             <div className="analyzer-header">
@@ -213,7 +225,7 @@ const AIResumeAnalyzer = () => {
                   <h2>
                     <FileTextOutlined /> Upload Your Resume (PDF)
                   </h2>
-                  <Dragger {...props} disabled={loading}>
+                  <Dragger {...props} disabled={loading || !isAuthenticated}>
                     <p className="ant-upload-drag-icon">
                       <InboxOutlined />
                     </p>
@@ -231,7 +243,7 @@ const AIResumeAnalyzer = () => {
                     placeholder="Paste the full job description here..."
                     value={jobDescription}
                     onChange={(e) => setJobDescription(e.target.value)}
-                    disabled={loading}
+                    disabled={loading || !isAuthenticated}
                   />
                 </div>
               </div>
@@ -239,7 +251,9 @@ const AIResumeAnalyzer = () => {
                 <button
                   className="btn-secondary"
                   onClick={handleAnalyze}
-                  disabled={!file || !jobDescription || loading}
+                  disabled={
+                    !file || !jobDescription || loading || !isAuthenticated
+                  }
                 >
                   {loading ? "Analyzing..." : "Analyze My Resume"}
                 </button>
@@ -255,3 +269,4 @@ const AIResumeAnalyzer = () => {
 };
 
 export default AIResumeAnalyzer;
+

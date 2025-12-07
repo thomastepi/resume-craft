@@ -33,3 +33,32 @@ export const templateTourStyles = (tourStepNum, index) => {
     fontSize: `${tourStepNum === 2 && index === 0 ? "35px" : "16px"}`,
   };
 };
+
+export const sampleTips = [
+  "Quantify your achievements! Use numbers and metrics to show your impact.",
+  "Tailor your resume for each job. Highlight skills and experiences relevant to the job description.",
+  "Use strong action verbs like 'Managed,' 'Developed,' and 'Achieved' to start your bullet points.",
+  "Proofread meticulously! A single typo can make a bad impression.",
+  "Keep it concise. Most recruiters spend only seconds scanning a resume.",
+];
+
+export const mockDocuments = [
+  {
+    id: 1,
+    title: "Software Engineer Resume",
+    lastEdited: "2 days ago",
+    icon: "📄",
+  },
+  {
+    id: 2,
+    title: "Data Analyst CV (Version 2)",
+    lastEdited: "5 days ago",
+    icon: "📄",
+  },
+  {
+    id: 3,
+    title: "Project Manager Application",
+    lastEdited: "1 week ago",
+    icon: "📄",
+  },
+];

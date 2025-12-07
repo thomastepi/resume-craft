@@ -200,7 +200,7 @@ const GenerateResume = () => {
   };
 
   return (
-    <DefaultLayout>
+    <DefaultLayout title="AI Toolkit - Generate Resume">
       <ResumeActionButtons ref={AiResumeRef} />
       <div
         style={{
@@ -229,7 +229,9 @@ const GenerateResume = () => {
                 : "Log In Now"
             }
             setError={setError}
-            showActionButton={![429, 500, 503].includes(errorStatus)}
+            showActionButton={
+              ![429, 404, 400, 401, 409, 422, 500, 503].includes(errorStatus)
+            }
           />
         )}
       </div>

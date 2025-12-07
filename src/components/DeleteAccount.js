@@ -32,7 +32,7 @@ const DeleteAccount = () => {
       title: "Are you sure you want to delete your account?",
       content:
         "This action is permanent and cannot be undone. All your resumes, and personal data will be permanently deleted from ResumeCraft.",
-      centered: true,
+      //centered: true,
       okText: "Yes",
       okType: "danger",
       cancelText: "No",

@@ -1,0 +1,12 @@
+.application-form input {
+  border-radius: 5px !important;
+  border: 1px solid grey !important;
+}
+
+.date-picker input {
+  border: none !important;
+}
+
+.date-picker {
+  border: 1px solid grey;
+}

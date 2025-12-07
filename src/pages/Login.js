@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import logo from "../assets/images/logo-form.png";
 import { Link, useNavigate } from "react-router-dom";
-import { Form, Input, message, Spin, Alert } from "antd";
+import { Form, Input, message, Spin, Alert, Checkbox } from "antd";
 import { Formik } from "formik";
 import { loginSchema } from "../utils/validationSchema";
 import { useGoogleLogin } from "@react-oauth/google";
-import "../resources/styles/pages/authentication.css";
+import s from "../resources/styles/pages/authentication.module.css";
 import GoogleSignInButton from "../components/GoogleSignInButton";
 import {
   loginWithGoogle,
@@ -40,12 +40,12 @@ function Login() {
   });
 
   return (
-    <div className="auth-parent">
+    <div className={s["auth-parent"]}>
       {loading && <Spin size="large" />}
-      <div className="auth-child">
-        <div className="form">
+      <div className={s["auth-child"]}>
+        <div className={s["form"]}>
           <Formik
-            initialValues={{ username: "", password: "" }}
+            initialValues={{ username: "", password: "", remember: true }}
             validationSchema={loginSchema}
             onSubmit={async (values, { setSubmitting }) => {
               try {
@@ -83,7 +83,7 @@ function Login() {
               isSubmitting,
             }) => (
               <Form layout="vertical" onFinish={handleSubmit}>
-                <div className="form-logo">
+                <div className={s["form-logo"]}>
                   <img src={logo} alt="logo" />
                 </div>
                 <h1>Sign In</h1>
@@ -99,7 +99,7 @@ function Login() {
                       />
                     </div>
 
-                    <div className="or-divider">
+                    <div className={s["or-divider"]}>
                       <span>
                         <strong>OR</strong>
                       </span>
@@ -120,7 +120,7 @@ function Login() {
                       }
                     >
                       <Input
-                        className="input-field"
+                        className={s["input-field"]}
                         name="username"
                         autoFocus
                         value={values.username}
@@ -177,7 +177,7 @@ function Login() {
                       }
                     >
                       <Input.Password
-                        className="passwd-field"
+                        className={s["passwd-field"]}
                         name="password"
                         type="password"
                         autoFocus
@@ -196,6 +196,13 @@ function Login() {
                         style={{ marginBottom: 16 }}
                       />
                     )}
+                    <Form.Item
+                      name="remember"
+                      valuePropName="checked"
+                      label={null}
+                    >
+                      <Checkbox>Remember me</Checkbox>
+                    </Form.Item>
                     <GoogleReCaptcha ref={recaptchaRef} />
                     <div style={{ width: "100%" }}>
                       <p>
@@ -246,7 +253,7 @@ function Login() {
 
                 <div>
                   <span
-                    className="guest-link"
+                    className={s["guest-link"]}
                     onClick={() => navigate("/forgot-password")}
                   >
                     Forgot your password?{" "}
