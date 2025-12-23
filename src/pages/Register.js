@@ -167,13 +167,9 @@ function Register() {
                     Terms of Service
                   </a>{" "}
                   apply. By signing up, you agree to our{" "}
-                  <a
-                    href="https://www.thomastepi.com/en/privacy-policy"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <Link to="/privacy-policy" target="_blank">
                     Privacy Policy
-                  </a>
+                  </Link>
                   .
                 </p>
 

@@ -11,6 +11,7 @@ import Resetpassword from "./Resetpassword";
 import CheckEmail from "./CheckEmail";
 import ResetSuccess from "./ResetSuccess";
 import GenerateResume from "./GenerateResume";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 export {
   Error,
@@ -26,4 +27,5 @@ export {
   ResetSuccess,
   AIToolkit,
   GenerateResume,
+  PrivacyPolicy,
 };

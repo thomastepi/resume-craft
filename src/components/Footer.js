@@ -42,13 +42,7 @@ const Footer = () => {
 
         <div className={styles.column}>
           <h3>Legal</h3>
-          <a
-            href="https://www.thomastepi.com/privacy-policy"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Privacy Policy
-          </a>
+          <Link to="/privacy-policy">Privacy Policy</Link>
         </div>
       </div>
       <div className={styles.bottomBar}>

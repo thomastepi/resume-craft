@@ -22,6 +22,7 @@ import {
   ResetSuccess,
   AIToolkit,
   GenerateResume,
+  PrivacyPolicy,
 } from "./pages";
 import AIResumeAnalyzer from "./components/AIResumeAnalyzer";
 import { message } from "antd";
@@ -43,6 +44,7 @@ function App() {
             <Route path="/set-new-password" element={<Resetpassword />} />
             <Route path="/check-email" element={<CheckEmail />} />
             <Route path="/reset-success" element={<ResetSuccess />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route
               path="/home"
               element={
